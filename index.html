@@ -3,71 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Radha Rani Jaap</title>
+    <title>Radha Rani Jaap & Leaderboard</title>
     <style>
         :root { --primary-orange: #f38630; --bg-dark: #120c08; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-dark); font-family: sans-serif; overflow: hidden; color: white; user-select: none; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-dark); font-family: sans-serif; color: white; user-select: none; overflow-x: hidden; }
         
-        .bg-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932'); background-size: cover; z-index: -1; }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932'); background-size: cover; z-index: -1; }
 
-        /* Name Prompt Overlay */
-        #nameOverlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95);
-            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100;
-        }
+        #nameOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; }
         input { padding: 12px; border-radius: 8px; border: none; margin-top: 15px; width: 70%; font-size: 1.1rem; text-align: center; }
         button { margin-top: 15px; padding: 10px 30px; background: var(--primary-orange); border: none; border-radius: 5px; color: white; font-weight: bold; cursor: pointer; }
 
-        .container { text-align: center; width: 100%; padding-top: 40px; }
-        .user-welcome { font-size: 1.2rem; color: var(--primary-orange); margin-bottom: 10px; }
-        
-        /* Counter UI */
-        .counter-wrapper { position: relative; width: 250px; height: 250px; margin: 20px auto; }
+        .main-content { text-align: center; padding-top: 20px; padding-bottom: 300px; }
+        .counter-wrapper { position: relative; width: 220px; height: 220px; margin: 20px auto; }
         svg { transform: rotate(-90deg); }
-        .circle-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 10; }
-        .circle-progress { fill: none; stroke: var(--primary-orange); stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 0.3s; }
-        
+        .circle-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 8; }
+        .circle-progress { fill: none; stroke: var(--primary-orange); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 0.3s; }
         .counter-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-        .current-count { font-size: 4rem; font-weight: bold; display: block; }
+
+        /* Leaderboard Style */
+        .leaderboard-section { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); margin: 20px; padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .leaderboard-title { color: var(--primary-orange); font-weight: bold; margin-bottom: 10px; font-size: 1.2rem; }
+        .lb-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
+        .lb-rank { color: var(--primary-orange); width: 30px; text-align: left; }
+        .lb-name { flex: 1; text-align: left; }
         
-        .stats { display: flex; justify-content: space-around; margin-top: 30px; font-size: 0.9rem; opacity: 0.8; }
-        .float-text { position: absolute; color: white; font-weight: bold; pointer-events: none; animation: floatUp 1s ease-out forwards; }
+        .float-text { position: absolute; color: white; font-weight: bold; pointer-events: none; animation: floatUp 1s ease-out forwards; z-index: 500; }
         @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-100px); opacity: 0; } }
     </style>
 </head>
 <body onclick="handleTap(event)">
     <div id="nameOverlay">
         <h2>Radhe Radhe</h2>
-        <p>Apna Naam Likhein</p>
-        <input type="text" id="userNameInput" placeholder="Enter Name...">
+        <p>Enter your name to start</p>
+        <input type="text" id="userNameInput" placeholder="Your Name">
         <button onclick="saveName()">Start Jaap</button>
     </div>
 
     <div class="bg-overlay"></div>
-    <div class="container">
-        <div id="welcomeMsg" class="user-welcome">Jai Shree Krishna</div>
-        <div style="font-size: 1.5rem;">Radha Radha 🥺❤️</div>
+    
+    <div class="main-content">
+        <div id="welcomeMsg" style="color: var(--primary-orange); font-size: 1.2rem;">Jai Shree Krishna</div>
+        <div style="font-size: 1.8rem; margin: 10px 0;">Radha Radha 🥺❤️</div>
 
         <div class="counter-wrapper">
-            <svg width="250" height="250">
-                <circle class="circle-bg" cx="125" cy="125" r="115"></circle>
-                <circle id="progressCircle" class="circle-progress" cx="125" cy="125" r="115"></circle>
+            <svg width="220" height="220">
+                <circle class="circle-bg" cx="110" cy="110" r="100"></circle>
+                <circle id="progressCircle" class="circle-progress" cx="110" cy="110" r="100"></circle>
             </svg>
             <div class="counter-inner">
-                <span id="dailyDisplay" class="current-count">0</span>
-                <div style="color:var(--primary-orange)">DAILY</div>
+                <span id="dailyDisplay" style="font-size: 3.5rem; font-weight: bold;">0</span>
+                <div style="font-size: 0.8rem; letter-spacing: 2px;">DAILY</div>
             </div>
         </div>
 
-        <div class="stats">
-            <div>TOTAL JAAP: <span id="totalDisplay">0</span></div>
-            <div>TARGET: 108</div>
+        <div style="margin-bottom: 20px;">TOTAL: <span id="totalDisplay" style="font-weight: bold;">0</span></div>
+
+        <div class="leaderboard-section">
+            <div class="leaderboard-title">🏆 TOP CHANTERS</div>
+            <div id="lb-list">
+                <div style="opacity: 0.5;">Loading ranks...</div>
+            </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, increment, collection, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
@@ -81,17 +83,17 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         let userName = localStorage.getItem('jaapUserName');
+        const todayStr = new Date().toLocaleDateString();
 
-        // Check if user exists
         if (userName) {
             document.getElementById('nameOverlay').style.display = 'none';
             setupApp();
         }
 
         window.saveName = () => {
-            const input = document.getElementById('userNameInput').value;
-            if (input.trim()) {
-                userName = input.trim();
+            const input = document.getElementById('userNameInput').value.trim();
+            if (input) {
+                userName = input;
                 localStorage.setItem('jaapUserName', userName);
                 document.getElementById('nameOverlay').style.display = 'none';
                 setupApp();
@@ -100,40 +102,60 @@
 
         function setupApp() {
             document.getElementById('welcomeMsg').innerText = `Radhe Radhe, ${userName}!`;
-            const userDoc = doc(db, "users", userName);
             
-            // Listen for data updates
-            onSnapshot(userDoc, (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    const daily = data.dailyCount || 0;
-                    const total = data.totalCount || 0;
-                    
+            // Listen to User Stats
+            onSnapshot(doc(db, "users", userName), (ds) => {
+                if (ds.exists()) {
+                    const data = ds.data();
+                    // Reset Daily Count if it's a new day
+                    const daily = data.lastDate === todayStr ? (data.dailyCount || 0) : 0;
                     document.getElementById('dailyDisplay').innerText = daily;
-                    document.getElementById('totalDisplay').innerText = total;
+                    document.getElementById('totalDisplay').innerText = data.totalCount || 0;
                     updateCircle(daily);
                 }
             });
+
+            // Listen to Leaderboard (Top 5)
+            const q = query(collection(db, "users"), orderBy("totalCount", "desc"), limit(5));
+            onSnapshot(q, (snapshot) => {
+                const lbList = document.getElementById('lb-list');
+                lbList.innerHTML = '';
+                snapshot.docs.forEach((doc, index) => {
+                    const data = doc.data();
+                    lbList.innerHTML += `
+                        <div class="lb-row">
+                            <span class="lb-rank">#${index+1}</span>
+                            <span class="lb-name">${doc.id}</span>
+                            <span class="lb-score">${data.totalCount || 0}</span>
+                        </div>`;
+                });
+            });
         }
 
-        window.handleTap = async (event) => {
-            if (!userName || event.target.tagName === 'BUTTON' || event.target.tagName === 'INPUT') return;
+        window.handleTap = async (e) => {
+            if (!userName || e.target.closest('#nameOverlay')) return;
 
-            // Float Text Logic
-            const float = document.createElement('div');
-            float.innerText = 'Radha Radha';
-            float.className = 'float-text';
-            float.style.left = `${event.clientX - 40}px`;
-            float.style.top = `${event.clientY - 20}px`;
-            document.body.appendChild(float);
-            setTimeout(() => float.remove(), 1000);
+            // Float Animation
+            const f = document.createElement('div');
+            f.innerText = 'Radha Radha'; f.className = 'float-text';
+            f.style.left = `${e.clientX - 40}px`; f.style.top = `${e.clientY - 20}px`;
+            document.body.appendChild(f);
+            setTimeout(() => f.remove(), 1000);
 
-            // Update Firebase
-            const userDoc = doc(db, "users", userName);
-            await setDoc(userDoc, {
+            // Update DB
+            const userRef = doc(db, "users", userName);
+            const userSnap = await (await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js")).getDoc(userRef);
+            
+            let dailyInc = 1;
+            // If date changed, reset daily to 1
+            if (userSnap.exists() && userSnap.data().lastDate !== todayStr) {
+                await setDoc(userRef, { dailyCount: 1, lastDate: todayStr }, { merge: true });
+            }
+
+            await setDoc(userRef, {
                 dailyCount: increment(1),
                 totalCount: increment(1),
-                lastUpdated: new Date().toLocaleDateString()
+                lastDate: todayStr
             }, { merge: true });
 
             if (navigator.vibrate) navigator.vibrate(40);
@@ -141,10 +163,9 @@
 
         function updateCircle(count) {
             const circle = document.getElementById('progressCircle');
-            const circumference = 2 * Math.PI * 115;
+            const circumference = 2 * Math.PI * 100;
             circle.style.strokeDasharray = circumference;
-            const offset = circumference - (count % 108 / 108) * circumference;
-            circle.style.strokeDashoffset = offset;
+            circle.style.strokeDashoffset = circumference - (count % 108 / 108) * circumference;
         }
     </script>
 </body>
