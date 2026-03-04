@@ -5,224 +5,147 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Radha Rani Jaap</title>
     <style>
-        :root {
-            --primary-orange: #f38630;
-            --bg-dark: #120c08;
-        }
+        :root { --primary-orange: #f38630; --bg-dark: #120c08; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-dark); font-family: sans-serif; overflow: hidden; color: white; user-select: none; }
+        
+        .bg-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932'); background-size: cover; z-index: -1; }
 
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--bg-dark);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
+        /* Name Prompt Overlay */
+        #nameOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95);
+            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100;
         }
+        input { padding: 12px; border-radius: 8px; border: none; margin-top: 15px; width: 70%; font-size: 1.1rem; text-align: center; }
+        button { margin-top: 15px; padding: 10px 30px; background: var(--primary-orange); border: none; border-radius: 5px; color: white; font-weight: bold; cursor: pointer; }
 
-        /* Background image placeholder - Add your temple image here */
-        .bg-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.9)), 
-                        url('https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            z-index: -1;
-        }
-
-        .container {
-            text-align: center;
-            width: 100%;
-        }
-
-        .header-title {
-            color: var(--primary-orange);
-            font-size: 2.5rem;
-            letter-spacing: 5px;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .sub-title {
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            opacity: 0.8;
-            margin-bottom: 50px;
-        }
-
-        .main-mantra {
-            font-size: 2rem;
-            margin-bottom: 30px;
-        }
-
-        /* Progress Circle */
-        .counter-wrapper {
-            position: relative;
-            width: 280px;
-            height: 280px;
-            margin: 0 auto;
-        }
-
-        svg {
-            transform: rotate(-90deg);
-        }
-
-        .circle-bg {
-            fill: none;
-            stroke: rgba(255, 255, 255, 0.1);
-            stroke-width: 8;
-        }
-
-        .circle-progress {
-            fill: none;
-            stroke: var(--primary-orange);
-            stroke-width: 8;
-            stroke-linecap: round;
-            transition: stroke-dashoffset 0.3s ease;
-        }
-
-        .counter-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .current-count {
-            font-size: 5rem;
-            font-weight: bold;
-            display: block;
-        }
-
-        .target-count {
-            font-size: 1.2rem;
-            color: var(--primary-orange);
-            margin-top: 5px;
-        }
-
-        /* Floating Animation */
-        .float-text {
-            position: absolute;
-            color: white;
-            font-size: 1.5rem;
-            pointer-events: none;
-            animation: floatUp 1s ease-out forwards;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(0,0,0,0.5);
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(-150px); opacity: 0; }
-        }
-
-        .tap-hint {
-            position: absolute;
-            bottom: 100px;
-            width: 100%;
-            font-style: italic;
-            opacity: 0.6;
-            font-size: 0.9rem;
-        }
+        .container { text-align: center; width: 100%; padding-top: 40px; }
+        .user-welcome { font-size: 1.2rem; color: var(--primary-orange); margin-bottom: 10px; }
+        
+        /* Counter UI */
+        .counter-wrapper { position: relative; width: 250px; height: 250px; margin: 20px auto; }
+        svg { transform: rotate(-90deg); }
+        .circle-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 10; }
+        .circle-progress { fill: none; stroke: var(--primary-orange); stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 0.3s; }
+        
+        .counter-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .current-count { font-size: 4rem; font-weight: bold; display: block; }
+        
+        .stats { display: flex; justify-content: space-around; margin-top: 30px; font-size: 0.9rem; opacity: 0.8; }
+        .float-text { position: absolute; color: white; font-weight: bold; pointer-events: none; animation: floatUp 1s ease-out forwards; }
+        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-100px); opacity: 0; } }
     </style>
 </head>
 <body onclick="handleTap(event)">
+    <div id="nameOverlay">
+        <h2>Radhe Radhe</h2>
+        <p>Apna Naam Likhein</p>
+        <input type="text" id="userNameInput" placeholder="Enter Name...">
+        <button onclick="saveName()">Start Jaap</button>
+    </div>
+
     <div class="bg-overlay"></div>
-
     <div class="container">
-        <div class="header-title">RADHE RADHE</div>
-        <div class="sub-title">SRI SRI RADHA RANI JAAP</div>
-
-        <div class="main-mantra">Radha Radha 🥺❤️</div>
+        <div id="welcomeMsg" class="user-welcome">Jai Shree Krishna</div>
+        <div style="font-size: 1.5rem;">Radha Radha 🥺❤️</div>
 
         <div class="counter-wrapper">
-            <svg width="280" height="280">
-                <circle class="circle-bg" cx="140" cy="140" r="130"></circle>
-                <circle id="progress" class="circle-progress" cx="140" cy="140" r="130"></circle>
+            <svg width="250" height="250">
+                <circle class="circle-bg" cx="125" cy="125" r="115"></circle>
+                <circle id="progressCircle" class="circle-progress" cx="125" cy="125" r="115"></circle>
             </svg>
-            <div class="counter-text">
-                <span id="counter" class="current-count">0</span>
-                <div class="target-count">/ 108 JAAP</div>
+            <div class="counter-inner">
+                <span id="dailyDisplay" class="current-count">0</span>
+                <div style="color:var(--primary-orange)">DAILY</div>
             </div>
         </div>
 
-        <div class="tap-hint">Tap anywhere to chant</div>
+        <div class="stats">
+            <div>TOTAL JAAP: <span id="totalDisplay">0</span></div>
+            <div>TARGET: 108</div>
+        </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Aapka Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
             authDomain: "jaap-fdd80.firebaseapp.com",
             projectId: "jaap-fdd80",
             storageBucket: "jaap-fdd80.firebasestorage.app",
             messagingSenderId: "375289521394",
-            appId: "1:375289521394:web:ced2cafa4d1743d5ab9c6b",
-            databaseURL: "https://jaap-fdd80-default-rtdb.firebaseio.com" // Make sure this is correct
+            appId: "1:375289521394:web:ced2cafa4d1743d5ab9c6b"
         };
 
         const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        const countRef = ref(db, 'jaapCount');
+        const db = getFirestore(app);
+        let userName = localStorage.getItem('jaapUserName');
 
-        let count = 0;
-        const target = 108;
-        const circle = document.getElementById('progress');
-        const radius = circle.r.baseVal.value;
-        const circumference = 2 * Math.PI * radius;
-
-        circle.style.strokeDasharray = `${circumference} ${circumference}`;
-        
-        // Sync with Firebase
-        onValue(countRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data !== null) {
-                count = data;
-                updateDisplay();
-            }
-        });
-
-        function updateDisplay() {
-            document.getElementById('counter').innerText = count;
-            const offset = circumference - (count % target / target) * circumference;
-            circle.style.strokeDashoffset = offset;
+        // Check if user exists
+        if (userName) {
+            document.getElementById('nameOverlay').style.display = 'none';
+            setupApp();
         }
 
-        window.handleTap = (event) => {
-            count++;
-            
-            // Save to Firebase
-            set(countRef, count);
+        window.saveName = () => {
+            const input = document.getElementById('userNameInput').value;
+            if (input.trim()) {
+                userName = input.trim();
+                localStorage.setItem('jaapUserName', userName);
+                document.getElementById('nameOverlay').style.display = 'none';
+                setupApp();
+            }
+        };
 
-            // Create floating text
+        function setupApp() {
+            document.getElementById('welcomeMsg').innerText = `Radhe Radhe, ${userName}!`;
+            const userDoc = doc(db, "users", userName);
+            
+            // Listen for data updates
+            onSnapshot(userDoc, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    const daily = data.dailyCount || 0;
+                    const total = data.totalCount || 0;
+                    
+                    document.getElementById('dailyDisplay').innerText = daily;
+                    document.getElementById('totalDisplay').innerText = total;
+                    updateCircle(daily);
+                }
+            });
+        }
+
+        window.handleTap = async (event) => {
+            if (!userName || event.target.tagName === 'BUTTON' || event.target.tagName === 'INPUT') return;
+
+            // Float Text Logic
             const float = document.createElement('div');
             float.innerText = 'Radha Radha';
             float.className = 'float-text';
-            float.style.left = `${event.clientX - 50}px`;
+            float.style.left = `${event.clientX - 40}px`;
             float.style.top = `${event.clientY - 20}px`;
             document.body.appendChild(float);
-
-            // Remove after animation
             setTimeout(() => float.remove(), 1000);
-            
-            updateDisplay();
 
-            // Simple Haptic feedback (vibration) if supported
-            if (navigator.vibrate) navigator.vibrate(50);
+            // Update Firebase
+            const userDoc = doc(db, "users", userName);
+            await setDoc(userDoc, {
+                dailyCount: increment(1),
+                totalCount: increment(1),
+                lastUpdated: new Date().toLocaleDateString()
+            }, { merge: true });
+
+            if (navigator.vibrate) navigator.vibrate(40);
         };
+
+        function updateCircle(count) {
+            const circle = document.getElementById('progressCircle');
+            const circumference = 2 * Math.PI * 115;
+            circle.style.strokeDasharray = circumference;
+            const offset = circumference - (count % 108 / 108) * circumference;
+            circle.style.strokeDashoffset = offset;
+        }
     </script>
 </body>
 </html>
