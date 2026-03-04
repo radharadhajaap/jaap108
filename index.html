@@ -8,67 +8,84 @@
         :root { --primary-orange: #f38630; --bg-dark: #120c08; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-dark); font-family: sans-serif; color: white; user-select: none; overflow: hidden; }
         
-        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932'); background-size: cover; z-index: -1; }
-
-        /* Floating Leaderboard Button */
-        .lb-button {
-            position: fixed; top: 20px; right: 20px; background: rgba(255,255,255,0.1);
-            padding: 10px 15px; border-radius: 30px; border: 1px solid var(--primary-orange);
-            text-decoration: none; color: white; font-size: 0.8rem; display: flex; align-items: center; gap: 8px; z-index: 100;
+        .bg-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.9)), 
+            url('https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932'); 
+            background-size: cover; z-index: -1; opacity: 0.6;
         }
 
-        .main-content { text-align: center; height: 100vh; display: flex; flex-direction: column; justify-content: center; }
-        
-        .welcome-section { margin-bottom: 20px; }
-        #welcomeMsg { color: var(--primary-orange); font-size: 1.1rem; }
-        .mantra { font-size: 2rem; margin: 10px 0; font-weight: bold; text-shadow: 0 0 15px rgba(243, 134, 48, 0.5); }
+        /* --- NEW: LIVE TICKER --- */
+        .live-ticker {
+            position: fixed; top: 75px; left: 0; width: 100%; background: rgba(243, 134, 48, 0.2);
+            padding: 5px 0; font-size: 0.8rem; overflow: hidden; white-space: nowrap; border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .ticker-content { display: inline-block; animation: scroll 15s linear infinite; padding-left: 100%; color: #ffd700; font-weight: bold; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        .counter-wrapper { position: relative; width: 260px; height: 260px; margin: 0 auto; }
+        /* Navigation Buttons */
+        .top-nav { position: fixed; top: 20px; width: 100%; display: flex; justify-content: space-between; padding: 0 15px; box-sizing: border-box; z-index: 100; }
+        .nav-btn { background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 30px; border: 1px solid var(--primary-orange); text-decoration: none; color: white; font-size: 0.75rem; display: flex; align-items: center; gap: 5px; cursor: pointer; }
+
+        .main-content { text-align: center; height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-top: 40px; }
+        
+        /* --- NEW: STREAK DISPLAY --- */
+        .streak-badge { font-size: 1.2rem; margin-bottom: 10px; color: #ffeb3b; text-shadow: 0 0 10px rgba(255,235,59,0.5); }
+
+        .mantra { font-size: 2.2rem; margin: 5px 0; font-weight: bold; text-shadow: 0 0 15px rgba(243, 134, 48, 0.6); }
+
+        .counter-wrapper { position: relative; width: 250px; height: 250px; margin: 10px auto; }
         svg { transform: rotate(-90deg); }
         .circle-bg { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 10; }
         .circle-progress { fill: none; stroke: var(--primary-orange); stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 0.3s; }
         .counter-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
-        .stats-footer { margin-top: 40px; font-size: 0.9rem; opacity: 0.8; letter-spacing: 1px; }
-        
-        .float-text { position: absolute; color: white; font-weight: bold; pointer-events: none; animation: floatUp 1s ease-out forwards; z-index: 500; font-size: 1.4rem; }
-        @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-120px) scale(1.2); opacity: 0; } }
+        .stats-footer { margin-top: 30px; font-size: 0.9rem; opacity: 0.8; letter-spacing: 1px; }
+        .float-text { position: absolute; color: white; font-weight: bold; pointer-events: none; animation: floatUp 1s ease-out forwards; z-index: 500; font-size: 1.3rem; }
+        @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-130px) scale(1.3); opacity: 0; } }
     </style>
 </head>
 <body onclick="handleTap(event)">
 
-    <a href="leaderboard.html" class="lb-button">
-        <span>🏆</span> Leaderboard
-    </a>
+    <div class="top-nav">
+        <div class="nav-btn" onclick="resetDailyCount(event)"><span>🔄</span> Reset</div>
+        <a href="leaderboard.html" class="nav-btn"><span>🏆</span> Leaderboard</a>
+    </div>
+
+    <div class="live-ticker">
+        <div class="ticker-content" id="liveTicker">Waiting for live jaaps... 🙏</div>
+    </div>
 
     <div class="bg-overlay"></div>
     
     <div class="main-content">
+        <div class="streak-badge" id="streakDisplay">🔥 0 Days Streak</div>
+        
         <div class="welcome-section">
-            <div id="welcomeMsg">Radhe Radhe</div>
+            <div id="welcomeMsg" style="opacity:0.7">Radhe Radhe</div>
             <div class="mantra">Radha Radha 🥺❤️</div>
         </div>
 
         <div class="counter-wrapper">
-            <svg width="260" height="260">
-                <circle class="circle-bg" cx="130" cy="130" r="120"></circle>
-                <circle id="progressCircle" class="circle-progress" cx="130" cy="130" r="120"></circle>
+            <svg width="250" height="250">
+                <circle class="circle-bg" cx="125" cy="125" r="115"></circle>
+                <circle id="progressCircle" class="circle-progress" cx="125" cy="125" r="115"></circle>
             </svg>
             <div class="counter-inner">
-                <span id="dailyDisplay" style="font-size: 5rem; font-weight: bold;">0</span>
-                <div style="font-size: 0.9rem; color: var(--primary-orange); margin-top: -10px;">DAILY</div>
+                <span id="dailyDisplay" style="font-size: 4.5rem; font-weight: bold;">0</span>
+                <div style="font-size: 0.8rem; color: var(--primary-orange); margin-top: -5px;">DAILY MALA</div>
             </div>
         </div>
 
         <div class="stats-footer">
-            TOTAL JAAP: <span id="totalDisplay" style="color: var(--primary-orange); font-weight: bold;">0</span>
-            <div style="margin-top: 10px; font-size: 0.7rem;">TAP ANYWHERE TO CHANT</div>
+            TOTAL: <span id="totalDisplay" style="color: var(--primary-orange); font-weight: bold;">0</span>
+            <div style="margin-top: 15px; font-size: 0.65rem; opacity: 0.5;">TAP TO CHANT • 108 = 1 MALA</div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, increment, getDoc, collection, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
@@ -82,35 +99,63 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         
-        // --- AUTH CHECK LOGIC ---
         let userName = localStorage.getItem('jaapUserName');
         const todayStr = new Date().toLocaleDateString();
 
-        if (!userName) {
-            // First time user, send to login
-            window.location.href = "login.html";
-        } else {
-            setupApp();
-        }
+        if (!userName) { window.location.href = "login.html"; } else { setupApp(); }
 
         function setupApp() {
             document.getElementById('welcomeMsg').innerText = `Radhe Radhe, ${userName}!`;
-            
             const userRef = doc(db, "users", userName);
+            
             onSnapshot(userRef, (ds) => {
                 if (ds.exists()) {
                     const data = ds.data();
+                    
+                    // Streak Logic
+                    checkStreak(data);
+                    
                     const daily = data.lastDate === todayStr ? (data.dailyCount || 0) : 0;
                     document.getElementById('dailyDisplay').innerText = daily;
                     document.getElementById('totalDisplay').innerText = data.totalCount || 0;
                     updateCircle(daily);
                 }
             });
+
+            // Live Ticker Logic: Fetch recent activities
+            const q = query(collection(db, "users"), orderBy("lastTimestamp", "desc"), limit(5));
+            onSnapshot(q, (snap) => {
+                let text = "";
+                snap.forEach(doc => {
+                    text += ` • ${doc.id} is chanting right now 🙏 `;
+                });
+                document.getElementById('liveTicker').innerText = text + text; // Double for smooth scroll
+            });
         }
 
+        function checkStreak(data) {
+            let streak = data.streak || 0;
+            const lastDate = data.lastDate;
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toLocaleDateString();
+
+            if (lastDate === todayStr) { /* Already updated today */ }
+            else if (lastDate === yesterdayStr) { /* Streak continues */ }
+            else { streak = 0; } // Streak broken
+
+            document.getElementById('streakDisplay').innerText = `🔥 ${streak} Days Streak`;
+        }
+
+        window.resetDailyCount = async (e) => {
+            e.stopPropagation();
+            if(confirm("Aaj ka jaap reset karein?")) {
+                await setDoc(doc(db, "users", userName), { dailyCount: 0, lastDate: todayStr }, { merge: true });
+            }
+        };
+
         window.handleTap = async (e) => {
-            // Prevent tap if clicking on leaderboard button
-            if (e.target.closest('.lb-button')) return;
+            if (e.target.closest('.nav-btn')) return;
 
             // Float Animation
             const f = document.createElement('div');
@@ -119,19 +164,22 @@
             document.body.appendChild(f);
             setTimeout(() => f.remove(), 1000);
 
-            // Update DB
             const userRef = doc(db, "users", userName);
             const userSnap = await getDoc(userRef);
-            
-            if (userSnap.exists() && userSnap.data().lastDate !== todayStr) {
-                // First tap of the new day
-                await setDoc(userRef, { dailyCount: 1, lastDate: todayStr }, { merge: true });
+            const data = userSnap.data();
+
+            let streakUpdate = data.streak || 0;
+            if (data.lastDate !== todayStr) {
+                const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+                streakUpdate = (data.lastDate === yesterday.toLocaleDateString()) ? streakUpdate + 1 : 1;
             }
 
             await setDoc(userRef, {
                 dailyCount: increment(1),
                 totalCount: increment(1),
-                lastDate: todayStr
+                lastDate: todayStr,
+                lastTimestamp: Date.now(),
+                streak: streakUpdate
             }, { merge: true });
 
             if (navigator.vibrate) navigator.vibrate(40);
@@ -139,7 +187,7 @@
 
         function updateCircle(count) {
             const circle = document.getElementById('progressCircle');
-            const circumference = 2 * Math.PI * 120;
+            const circumference = 2 * Math.PI * 115;
             circle.style.strokeDasharray = circumference;
             circle.style.strokeDashoffset = circumference - (count % 108 / 108) * circumference;
         }
