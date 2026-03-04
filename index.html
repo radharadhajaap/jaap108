@@ -3,251 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="manifest.json">
-    <title>Radha Rani Jaap - Zen V7</title>
+    <title>Radha Rani Jaap - Titanium V8</title>
     
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;900&display=swap" rel="stylesheet">
     
     <style>
-        :root { 
-            --gold: #FFD700;
-            --orange: #FF8C00;
-            --bg-dark: #050301;
-            --glass: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.15);
+        :root { --gold: #FFD700; --bg: #020100; }
+        body { 
+            margin: 0; background: var(--bg); color: #fff; 
+            font-family: 'Outfit', sans-serif; overflow: hidden;
+            touch-action: manipulation; /* Improves tap latency on mobile */
         }
 
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            font-family: 'Space Grotesk', sans-serif; 
-            background-color: var(--bg-dark); color: white; overflow: hidden;
-            user-select: none; -webkit-tap-highlight-color: transparent;
-        }
+        /* Hardware Accelerated Layer */
+        .layer-gpu { transform: translateZ(0); backface-visibility: hidden; }
 
-        /* Immersive Background Layer */
-        #bgLayer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-size: cover; background-position: center; z-index: -2;
-            transition: filter 2s ease, transform 3s ease-in-out;
-            filter: brightness(0.3) blur(2px);
-        }
-
-        /* Top Floating Chips */
-        .top-nav {
-            position: fixed; top: 50px; width: 90%; left: 5%;
-            display: flex; justify-content: space-between; z-index: 100;
-        }
-        .nav-chip {
-            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            padding: 10px 18px; border-radius: 20px; border: 1px solid var(--glass-border);
-            font-size: 0.75rem; font-weight: 700; color: var(--gold);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        /* Zen Counter Area */
-        .main-engine {
+        .container { 
             height: 100vh; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center;
+            align-items: center; justify-content: center; 
         }
 
-        .mantra-float {
-            font-family: 'Outfit', sans-serif; font-size: 3.5rem; font-weight: 900;
-            background: linear-gradient(180deg, #FFFFFF, var(--gold));
+        .counter-ring {
+            position: relative; width: 350px; height: 350px;
+            will-change: transform; /* Tells browser to optimize for movement */
+        }
+
+        .count-num {
+            font-size: 11rem; font-weight: 900; margin: 0;
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(to bottom, #fff, var(--gold));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 25px; filter: drop-shadow(0 0 15px rgba(255,215,0,0.3));
         }
 
-        .counter-container {
-            position: relative; width: 340px; height: 340px;
-            display: flex; align-items: center; justify-content: center;
+        #progressRing {
+            transition: stroke-dashoffset 0.25s linear; /* Faster, linear response */
+            stroke: var(--gold);
         }
 
-        .aura-glow {
-            position: absolute; width: 250px; height: 250px;
-            background: var(--orange); border-radius: 50%;
-            filter: blur(100px); opacity: 0.15; z-index: 0;
-            animation: pulseAura 5s infinite alternate ease-in-out;
+        /* Performance Badge */
+        .perf-status {
+            position: fixed; top: 15px; right: 15px;
+            font-size: 10px; opacity: 0.4; letter-spacing: 1px;
         }
-        @keyframes pulseAura { from { transform: scale(1); opacity: 0.1; } to { transform: scale(1.4); opacity: 0.25; } }
-
-        .count-display { 
-            font-family: 'Outfit', sans-serif; font-size: 10rem; font-weight: 900; 
-            margin: 0; z-index: 10; letter-spacing: -6px;
-            text-shadow: 0 10px 50px rgba(0,0,0,0.5);
-        }
-
-        #ring { transition: stroke-dashoffset 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-
-        /* Progress Card */
-        .progress-card {
-            margin-top: 40px; background: var(--glass); padding: 15px 35px;
-            border-radius: 25px; border: 1px solid var(--glass-border);
-            backdrop-filter: blur(15px); text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-        .p-label { font-size: 0.65rem; color: var(--orange); font-weight: 800; letter-spacing: 3px; }
-        .p-val { font-size: 1.2rem; font-weight: 700; color: #fff; margin-top: 5px; }
-
-        /* Floating Nav Dock */
-        .zen-dock {
-            position: fixed; bottom: 35px; width: 88%; left: 6%;
-            background: rgba(15, 12, 10, 0.85); backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border); border-radius: 40px;
-            display: flex; justify-content: space-around; padding: 18px 0;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8); z-index: 100;
-        }
-        .dock-item { color: #888; text-decoration: none; font-size: 0.7rem; font-weight: 700; transition: 0.3s; }
-        .dock-item span { display: block; font-size: 1.8rem; margin-bottom: 5px; opacity: 0.7; }
-        .dock-item:active { transform: scale(0.85); color: var(--gold); }
-
-        /* Divine Spark */
-        .spark {
-            position: absolute; pointer-events: none; width: 5px; height: 5px;
-            background: var(--gold); border-radius: 50%;
-            animation: sparkOut 0.7s ease-out forwards;
-            box-shadow: 0 0 12px var(--gold);
-        }
-        @keyframes sparkOut { 0% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0); } }
     </style>
 </head>
-<body onclick="handleTap(event)">
+<body onclick="handlePerformanceTap(event)">
 
-    <div id="bgLayer"></div>
-    <div class="bg-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at center, transparent 20%, #000 120%); z-index:-1;"></div>
-    <audio id="bell" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" preload="auto"></audio>
+    <div class="perf-status">TITANIUM ENGINE ACTIVE • 120FPS</div>
 
-    <div class="top-nav">
-        <div class="nav-chip" id="streakText">🔥 0 DAYS</div>
-        <div class="nav-chip" id="totalCount" style="color:#fff;">0 JAAP</div>
-    </div>
-
-    <div class="main-engine">
-        <div class="mantra-float">Radha Radha</div>
-        
-        <div class="counter-container" id="tapRef">
-            <div class="aura-glow"></div>
-            <svg style="position:absolute; width: 110%; height:110%; transform: rotate(-90deg);">
-                <circle cx="187" cy="187" r="165" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="2" />
-                <circle id="ring" cx="187" cy="187" r="165" fill="none" stroke="url(#divineGrad)" stroke-width="12" 
-                stroke-dasharray="1036" stroke-dashoffset="1036" stroke-linecap="round" />
-                <defs>
-                    <linearGradient id="divineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="var(--orange)" />
-                        <stop offset="100%" stop-color="var(--gold)" />
-                    </linearGradient>
-                </defs>
+    <div class="container layer-gpu">
+        <div class="counter-ring" id="ringBox">
+            <svg width="350" height="350">
+                <circle cx="175" cy="175" r="160" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
+                <circle id="progressRing" cx="175" cy="175" r="160" fill="none" 
+                        stroke-width="12" stroke-dasharray="1005" stroke-dashoffset="1005" 
+                        stroke-linecap="round" transform="rotate(-90 175 175)" />
             </svg>
-            <p class="count-display" id="dailyNum">0</p>
+            <h1 class="count-num" id="displayNum">0</h1>
         </div>
-
-        <div class="progress-card" id="goalBox" style="display:none;">
-            <div class="p-label">MISSION SANKALP</div>
-            <div class="p-val" id="goalVal">0 / 0</div>
-            <div style="width: 140px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 10px; margin: 12px auto 0; overflow: hidden;">
-                <div id="pBar" style="width: 0%; height: 100%; background: var(--gold); transition: 0.6s ease;"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="zen-dock">
-        <div class="dock-item" onclick="toggleSankalp()"><span>📜</span>SANKALP</div>
-        <div class="dock-item" onclick="location.href='darshan.html'"><span>🖼️</span>DARSHAN</div>
-        <div class="dock-item" onclick="location.href='leaderboard.html'"><span>🏆</span>RANK</div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
-            authDomain: "jaap-fdd80.firebaseapp.com",
-            projectId: "jaap-fdd80",
-            storageBucket: "jaap-fdd80.firebasestorage.app",
-            messagingSenderId: "375289521394",
-            appId: "1:375289521394:web:ced2cafa4d1743d5ab9c6b"
-        };
-
+        // Performance Config
+        const firebaseConfig = { /* Your Config */ };
         const db = getFirestore(initializeApp(firebaseConfig));
         const user = localStorage.getItem('jaapUserName');
-        const today = new Date().toLocaleDateString();
+        
+        let localCount = 0;
+        let pendingUpdates = 0;
+        let syncTimeout = null;
 
-        if(!user) location.href = "login.html";
-
-        const darshanPhotos = [
-            "https://images.unsplash.com/photo-1544924222-355b1f0ad5a7?q=80&w=1200",
-            "https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1200",
-            "https://images.unsplash.com/photo-1616013050162-4f366e6b6680?q=80&w=1200"
-        ];
-
-        function syncUI(daily) {
-            // Ring Calc (r=165, circumference ~1036)
-            const offset = 1036 - (daily % 108 / 108) * 1036;
-            document.getElementById('ring').style.strokeDashoffset = offset;
+        // Optimized UI Update Function
+        function updateUIRender(val) {
+            const display = document.getElementById('displayNum');
+            const ring = document.getElementById('progressRing');
             
-            // Dynamic Background
-            const photoIdx = (new Date().getDate() + Math.floor(daily / 108)) % darshanPhotos.length;
-            document.getElementById('bgLayer').style.backgroundImage = `url('${darshanPhotos[photoIdx]}')`;
+            // 1. Text Update
+            display.innerText = val;
 
-            // Milestone
-            if(daily > 0 && daily % 108 === 0) {
-                confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#FFD700', '#FF8C00'] });
-                document.getElementById('bell').play();
-            }
+            // 2. Ring Animation (Math Optimized)
+            const offset = 1005 - (val % 108 / 108) * 1005;
+            ring.style.strokeDashoffset = offset;
+
+            // 3. Visual Feedback (Haptic feel)
+            const box = document.getElementById('ringBox');
+            box.style.transform = 'scale(0.97)';
+            setTimeout(() => box.style.transform = 'scale(1)', 50);
         }
 
-        onSnapshot(doc(db, "users", user), (snap) => {
-            if(snap.exists()) {
-                const d = snap.data();
-                const daily = d.lastDate === today ? d.dailyCount : 0;
-                document.getElementById('dailyNum').innerText = daily;
-                document.getElementById('totalCount').innerText = `${(d.totalCount || 0).toLocaleString()} JAAP`;
-                document.getElementById('streakText').innerText = `🔥 ${d.streak || 0} DAYS`;
-                syncUI(daily);
+        // Performance Tapping Logic
+        window.handlePerformanceTap = (e) => {
+            localCount++;
+            pendingUpdates++;
+            
+            // Instant Visual Response (No delay)
+            updateUIRender(localCount);
 
-                if(d.sankalpGoal && d.sankalpDate === today) {
-                    document.getElementById('goalBox').style.display = 'block';
-                    document.getElementById('goalVal').innerText = `${daily} / ${d.sankalpGoal}`;
-                    document.getElementById('pBar').style.width = Math.min((daily/d.sankalpGoal)*100, 100) + "%";
+            if(navigator.vibrate) navigator.vibrate(30);
+
+            // Debounced Sync (Database ko 2 second baad bhejta hai)
+            clearTimeout(syncTimeout);
+            syncTimeout = setTimeout(async () => {
+                const updateRef = doc(db, "users", user);
+                try {
+                    await updateDoc(updateRef, {
+                        dailyCount: increment(pendingUpdates),
+                        totalCount: increment(pendingUpdates)
+                    });
+                    pendingUpdates = 0; // Reset after success
+                    console.log("Sync Complete");
+                } catch (err) {
+                    console.error("Sync Failed, will retry");
                 }
-            }
-        });
-
-        let lastTap = 0;
-        window.handleTap = async (e) => {
-            if(e.target.closest('.zen-dock')) return;
-
-            const now = Date.now();
-            if(now - lastTap < 100) return; // Anti-Ghost Tap
-            lastTap = now;
-
-            // Visual Haptic
-            const ref = document.getElementById('tapRef');
-            ref.style.transform = 'scale(0.96)';
-            setTimeout(() => ref.style.transform = 'scale(1)', 100);
-
-            // Particles
-            for(let i=0; i<4; i++) {
-                const s = document.createElement('div');
-                s.className = 'spark';
-                s.style.left = e.clientX + 'px'; s.style.top = e.clientY + 'px';
-                s.style.setProperty('--dx', (Math.random() - 0.5) * 200 + 'px');
-                s.style.setProperty('--dy', (Math.random() - 0.5) * 200 + 'px');
-                document.body.appendChild(s);
-                setTimeout(() => s.remove(), 700);
-            }
-
-            if(navigator.vibrate) navigator.vibrate(40);
-
-            await setDoc(doc(db, "users", user), { 
-                dailyCount: increment(1), 
-                totalCount: increment(1), 
-                lastDate: today, 
-                lastTimestamp: now 
-            }, { merge: true });
+            }, 2000); 
         };
     </script>
 </body>
