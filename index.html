@@ -4,168 +4,175 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
-    <title>Radha Rani Jaap - Vedic Glow</title>
+    <title>Radha Rani Jaap - Final</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;900&display=swap" rel="stylesheet">
+    
     <style>
         :root { 
             --orange: #f38630; 
             --gold: #ffcc33;
-            --glass: rgba(255, 255, 255, 0.08);
+            --glass: rgba(255, 255, 255, 0.07);
             --glass-border: rgba(255, 255, 255, 0.15);
         }
 
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            font-family: 'Poppins', 'Segoe UI', sans-serif; 
-            background-color: #080502; color: white; overflow: hidden;
+            font-family: 'Poppins', sans-serif; 
+            background-color: #050301; color: white; overflow: hidden;
             user-select: none; -webkit-tap-highlight-color: transparent;
         }
 
+        /* 3D Parallax Background */
         #darshanBg {
-            position: fixed; top: -5%; left: -5%; width: 110%; height: 110%;
+            position: fixed; top: -10%; left: -10%; width: 120%; height: 120%;
             background-size: cover; background-position: center;
             z-index: -2; transition: background-image 2s ease-in-out;
-            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9));
+            filter: brightness(0.6);
         }
 
         .bg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.9) 100%);
+            background: radial-gradient(circle at center, transparent 10%, #000 100%);
             z-index: -1;
         }
 
-        /* Status Bar */
-        .status-bar {
-            position: fixed; top: 30px; width: 90%; left: 5%;
+        /* Status Chips */
+        .status-container {
+            position: fixed; top: 40px; width: 90%; left: 5%;
             display: flex; justify-content: space-between; z-index: 100;
         }
         .chip {
             background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             padding: 10px 18px; border-radius: 50px; border: 1px solid var(--glass-border);
-            font-size: 0.75rem; font-weight: 700; color: var(--gold); letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            font-size: 0.75rem; font-weight: 600; color: var(--gold); letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Main Counter Area */
+        /* Main Jaap Engine */
         .main { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         
-        .mantra-text {
-            font-size: 3.2rem; font-weight: 800; text-transform: uppercase;
+        .mantra { 
+            font-size: 3.5rem; font-weight: 900; text-transform: uppercase;
             background: linear-gradient(to bottom, #fff, var(--gold));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 15px; filter: drop-shadow(0 0 20px rgba(243,134,48,0.3));
+            margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(243,134,48,0.4));
+            animation: breathe 4s infinite alternate ease-in-out;
         }
+        @keyframes breathe { from { transform: scale(1); } to { transform: scale(1.05); } }
 
-        .counter-wrap {
-            position: relative; width: 340px; height: 340px;
+        .counter-container {
+            position: relative; width: 350px; height: 350px;
             display: flex; align-items: center; justify-content: center;
         }
 
-        .glow-sphere {
-            position: absolute; width: 200px; height: 200px;
-            background: radial-gradient(circle, var(--orange), transparent 70%);
-            filter: blur(50px); opacity: 0.15; z-index: 0;
-            animation: pulse 3s infinite alternate;
+        .glow-aura {
+            position: absolute; width: 220px; height: 220px;
+            background: var(--orange); border-radius: 50%;
+            filter: blur(80px); opacity: 0.15; z-index: 0;
         }
-        @keyframes pulse { from { opacity: 0.1; transform: scale(0.9); } to { opacity: 0.3; transform: scale(1.1); } }
 
         .daily-num { 
-            font-size: 7.5rem; font-weight: 900; line-height: 1; margin: 0; 
-            z-index: 10; font-family: 'Inter', sans-serif;
-            text-shadow: 0 5px 20px rgba(0,0,0,0.6);
+            font-size: 8rem; font-weight: 900; line-height: 1; margin: 0; 
+            z-index: 10; font-variant-numeric: tabular-nums;
+            text-shadow: 0 10px 40px rgba(0,0,0,0.8);
         }
 
-        /* Custom Sankalp Modal */
-        #sankalpOverlay {
-            display: none; position: fixed; top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 1000;
-            justify-content: center; align-items: center;
-        }
-        .modal-card {
-            background: #15110d; padding: 35px; border-radius: 30px; border: 1px solid var(--orange);
-            width: 80%; max-width: 320px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-        .modal-card input {
-            width: 100%; padding: 15px; margin: 20px 0; border-radius: 12px; border: 1px solid #333;
-            background: #000; color: white; font-size: 1.5rem; text-align: center;
-        }
+        /* Progress Ring */
+        #ring { transition: stroke-dashoffset 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-        /* Dock */
+        /* Floating Navigation Dock */
         .dock {
             position: fixed; bottom: 35px; width: 85%; left: 7.5%;
-            background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border); border-radius: 30px;
-            display: flex; justify-content: space-around; padding: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4); z-index: 100;
+            background: rgba(20, 15, 10, 0.8); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border); border-radius: 35px;
+            display: flex; justify-content: space-around; padding: 16px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.7); z-index: 100;
         }
-        .dock-btn { color: white; text-align: center; font-size: 0.7rem; font-weight: 600; cursor: pointer; opacity: 0.8; transition: 0.3s; }
-        .dock-btn span { display: block; font-size: 1.6rem; margin-bottom: 4px; }
-        .dock-btn:active { transform: scale(0.9); opacity: 1; }
+        .dock-item { color: white; text-decoration: none; font-size: 0.7rem; text-align: center; font-weight: 700; opacity: 0.7; transition: 0.3s; }
+        .dock-item span { display: block; font-size: 1.6rem; margin-bottom: 5px; }
+        .dock-item:active { transform: scale(0.85); opacity: 1; color: var(--gold); }
 
-        /* Floating Particle */
-        .particle {
-            position: absolute; width: 6px; height: 6px; background: var(--gold);
-            border-radius: 50%; pointer-events: none; animation: fly 0.8s ease-out forwards;
+        /* Custom Sankalp Modal */
+        #sankalpModal {
+            display: none; position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center;
         }
-        @keyframes fly {
-            0% { transform: translate(0,0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        .modal-card {
+            background: #15110d; padding: 40px 30px; border-radius: 35px; border: 1px solid var(--orange);
+            width: 80%; max-width: 320px; text-align: center;
+        }
+        .modal-card input {
+            width: 90%; padding: 15px; margin: 20px 0; border-radius: 15px; border: 1px solid #333;
+            background: #000; color: white; font-size: 1.8rem; text-align: center; outline: none;
+        }
+
+        /* Haptic Ripple Effect */
+        .ripple {
+            position: absolute; width: 10px; height: 10px; background: var(--gold);
+            border-radius: 50%; pointer-events: none; animation: rippleAnim 0.8s ease-out forwards;
+            box-shadow: 0 0 20px var(--gold);
+        }
+        @keyframes rippleAnim {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(15); opacity: 0; }
         }
     </style>
 </head>
-<body onclick="handleTap(event)">
+<body onclick="handleGlobalTap(event)">
 
     <div id="darshanBg"></div>
     <div class="bg-overlay"></div>
     <audio id="bellSound"><source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
 
-    <div class="status-bar">
-        <div class="chip" id="streakText">🔥 0 DAYS</div>
-        <div class="chip" style="color:#fff;">TOTAL: <span id="lifeTotal">0</span></div>
+    <div class="status-container">
+        <div class="chip" id="streakChip">🔥 0 DAYS</div>
+        <div class="chip" id="totalChip" style="color:#fff;">TOTAL: 0</div>
     </div>
 
     <div class="main">
-        <div class="mantra-text">Radha Radha</div>
+        <div class="mantra">Radha Radha</div>
         
-        <div class="counter-wrap">
-            <div class="glow-sphere"></div>
+        <div class="counter-container">
+            <div class="glow-aura"></div>
             <svg style="position:absolute; width: 100%; height:100%; transform: rotate(-90deg);">
-                <circle cx="170" cy="170" r="155" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
-                <circle id="ring" cx="170" cy="170" r="155" fill="none" stroke="url(#goldGrad)" stroke-width="6" 
-                stroke-dasharray="974" stroke-dashoffset="974" stroke-linecap="round" style="transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);" />
+                <circle cx="175" cy="175" r="160" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="2" />
+                <circle id="ring" cx="175" cy="175" r="160" fill="none" stroke="url(#divineGrad)" stroke-width="8" 
+                stroke-dasharray="1005" stroke-dashoffset="1005" stroke-linecap="round" />
                 <defs>
-                    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color: #f38630;" />
-                        <stop offset="100%" style="stop-color: #ffcc33;" />
+                    <linearGradient id="divineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color: var(--orange);" />
+                        <stop offset="100%" style="stop-color: var(--gold);" />
                     </linearGradient>
                 </defs>
             </svg>
             
             <div style="z-index: 20; text-align: center;">
-                <p class="daily-num" id="dailyCount">0</p>
-                <div id="sankalpProgress" style="display:none; margin-top: 5px;">
-                    <div style="font-size: 0.7rem; color: var(--gold); font-weight: 800; letter-spacing: 2px;">
-                        GOAL: <span id="gStatus">0/0</span>
+                <p class="daily-num" id="dailyText">0</p>
+                <div id="goalView" style="display:none; margin-top: 10px;">
+                    <div style="font-size: 0.7rem; color: var(--gold); font-weight: 800; letter-spacing: 3px;">
+                        TARGET: <span id="goalStat">0/0</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="sankalpOverlay">
-        <div class="modal-card">
-            <h2 style="color:var(--orange); margin:0;">Daily Sankalp</h2>
-            <p style="opacity:0.6; font-size:0.8rem;">How many malas today?</p>
-            <input type="number" id="malaInput" placeholder="1, 5, 11..." inputmode="numeric">
-            <button onclick="saveSankalp()" style="background:var(--orange); border:none; padding:15px; width:100%; border-radius:12px; color:white; font-weight:bold; font-size:1rem;">START MISSION</button>
-            <p onclick="closeSankalp()" style="margin-top:15px; opacity:0.5; font-size:0.8rem; cursor:pointer;">Cancel</p>
-        </div>
+    <div class="dock">
+        <div class="dock-item" onclick="toggleModal(true)"><span>📜</span>SANKALP</div>
+        <div class="dock-item" onclick="window.location.href='darshan.html'"><span>🖼️</span>DARSHAN</div>
+        <div class="dock-item" onclick="window.location.href='leaderboard.html'"><span>🏆</span>RANK</div>
     </div>
 
-    <div class="dock">
-        <div class="dock-btn" onclick="openSankalp()"><span>📜</span>SANKALP</div>
-        <div class="dock-btn" onclick="window.location.href='leaderboard.html'"><span>🏆</span>RANK</div>
-        <div class="dock-btn" onclick="location.reload()"><span>🖼️</span>DARSHAN</div>
+    <div id="sankalpModal">
+        <div class="modal-card">
+            <h2 style="color:var(--gold); margin:0; letter-spacing: 1px;">Aadhyatmik Goal</h2>
+            <p style="opacity:0.6; font-size:0.8rem; margin-top:10px;">Aaj kitni Mala karni hai?</p>
+            <input type="number" id="mInput" placeholder="1, 5, 11, 21..." inputmode="numeric">
+            <button onclick="saveSankalp()" style="background:var(--orange); border:none; padding:18px; width:100%; border-radius:15px; color:white; font-weight:bold; font-size:1.1rem; box-shadow: 0 10px 20px rgba(243,134,48,0.3);">START JAAP 🙏</button>
+            <p onclick="toggleModal(false)" style="margin-top:20px; opacity:0.4; font-size:0.8rem;">Cancel</p>
+        </div>
     </div>
 
     <script type="module">
@@ -187,49 +194,52 @@
 
         if(!user) window.location.href = "login.html";
 
-        function updateDisplay(daily) {
-            // Circumference of 155 radius is ~974
-            const offset = 974 - (daily % 108 / 108) * 974;
+        const photos = [
+            "https://images.unsplash.com/photo-1544924222-355b1f0ad5a7?q=80&w=1200",
+            "https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1200",
+            "https://images.unsplash.com/photo-1616013050162-4f366e6b6680?q=80&w=1200"
+        ];
+
+        function syncUI(daily) {
+            const offset = 1005 - (daily % 108 / 108) * 1005;
             document.getElementById('ring').style.strokeDashoffset = offset;
 
+            const photoIdx = (new Date().getDate() + Math.floor(daily / 108)) % photos.length;
+            document.getElementById('darshanBg').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.85)), url('${photos[photoIdx]}')`;
+
             if(daily > 0 && daily % 108 === 0) {
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#f38630', '#ffcc33'] });
+                confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#f38630', '#ffcc33', '#ffffff'] });
                 document.getElementById('bellSound').play();
             }
         }
 
         onSnapshot(doc(db, "users", user), (ds) => {
             if(ds.exists()) {
-                const d = ds.data();
-                const daily = d.lastDate === today ? d.dailyCount : 0;
-                document.getElementById('dailyCount').innerText = daily;
-                document.getElementById('lifeTotal').innerText = d.totalCount.toLocaleString();
-                document.getElementById('streakText').innerText = `🔥 ${d.streak || 0} DAYS`;
-                updateDisplay(daily);
+                const data = ds.data();
+                const daily = data.lastDate === today ? data.dailyCount : 0;
+                document.getElementById('dailyText').innerText = daily;
+                document.getElementById('totalChip').innerText = `TOTAL: ${data.totalCount.toLocaleString()}`;
+                document.getElementById('streakChip').innerText = `🔥 ${data.streak || 0} DAYS`;
+                syncUI(daily);
 
-                if(d.sankalpGoal && d.sankalpDate === today) {
-                    document.getElementById('sankalpProgress').style.display = 'block';
-                    document.getElementById('gStatus').innerText = `${daily}/${d.sankalpGoal}`;
+                if(data.sankalpGoal && data.sankalpDate === today) {
+                    document.getElementById('goalView').style.display = 'block';
+                    document.getElementById('goalStat').innerText = `${daily}/${data.sankalpGoal}`;
                 }
             }
         });
 
-        window.handleTap = async (e) => {
+        window.handleGlobalTap = async (e) => {
             if(e.target.closest('.dock') || e.target.closest('.modal-card')) return;
 
-            // Golden Particles Effect
-            for(let i=0; i<6; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                p.style.left = e.clientX + 'px';
-                p.style.top = e.clientY + 'px';
-                p.style.setProperty('--tx', (Math.random()-0.5)*200 + 'px');
-                p.style.setProperty('--ty', (Math.random()-0.5)*200 + 'px');
-                document.body.appendChild(p);
-                setTimeout(() => p.remove(), 800);
-            }
+            const rip = document.createElement('div');
+            rip.className = 'ripple';
+            rip.style.left = e.clientX + 'px';
+            rip.style.top = e.clientY + 'px';
+            document.body.appendChild(rip);
+            setTimeout(() => rip.remove(), 800);
 
-            if(navigator.vibrate) navigator.vibrate(40);
+            if(navigator.vibrate) navigator.vibrate(50);
 
             await setDoc(doc(db, "users", user), { 
                 dailyCount: increment(1), 
@@ -239,14 +249,13 @@
             }, { merge: true });
         };
 
-        window.openSankalp = () => { document.getElementById('sankalpOverlay').style.display = 'flex'; };
-        window.closeSankalp = () => { document.getElementById('sankalpOverlay').style.display = 'none'; };
+        window.toggleModal = (show) => { document.getElementById('sankalpModal').style.display = show ? 'flex' : 'none'; };
         
         window.saveSankalp = async () => {
-            const m = document.getElementById('malaInput').value;
+            const m = document.getElementById('mInput').value;
             if(m > 0) {
                 await setDoc(doc(db, "users", user), { sankalpGoal: m * 108, sankalpDate: today }, { merge: true });
-                closeSankalp();
+                toggleModal(false);
             }
         };
     </script>
