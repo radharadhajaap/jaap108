@@ -14,12 +14,14 @@
             background-color: #0d0905; color: white; overflow: hidden;
         }
 
+        /* Immersive Background */
         .bg-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover; background-position: center;
             z-index: -1; transition: background-image 1.5s ease-in-out;
         }
 
+        /* Glass UI Navigation */
         .top-nav {
             position: fixed; top: 20px; width: 100%; display: flex;
             justify-content: space-evenly; padding: 0 10px; z-index: 100;
@@ -31,38 +33,40 @@
             text-decoration: none; cursor: pointer; display: flex; align-items: center; gap: 8px;
         }
 
-        /* Sankalp UI */
-        .sankalp-box {
+        /* Sankalp (Goal) UI */
+        .sankalp-status {
             position: fixed; top: 85px; width: 90%; left: 5%;
             background: rgba(0, 0, 0, 0.6); border-radius: 15px;
             padding: 12px; border: 1px solid rgba(243, 134, 48, 0.3);
             text-align: center; z-index: 90;
         }
-        .sankalp-progress { height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 8px; overflow: hidden; }
-        .sankalp-fill { height: 100%; background: linear-gradient(90deg, #4caf50, #8bc34a); width: 0%; transition: 1s; }
+        .sankalp-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 8px; overflow: hidden; }
+        .sankalp-fill { height: 100%; background: linear-gradient(90deg, #4caf50, #8bc34a); width: 0%; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); }
 
         .main-content { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .mantra-text { font-size: 2.2rem; font-weight: bold; text-shadow: 0 0 20px rgba(243, 134, 48, 0.8); }
+        .mantra-title { font-size: 2.2rem; font-weight: bold; text-shadow: 0 0 20px rgba(243, 134, 48, 0.8); margin-bottom: 5px; }
 
-        .mala-circle { position: relative; width: 260px; height: 260px; margin: 20px auto; display: flex; align-items: center; justify-content: center; }
+        /* Digital Mala */
+        .mala-circle { position: relative; width: 260px; height: 260px; margin: 15px auto; display: flex; align-items: center; justify-content: center; }
         .mala-svg { position: absolute; width: 100%; height: 100%; transform: rotate(-90deg); transition: 0.4s; }
         
-        .daily-num { font-size: 5rem; font-weight: 800; line-height: 1; margin: 0; }
-        .float-text { position: absolute; color: #ffcc33; font-weight: bold; pointer-events: none; animation: floatUp 0.8s forwards; font-size: 1.5rem; }
+        .count-text { font-size: 5rem; font-weight: 800; line-height: 1; margin: 0; }
+        .floating-radhe { position: absolute; color: #ffcc33; font-weight: bold; pointer-events: none; animation: floatUp 0.8s forwards; font-size: 1.5rem; }
+        
         @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-100px); } }
 
-        /* Sankalp Modal */
+        /* Sankalp Popup */
         #sankalpModal {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(20, 15, 10, 0.95); padding: 30px; border-radius: 20px;
-            border: 1px solid var(--orange); z-index: 1000; width: 80%; text-align: center;
+            background: rgba(20, 15, 10, 0.98); padding: 30px; border-radius: 25px;
+            border: 1px solid var(--orange); z-index: 1000; width: 85%; text-align: center; box-shadow: 0 0 30px rgba(0,0,0,0.5);
         }
-        .modal-input { width: 100%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 1px solid #444; background: #000; color: white; text-align: center; }
+        .sankalp-input { width: 100%; padding: 15px; margin: 15px 0; border-radius: 12px; border: 1px solid #444; background: #000; color: white; text-align: center; font-size: 1.2rem; }
     </style>
 </head>
 <body onclick="handleTap(event)">
 
-    <div class="bg-container" id="dailyDarshanBg"></div>
+    <div class="bg-container" id="darshanBg"></div>
     <audio id="bellSound"><source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
 
     <div class="top-nav">
@@ -70,16 +74,16 @@
         <a href="leaderboard.html" class="nav-btn"><span>🏆</span> Rank</a>
     </div>
 
-    <div class="sankalp-box" id="sankalpDisplay" style="display:none;">
+    <div class="sankalp-status" id="sankalpDisplay" style="display:none;">
         <div style="font-size: 0.75rem; color: #ffcc33; margin-bottom: 5px;">
-            🙏 Sankalp Progress: <span id="sankalpCurrent">0</span> / <span id="sankalpGoal">0</span>
+            🙏 Sankalp: <span id="sankalpCurrent">0</span> / <span id="sankalpGoal">0</span>
         </div>
-        <div class="sankalp-progress"><div class="sankalp-fill" id="sankalpFill"></div></div>
+        <div class="sankalp-bar"><div class="sankalp-fill" id="sankalpFill"></div></div>
     </div>
 
     <div class="main-content">
         <div id="streakDisplay" style="color:#ffeb3b; font-size: 1rem; margin-bottom: 10px;">🔥 0 Day Streak</div>
-        <div class="mantra-text">Radha Radha</div>
+        <div class="mantra-title">Radha Radha</div>
         
         <div class="mala-circle">
             <svg class="mala-svg" id="malaSvg" viewBox="0 0 100 100">
@@ -87,7 +91,7 @@
                 <circle id="progressCircle" cx="50" cy="50" r="45" fill="none" stroke="#f38630" stroke-width="3" stroke-dasharray="282.7" stroke-dashoffset="282.7" />
             </svg>
             <div style="position:relative; z-index:10;">
-                <p class="daily-num" id="dailyDisplay">0</p>
+                <p class="count-text" id="dailyDisplay">0</p>
                 <p style="font-size: 0.7rem; letter-spacing: 2px; margin: 0; color: var(--orange);">DAILY JAAP</p>
             </div>
         </div>
@@ -98,10 +102,10 @@
     </div>
 
     <div id="sankalpModal">
-        <h3 style="color:var(--orange)">Aaj ka Sankalp</h3>
-        <p style="font-size:0.8rem; opacity:0.8;">Aap aaj kitni mala (1 mala = 108 jaap) karne ka sankalp lete hain?</p>
-        <input type="number" id="malaInput" class="modal-input" placeholder="Enter number of Malas">
-        <button onclick="setSankalp()" style="background:var(--orange); border:none; padding:12px 25px; border-radius:10px; color:white; font-weight:bold;">Sankalp Lein 🙏</button>
+        <h2 style="color:var(--orange); margin-top:0;">Sankalp Lein 🙏</h2>
+        <p style="font-size:0.85rem; opacity:0.8;">Aaj aap kitni mala karne ka sankalp lete hain?<br>(1 Mala = 108 Jaap)</p>
+        <input type="number" id="malaInput" class="sankalp-input" placeholder="Mala ki sankhya">
+        <button onclick="setSankalp()" style="background:var(--orange); border:none; padding:15px 30px; border-radius:12px; color:white; font-weight:bold; width:100%; font-size:1rem;">Start My Sankalp</button>
     </div>
 
     <script type="module">
@@ -123,40 +127,46 @@
         const today = new Date().toLocaleDateString();
 
         let rotation = 0;
-        let userSankalp = 0;
 
-        const darshanImages = [
+        // --- Darshan Images Array ---
+        const darshanPhotos = [
             "https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932",
             "https://images.unsplash.com/photo-1544924222-355b1f0ad5a7?q=80&w=1932",
-            "https://images.unsplash.com/photo-1506191696232-49195305149b?q=80&w=1932"
+            "https://images.unsplash.com/photo-1506191696232-49195305149b?q=80&w=1932",
+            "https://images.unsplash.com/photo-1563810222123-26176313388c?q=80&w=1932"
         ];
 
-        function init() {
-            // Set Daily Darshan
-            const dayIdx = new Date().getDate() % darshanImages.length;
-            document.getElementById('dailyDarshanBg').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url('${darshanImages[dayIdx]}')`;
+        function updateBackground(dailyCount) {
+            // Logic: Har 108 jaap par ya har naye din par image badlegi
+            const dayBase = new Date().getDate();
+            const malaBase = Math.floor(dailyCount / 108);
+            const photoIdx = (dayBase + malaBase) % darshanPhotos.length;
+            
+            document.getElementById('darshanBg').style.backgroundImage = 
+                `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url('${darshanPhotos[photoIdx]}')`;
+        }
 
-            // Load Data
+        function initApp() {
             onSnapshot(doc(db, "users", userName), (ds) => {
                 if(ds.exists()) {
                     const d = ds.data();
                     const daily = d.lastDate === today ? d.dailyCount : 0;
+                    
                     document.getElementById('dailyDisplay').innerText = daily;
                     document.getElementById('totalDisplay').innerText = d.totalCount;
                     document.getElementById('streakDisplay').innerText = `🔥 ${d.streak || 0} Day Streak`;
-                    
                     document.getElementById('progressCircle').style.strokeDashoffset = 282.7 - (daily % 108 / 108) * 282.7;
 
-                    // Update Sankalp UI
+                    updateBackground(daily);
+
+                    // Sankalp Progress
                     if(d.sankalpGoal && d.sankalpDate === today) {
                         document.getElementById('sankalpDisplay').style.display = 'block';
                         document.getElementById('sankalpGoal').innerText = d.sankalpGoal;
                         document.getElementById('sankalpCurrent').innerText = daily;
                         const progress = Math.min((daily / d.sankalpGoal) * 100, 100);
                         document.getElementById('sankalpFill').style.width = progress + "%";
-                        if(daily >= d.sankalpGoal && d.sankalpGoal > 0) {
-                            document.getElementById('sankalpCurrent').innerText = "DONE! ✨";
-                        }
+                        if(daily >= d.sankalpGoal) document.getElementById('sankalpCurrent').innerText = "SIDDHA ✨";
                     }
                 }
             });
@@ -166,9 +176,8 @@
 
         window.setSankalp = async () => {
             const malas = document.getElementById('malaInput').value;
-            if(!malas || malas <= 0) return alert("Please enter valid number of malas.");
-            const goal = malas * 108;
-            await setDoc(doc(db, "users", userName), { sankalpGoal: goal, sankalpDate: today }, { merge: true });
+            if(!malas || malas <= 0) return alert("Kripya mala ki sankhya bharein.");
+            await setDoc(doc(db, "users", userName), { sankalpGoal: malas * 108, sankalpDate: today }, { merge: true });
             document.getElementById('sankalpModal').style.display = 'none';
         };
 
@@ -178,20 +187,26 @@
             rotation += (360 / 108);
             document.getElementById('malaSvg').style.transform = `rotate(${rotation - 90}deg)`;
 
-            const f = document.createElement('div'); f.className = 'float-text'; f.innerText = 'Radhe';
+            const f = document.createElement('div'); f.className = 'floating-radhe'; f.innerText = 'Radhe';
             f.style.left = e.clientX + 'px'; f.style.top = e.clientY + 'px';
             document.body.appendChild(f);
             setTimeout(() => f.remove(), 800);
 
-            await setDoc(doc(db, "users", userName), { dailyCount: increment(1), totalCount: increment(1), lastDate: today, lastTimestamp: Date.now() }, { merge: true });
+            const userRef = doc(db, "users", userName);
+            await setDoc(userRef, { 
+                dailyCount: increment(1), 
+                totalCount: increment(1), 
+                lastDate: today, 
+                lastTimestamp: Date.now() 
+            }, { merge: true });
 
             if((parseInt(document.getElementById('dailyDisplay').innerText) + 1) % 108 === 0) {
                 document.getElementById('bellSound').play();
             }
-            if(navigator.vibrate) navigator.vibrate(40);
+            if(navigator.vibrate) navigator.vibrate(45);
         };
 
-        init();
+        initApp();
     </script>
 </body>
 </html>
