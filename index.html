@@ -3,143 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Radha Rani Jaap - Rhythm V10</title>
+    <title>Radha Rani Jaap - Button V11</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@900&display=swap" rel="stylesheet">
     
     <style>
         :root { 
             --gold: #FFD700; 
-            --deep-orange: #FF4500;
-            --glass: rgba(255, 255, 255, 0.08);
+            --bg: #080705;
+            --btn-grad: linear-gradient(145deg, #1a1a1a, #000000);
+            --shadow: 10px 10px 20px #030303, -5px -5px 15px #141414;
         }
 
         body, html { 
-            margin: 0; height: 100%; background: #000; color: white;
+            margin: 0; height: 100%; background: var(--bg); 
+            display: flex; align-items: center; justify-content: center;
             font-family: 'Outfit', sans-serif; overflow: hidden;
         }
 
-        /* Animated Background Particles */
-        #particleCanvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; opacity: 0.4;
+        /* The Main Interactive Button Container */
+        .button-engine {
+            position: relative; width: 280px; height: 280px;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        /* The Divine Pulse Container */
-        .rhythm-container {
-            height: 100vh; display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            transition: background 0.3s ease;
-        }
-
-        .mantra-sync {
-            font-size: 1.5rem; font-weight: 100; letter-spacing: 12px;
-            color: var(--gold); margin-bottom: 30px;
-            text-transform: uppercase; transition: 0.2s;
-        }
-
-        .counter-box {
-            position: relative; width: 320px; height: 320px;
-            border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; cursor: pointer;
-        }
-
-        .glow-ring {
-            position: absolute; width: 100%; height: 100%;
-            border-radius: 50%; border: 2px solid var(--glass);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.05);
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .main-number {
-            font-size: 10rem; font-weight: 900; margin: 0;
-            background: linear-gradient(to bottom, #fff, #777);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        /* 3D Neumorphic Base */
+        .tap-pad {
+            width: 240px; height: 240px;
+            background: var(--btn-grad);
+            border-radius: 50%;
+            border: 2px solid rgba(255, 215, 0, 0.1);
+            box-shadow: var(--shadow);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 10;
         }
 
-        /* Bottom Status Bar */
-        .status-dock {
-            position: fixed; bottom: 40px; width: 85%;
-            background: var(--glass); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 25px; padding: 20px;
-            display: flex; justify-content: space-around;
+        /* Physical Click Effect */
+        .tap-pad:active {
+            transform: scale(0.92);
+            box-shadow: inset 5px 5px 15px #000, inset -5px -5px 15px #1a1a1a;
+            border-color: var(--gold);
         }
 
-        .stat-item { text-align: center; }
-        .stat-label { font-size: 0.6rem; color: #888; text-transform: uppercase; margin-bottom: 5px; }
-        .stat-value { font-size: 1.1rem; font-weight: 600; color: #fff; }
+        /* Dynamic Glow Behind Button */
+        .btn-aura {
+            position: absolute; width: 200px; height: 200px;
+            background: var(--gold); border-radius: 50%;
+            filter: blur(80px); opacity: 0.1;
+            transition: 0.3s; pointer-events: none;
+        }
 
-        /* Pulse Animation on Tap */
-        .tap-pulse { animation: pulseAnim 0.4s ease-out; }
-        @keyframes pulseAnim {
-            0% { transform: scale(1); box-shadow: 0 0 0px var(--gold); }
-            50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(255, 215, 0, 0.2); }
-            100% { transform: scale(1); box-shadow: 0 0 0px var(--gold); }
+        .count-text {
+            font-size: 8rem; margin: 0;
+            background: linear-gradient(180deg, #fff, #888);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            pointer-events: none;
+        }
+
+        /* Ripple Animation */
+        .ripple {
+            position: absolute; border: 2px solid var(--gold);
+            border-radius: 50%; pointer-events: none;
+            animation: rippleEffect 0.6s ease-out forwards;
+        }
+        @keyframes rippleEffect {
+            0% { width: 240px; height: 240px; opacity: 0.5; }
+            100% { width: 450px; height: 450px; opacity: 0; }
         }
     </style>
 </head>
-<body onclick="divineTap(event)">
+<body>
 
-    <canvas id="particleCanvas"></canvas>
-
-    <div class="rhythm-container" id="mainContainer">
-        <div class="mantra-sync" id="mantraText">Radha Radha</div>
-        
-        <div class="counter-box" id="pulseRef">
-            <div class="glow-ring"></div>
-            <h1 class="main-number" id="countDisp">0</h1>
-        </div>
-
-        <div class="status-dock">
-            <div class="stat-item">
-                <div class="stat-label">Daily Streak</div>
-                <div class="stat-value">🔥 12 Days</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Session Malas</div>
-                <div class="stat-value" id="malaDisp">0.0</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Global Rank</div>
-                <div class="stat-value">🌟 #42</div>
-            </div>
+    <div class="button-engine">
+        <div class="btn-aura" id="aura"></div>
+        <div class="tap-pad" id="mainButton" onpointerdown="triggerButton(event)">
+            <h1 class="count-text" id="counter">0</h1>
         </div>
     </div>
 
     <script>
         let count = 0;
-        const mantra = document.getElementById('mantraText');
-        const countDisp = document.getElementById('countDisp');
-        const pulseRef = document.getElementById('pulseRef');
-        const malaDisp = document.getElementById('malaDisp');
+        const btn = document.getElementById('mainButton');
+        const aura = document.getElementById('aura');
+        const counter = document.getElementById('counter');
 
-        function divineTap(e) {
-            // Logic
+        function triggerButton(e) {
             count++;
-            countDisp.innerText = count;
-            malaDisp.innerText = (count / 108).toFixed(1);
+            counter.innerText = count;
 
-            // Visual Feedback
-            pulseRef.classList.remove('tap-pulse');
-            void pulseRef.offsetWidth; // Trigger reflow
-            pulseRef.classList.add('tap-pulse');
+            // 1. Create Ripple
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple';
+            document.body.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
 
-            mantra.style.letterSpacing = '18px';
-            mantra.style.color = '#fff';
-            setTimeout(() => {
-                mantra.style.letterSpacing = '12px';
-                mantra.style.color = 'var(--gold)';
-            }, 200);
+            // 2. Increase Aura on high count
+            const intensity = Math.min(0.1 + (count % 108) * 0.005, 0.6);
+            aura.style.opacity = intensity;
+            aura.style.transform = `scale(${1 + intensity})`;
 
-            // Haptics
+            // 3. Physical Haptics
             if(navigator.vibrate) {
-                if(count % 108 === 0) navigator.vibrate([100, 50, 100]);
-                else navigator.vibrate(40);
+                if(count % 108 === 0) {
+                    navigator.vibrate([100, 50, 100, 50, 200]);
+                    aura.style.background = '#00faff'; // Color shift on Mala
+                } else {
+                    navigator.vibrate(35);
+                }
             }
-
-            // Optional: Add sound effect here
         }
     </script>
 </body>
