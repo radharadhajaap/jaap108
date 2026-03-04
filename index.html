@@ -3,125 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Radha Rani Jaap - Titanium V8</title>
+    <title>Radha Rani Jaap - Horizon Layout</title>
     
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
     
     <style>
-        :root { --gold: #FFD700; --bg: #020100; }
-        body { 
-            margin: 0; background: var(--bg); color: #fff; 
+        :root { 
+            --gold: #FFD700; 
+            --surface: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body, html { 
+            margin: 0; height: 100%; background: #050301; color: white;
             font-family: 'Outfit', sans-serif; overflow: hidden;
-            touch-action: manipulation; /* Improves tap latency on mobile */
         }
 
-        /* Hardware Accelerated Layer */
-        .layer-gpu { transform: translateZ(0); backface-visibility: hidden; }
-
-        .container { 
-            height: 100vh; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; 
+        /* 1. TOP SECTION: Elegant Header */
+        .layout-header {
+            position: fixed; top: 0; width: 100%; height: 80px;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            z-index: 10;
+        }
+        .mantra-banner {
+            font-size: 1.2rem; letter-spacing: 8px; font-weight: 300;
+            text-transform: uppercase; color: var(--gold); opacity: 0.8;
         }
 
-        .counter-ring {
-            position: relative; width: 350px; height: 350px;
-            will-change: transform; /* Tells browser to optimize for movement */
+        /* 2. CENTER SECTION: Immersive Tap Zone */
+        .tap-zone {
+            height: 100vh; width: 100%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            position: relative;
         }
-
-        .count-num {
-            font-size: 11rem; font-weight: 900; margin: 0;
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(to bottom, #fff, var(--gold));
+        .main-display {
+            text-align: center; transform: translateY(-40px);
+        }
+        .huge-num {
+            font-size: 11rem; font-weight: 900; line-height: 0.8;
+            margin: 0; background: linear-gradient(#fff, #999);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        #progressRing {
-            transition: stroke-dashoffset 0.25s linear; /* Faster, linear response */
-            stroke: var(--gold);
+        /* 3. BOTTOM SECTION: Ergonomic Controls */
+        .layout-footer {
+            position: fixed; bottom: 0; width: 100%;
+            background: linear-gradient(to top, #000 70%, transparent);
+            padding-bottom: 40px; z-index: 20;
         }
 
-        /* Performance Badge */
-        .perf-status {
-            position: fixed; top: 15px; right: 15px;
-            font-size: 10px; opacity: 0.4; letter-spacing: 1px;
+        /* Side-by-Side Stat Cards */
+        .stats-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+            padding: 0 25px; margin-bottom: 25px;
         }
+        .grid-card {
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 15px; border-radius: 20px; backdrop-filter: blur(20px);
+        }
+        .label { font-size: 0.65rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .val { font-size: 1.2rem; font-weight: 700; color: #fff; }
+
+        /* Compact Navigation Dock */
+        .nav-dock {
+            width: 85%; margin: 0 auto;
+            background: rgba(255,255,255,0.08); border: 1px solid var(--border);
+            border-radius: 30px; display: flex; justify-content: space-around;
+            padding: 12px 0;
+        }
+        .nav-item { font-size: 1.4rem; opacity: 0.6; }
     </style>
 </head>
-<body onclick="handlePerformanceTap(event)">
+<body>
 
-    <div class="perf-status">TITANIUM ENGINE ACTIVE • 120FPS</div>
+    <header class="layout-header">
+        <div class="mantra-banner">Radha Radha</div>
+    </header>
 
-    <div class="container layer-gpu">
-        <div class="counter-ring" id="ringBox">
-            <svg width="350" height="350">
-                <circle cx="175" cy="175" r="160" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
-                <circle id="progressRing" cx="175" cy="175" r="160" fill="none" 
-                        stroke-width="12" stroke-dasharray="1005" stroke-dashoffset="1005" 
-                        stroke-linecap="round" transform="rotate(-90 175 175)" />
-            </svg>
-            <h1 class="count-num" id="displayNum">0</h1>
+    <main class="tap-zone" onclick="handleTap()">
+        <div class="main-display">
+            <h1 class="huge-num" id="daily">0</h1>
+            <div style="font-size: 0.8rem; color: var(--gold); margin-top: 10px; letter-spacing: 3px;">
+                MALA IN PROGRESS
+            </div>
         </div>
-    </div>
+    </main>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    <footer class="layout-footer">
+        <div class="stats-grid">
+            <div class="grid-card">
+                <div class="label">Today's Mala</div>
+                <div class="val" id="mala">0.0</div>
+            </div>
+            <div class="grid-card">
+                <div class="label">Total Jaap</div>
+                <div class="val" id="total">1,240</div>
+            </div>
+        </div>
 
-        // Performance Config
-        const firebaseConfig = { /* Your Config */ };
-        const db = getFirestore(initializeApp(firebaseConfig));
-        const user = localStorage.getItem('jaapUserName');
-        
-        let localCount = 0;
-        let pendingUpdates = 0;
-        let syncTimeout = null;
+        <nav class="nav-dock">
+            <div class="nav-item">📜</div>
+            <div class="nav-item">🖼️</div>
+            <div class="nav-item">🏆</div>
+            <div class="nav-item">⚙️</div>
+        </nav>
+    </footer>
 
-        // Optimized UI Update Function
-        function updateUIRender(val) {
-            const display = document.getElementById('displayNum');
-            const ring = document.getElementById('progressRing');
+    <script>
+        let count = 0;
+        function handleTap() {
+            count++;
+            document.getElementById('daily').innerText = count;
+            document.getElementById('mala').innerText = (count / 108).toFixed(1);
             
-            // 1. Text Update
-            display.innerText = val;
-
-            // 2. Ring Animation (Math Optimized)
-            const offset = 1005 - (val % 108 / 108) * 1005;
-            ring.style.strokeDashoffset = offset;
-
-            // 3. Visual Feedback (Haptic feel)
-            const box = document.getElementById('ringBox');
-            box.style.transform = 'scale(0.97)';
-            setTimeout(() => box.style.transform = 'scale(1)', 50);
-        }
-
-        // Performance Tapping Logic
-        window.handlePerformanceTap = (e) => {
-            localCount++;
-            pendingUpdates++;
-            
-            // Instant Visual Response (No delay)
-            updateUIRender(localCount);
-
+            // Haptic Feedback
             if(navigator.vibrate) navigator.vibrate(30);
-
-            // Debounced Sync (Database ko 2 second baad bhejta hai)
-            clearTimeout(syncTimeout);
-            syncTimeout = setTimeout(async () => {
-                const updateRef = doc(db, "users", user);
-                try {
-                    await updateDoc(updateRef, {
-                        dailyCount: increment(pendingUpdates),
-                        totalCount: increment(pendingUpdates)
-                    });
-                    pendingUpdates = 0; // Reset after success
-                    console.log("Sync Complete");
-                } catch (err) {
-                    console.error("Sync Failed, will retry");
-                }
-            }, 2000); 
-        };
+        }
     </script>
 </body>
 </html>
