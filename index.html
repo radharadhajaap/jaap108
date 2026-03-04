@@ -7,105 +7,75 @@
     <title>Radha Rani Jaap Pro</title>
     <style>
         :root { --orange: #f38630; --glass: rgba(255, 255, 255, 0.1); }
-        
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            font-family: 'Segoe UI', Roboto, sans-serif; 
-            background-color: #0d0905; color: white; overflow: hidden;
-        }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Segoe UI', sans-serif; background-color: #0d0905; color: white; overflow: hidden; }
 
-        /* Immersive Background */
-        .bg-container {
+        /* Fixed Background Container */
+        #darshanBg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover; background-position: center;
-            z-index: -1; transition: background-image 1.5s ease-in-out;
+            z-index: -1; transition: background-image 1.2s ease-in-out;
         }
 
-        /* Glass UI Navigation */
-        .top-nav {
-            position: fixed; top: 20px; width: 100%; display: flex;
-            justify-content: space-evenly; padding: 0 10px; z-index: 100;
-        }
-        .nav-btn {
-            background: var(--glass); backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 10px 18px; border-radius: 50px; color: white; font-size: 0.8rem;
-            text-decoration: none; cursor: pointer; display: flex; align-items: center; gap: 8px;
-        }
+        /* Glass UI Components */
+        .top-nav { position: fixed; top: 20px; width: 100%; display: flex; justify-content: space-evenly; z-index: 100; }
+        .nav-btn { background: var(--glass); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); padding: 10px 18px; border-radius: 50px; color: white; font-size: 0.8rem; cursor: pointer; text-decoration: none; }
 
-        /* Sankalp (Goal) UI */
-        .sankalp-status {
-            position: fixed; top: 85px; width: 90%; left: 5%;
-            background: rgba(0, 0, 0, 0.6); border-radius: 15px;
-            padding: 12px; border: 1px solid rgba(243, 134, 48, 0.3);
-            text-align: center; z-index: 90;
-        }
+        .sankalp-box { position: fixed; top: 85px; width: 90%; left: 5%; background: rgba(0,0,0,0.6); border-radius: 15px; padding: 12px; border: 1px solid rgba(243,134,48,0.3); text-align: center; z-index: 90; display: none; }
         .sankalp-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 8px; overflow: hidden; }
-        .sankalp-fill { height: 100%; background: linear-gradient(90deg, #4caf50, #8bc34a); width: 0%; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sankalp-fill { height: 100%; background: linear-gradient(90deg, #4caf50, #8bc34a); width: 0%; transition: 0.5s; }
 
-        .main-content { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .mantra-title { font-size: 2.2rem; font-weight: bold; text-shadow: 0 0 20px rgba(243, 134, 48, 0.8); margin-bottom: 5px; }
+        .main { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .mantra { font-size: 2.5rem; font-weight: bold; text-shadow: 0 0 20px var(--orange); margin-bottom: 10px; }
 
         /* Digital Mala */
-        .mala-circle { position: relative; width: 260px; height: 260px; margin: 15px auto; display: flex; align-items: center; justify-content: center; }
-        .mala-svg { position: absolute; width: 100%; height: 100%; transform: rotate(-90deg); transition: 0.4s; }
-        
-        .count-text { font-size: 5rem; font-weight: 800; line-height: 1; margin: 0; }
-        .floating-radhe { position: absolute; color: #ffcc33; font-weight: bold; pointer-events: none; animation: floatUp 0.8s forwards; font-size: 1.5rem; }
-        
-        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-100px); } }
+        .mala-wrap { position: relative; width: 280px; height: 280px; display: flex; align-items: center; justify-content: center; }
+        .mala-svg { position: absolute; width: 100%; height: 100%; transform: rotate(-90deg); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .daily-num { font-size: 5.5rem; font-weight: 800; line-height: 1; margin: 0; }
 
-        /* Sankalp Popup */
-        #sankalpModal {
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(20, 15, 10, 0.98); padding: 30px; border-radius: 25px;
-            border: 1px solid var(--orange); z-index: 1000; width: 85%; text-align: center; box-shadow: 0 0 30px rgba(0,0,0,0.5);
-        }
-        .sankalp-input { width: 100%; padding: 15px; margin: 15px 0; border-radius: 12px; border: 1px solid #444; background: #000; color: white; text-align: center; font-size: 1.2rem; }
+        /* Floating Text */
+        .float-radhe { position: absolute; color: #ffcc33; font-weight: bold; pointer-events: none; animation: floatUp 0.8s forwards; font-size: 1.5rem; }
+        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-120px); } }
+
+        /* Modal */
+        #sankalpModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1512; padding: 30px; border-radius: 20px; border: 1px solid var(--orange); z-index: 1000; width: 80%; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 1px solid #444; background: #000; color: white; text-align: center; box-sizing: border-box; }
     </style>
 </head>
 <body onclick="handleTap(event)">
 
-    <div class="bg-container" id="darshanBg"></div>
+    <div id="darshanBg"></div>
     <audio id="bellSound"><source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
 
     <div class="top-nav">
-        <div class="nav-btn" onclick="openSankalp(event)"><span>📜</span> Sankalp</div>
-        <a href="leaderboard.html" class="nav-btn"><span>🏆</span> Rank</a>
+        <div class="nav-btn" onclick="openSankalp(event)">📜 Sankalp</div>
+        <a href="leaderboard.html" class="nav-btn">🏆 Rank</a>
     </div>
 
-    <div class="sankalp-status" id="sankalpDisplay" style="display:none;">
-        <div style="font-size: 0.75rem; color: #ffcc33; margin-bottom: 5px;">
-            🙏 Sankalp: <span id="sankalpCurrent">0</span> / <span id="sankalpGoal">0</span>
-        </div>
-        <div class="sankalp-bar"><div class="sankalp-fill" id="sankalpFill"></div></div>
+    <div class="sankalp-box" id="sankalpDisplay">
+        <div style="font-size: 0.75rem; color: #ffcc33;">🙏 Goal: <span id="sCurrent">0</span> / <span id="sGoal">0</span></div>
+        <div class="sankalp-bar"><div class="sankalp-fill" id="sFill"></div></div>
     </div>
 
-    <div class="main-content">
-        <div id="streakDisplay" style="color:#ffeb3b; font-size: 1rem; margin-bottom: 10px;">🔥 0 Day Streak</div>
-        <div class="mantra-title">Radha Radha</div>
-        
-        <div class="mala-circle">
+    <div class="main">
+        <div id="streak" style="color:#ffeb3b; margin-bottom: 10px;">🔥 0 Day Streak</div>
+        <div class="mantra">Radha Radha</div>
+        <div class="mala-wrap">
             <svg class="mala-svg" id="malaSvg" viewBox="0 0 100 100">
                 <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
-                <circle id="progressCircle" cx="50" cy="50" r="45" fill="none" stroke="#f38630" stroke-width="3" stroke-dasharray="282.7" stroke-dashoffset="282.7" />
+                <circle id="progCirc" cx="50" cy="50" r="45" fill="none" stroke="#f38630" stroke-width="3" stroke-dasharray="282.7" stroke-dashoffset="282.7" />
             </svg>
-            <div style="position:relative; z-index:10;">
-                <p class="count-text" id="dailyDisplay">0</p>
-                <p style="font-size: 0.7rem; letter-spacing: 2px; margin: 0; color: var(--orange);">DAILY JAAP</p>
+            <div style="z-index:10;">
+                <p class="daily-num" id="dailyCount">0</p>
+                <p style="font-size: 0.7rem; letter-spacing: 3px; color: var(--orange); margin: 0;">DAILY JAAP</p>
             </div>
         </div>
-
-        <div style="margin-top: 20px; opacity: 0.8; font-size: 0.9rem;">
-            MY TOTAL: <b id="totalDisplay" style="color:var(--orange)">0</b>
-        </div>
+        <p style="margin-top:20px; opacity:0.7;">TOTAL: <b id="totalCount" style="color:var(--orange)">0</b></p>
     </div>
 
     <div id="sankalpModal">
-        <h2 style="color:var(--orange); margin-top:0;">Sankalp Lein 🙏</h2>
-        <p style="font-size:0.85rem; opacity:0.8;">Aaj aap kitni mala karne ka sankalp lete hain?<br>(1 Mala = 108 Jaap)</p>
-        <input type="number" id="malaInput" class="sankalp-input" placeholder="Mala ki sankhya">
-        <button onclick="setSankalp()" style="background:var(--orange); border:none; padding:15px 30px; border-radius:12px; color:white; font-weight:bold; width:100%; font-size:1rem;">Start My Sankalp</button>
+        <h3 style="color:var(--orange)">Aaj ka Sankalp</h3>
+        <input type="number" id="mInput" placeholder="Kitni Mala? (e.g. 1, 5, 11)">
+        <button onclick="setSankalp()" style="background:var(--orange); border:none; padding:12px 25px; border-radius:10px; color:white; font-weight:bold; width:100%;">Confirm</button>
     </div>
 
     <script type="module">
@@ -121,92 +91,72 @@
             appId: "1:375289521394:web:ced2cafa4d1743d5ab9c6b"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const userName = localStorage.getItem('jaapUserName');
+        const db = getFirestore(initializeApp(firebaseConfig));
+        const user = localStorage.getItem('jaapUserName');
         const today = new Date().toLocaleDateString();
 
-        let rotation = 0;
+        if(!user) window.location.href = "login.html";
 
-        // --- Darshan Images Array ---
-        const darshanPhotos = [
+        let rot = 0;
+        const photos = [
             "https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932",
+            "https://images.unsplash.com/photo-1616013050162-4f366e6b6680?q=80&w=1932",
             "https://images.unsplash.com/photo-1544924222-355b1f0ad5a7?q=80&w=1932",
-            "https://images.unsplash.com/photo-1506191696232-49195305149b?q=80&w=1932",
-            "https://images.unsplash.com/photo-1563810222123-26176313388c?q=80&w=1932"
+            "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=1932"
         ];
 
-        function updateBackground(dailyCount) {
-            // Logic: Har 108 jaap par ya har naye din par image badlegi
-            const dayBase = new Date().getDate();
-            const malaBase = Math.floor(dailyCount / 108);
-            const photoIdx = (dayBase + malaBase) % darshanPhotos.length;
+        function updateUI(daily) {
+            // Background update logic
+            const idx = (new Date().getDate() + Math.floor(daily / 108)) % photos.length;
+            document.getElementById('darshanBg').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url('${photos[idx]}')`;
             
-            document.getElementById('darshanBg').style.backgroundImage = 
-                `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url('${darshanPhotos[photoIdx]}')`;
+            // Progress circle
+            document.getElementById('progCirc').style.strokeDashoffset = 282.7 - (daily % 108 / 108) * 282.7;
         }
 
-        function initApp() {
-            onSnapshot(doc(db, "users", userName), (ds) => {
-                if(ds.exists()) {
-                    const d = ds.data();
-                    const daily = d.lastDate === today ? d.dailyCount : 0;
-                    
-                    document.getElementById('dailyDisplay').innerText = daily;
-                    document.getElementById('totalDisplay').innerText = d.totalCount;
-                    document.getElementById('streakDisplay').innerText = `🔥 ${d.streak || 0} Day Streak`;
-                    document.getElementById('progressCircle').style.strokeDashoffset = 282.7 - (daily % 108 / 108) * 282.7;
+        onSnapshot(doc(db, "users", user), (ds) => {
+            if(ds.exists()) {
+                const d = ds.data();
+                const daily = d.lastDate === today ? d.dailyCount : 0;
+                document.getElementById('dailyCount').innerText = daily;
+                document.getElementById('totalCount').innerText = d.totalCount;
+                document.getElementById('streak').innerText = `🔥 ${d.streak || 0} Day Streak`;
+                updateUI(daily);
 
-                    updateBackground(daily);
-
-                    // Sankalp Progress
-                    if(d.sankalpGoal && d.sankalpDate === today) {
-                        document.getElementById('sankalpDisplay').style.display = 'block';
-                        document.getElementById('sankalpGoal').innerText = d.sankalpGoal;
-                        document.getElementById('sankalpCurrent').innerText = daily;
-                        const progress = Math.min((daily / d.sankalpGoal) * 100, 100);
-                        document.getElementById('sankalpFill').style.width = progress + "%";
-                        if(daily >= d.sankalpGoal) document.getElementById('sankalpCurrent').innerText = "SIDDHA ✨";
-                    }
+                if(d.sankalpGoal && d.sankalpDate === today) {
+                    document.getElementById('sankalpDisplay').style.display = 'block';
+                    document.getElementById('sGoal').innerText = d.sankalpGoal;
+                    document.getElementById('sCurrent').innerText = daily;
+                    document.getElementById('sFill').style.width = Math.min((daily/d.sankalpGoal)*100, 100) + "%";
                 }
-            });
-        }
+            }
+        });
 
         window.openSankalp = (e) => { e.stopPropagation(); document.getElementById('sankalpModal').style.display = 'block'; };
-
+        
         window.setSankalp = async () => {
-            const malas = document.getElementById('malaInput').value;
-            if(!malas || malas <= 0) return alert("Kripya mala ki sankhya bharein.");
-            await setDoc(doc(db, "users", userName), { sankalpGoal: malas * 108, sankalpDate: today }, { merge: true });
+            const m = document.getElementById('mInput').value;
+            if(!m) return;
+            await setDoc(doc(db, "users", user), { sankalpGoal: m * 108, sankalpDate: today }, { merge: true });
             document.getElementById('sankalpModal').style.display = 'none';
         };
 
         window.handleTap = async (e) => {
             if(e.target.closest('.nav-btn') || e.target.closest('#sankalpModal')) return;
 
-            rotation += (360 / 108);
-            document.getElementById('malaSvg').style.transform = `rotate(${rotation - 90}deg)`;
+            rot += (360 / 108);
+            document.getElementById('malaSvg').style.transform = `rotate(${rot - 90}deg)`;
 
-            const f = document.createElement('div'); f.className = 'floating-radhe'; f.innerText = 'Radhe';
-            f.style.left = e.clientX + 'px'; f.style.top = e.clientY + 'px';
-            document.body.appendChild(f);
-            setTimeout(() => f.remove(), 800);
+            const f = document.createElement('div'); f.className='float-radhe'; f.innerText='Radhe';
+            f.style.left=e.clientX+'px'; f.style.top=e.clientY+'px'; document.body.appendChild(f);
+            setTimeout(()=>f.remove(), 800);
 
-            const userRef = doc(db, "users", userName);
-            await setDoc(userRef, { 
-                dailyCount: increment(1), 
-                totalCount: increment(1), 
-                lastDate: today, 
-                lastTimestamp: Date.now() 
-            }, { merge: true });
-
-            if((parseInt(document.getElementById('dailyDisplay').innerText) + 1) % 108 === 0) {
-                document.getElementById('bellSound').play();
-            }
-            if(navigator.vibrate) navigator.vibrate(45);
+            const dailyVal = parseInt(document.getElementById('dailyCount').innerText) + 1;
+            if(dailyVal % 108 === 0) document.getElementById('bellSound').play();
+            
+            await setDoc(doc(db, "users", user), { dailyCount: increment(1), totalCount: increment(1), lastDate: today, lastTimestamp: Date.now() }, { merge: true });
+            if(navigator.vibrate) navigator.vibrate(40);
         };
-
-        initApp();
     </script>
 </body>
 </html>
