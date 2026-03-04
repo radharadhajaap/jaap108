@@ -1,97 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Radha Rani Jaap</title>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Jaap App</title>
     <style>
-        :root { --primary-orange: #f38630; --bg-dark: #120c08; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-dark); font-family: sans-serif; color: white; user-select: none; overflow: hidden; }
-        
-        .bg-overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(0,0,0,0.95)), 
-            url('https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932'); 
-            background-size: cover; z-index: -1; opacity: 0.5;
-        }
-
-        /* Top Navigation */
-        .top-nav { position: fixed; top: 20px; width: 100%; display: flex; justify-content: space-between; padding: 0 15px; box-sizing: border-box; z-index: 100; }
-        .nav-btn { background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 30px; border: 1px solid var(--primary-orange); color: white; font-size: 0.75rem; display: flex; align-items: center; gap: 5px; cursor: pointer; text-decoration: none; }
-
-        /* Music Toggle UI */
-        #musicToggle { background: rgba(243, 134, 48, 0.2); }
-
-        /* Live Ticker */
-        .live-ticker { position: fixed; top: 70px; left: 0; width: 100%; background: rgba(243, 134, 48, 0.15); padding: 4px 0; font-size: 0.75rem; overflow: hidden; white-space: nowrap; border-top: 1px solid rgba(255,255,255,0.05); }
-        .ticker-content { display: inline-block; animation: scroll 20s linear infinite; color: #ffd700; }
-        @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
-        .main-content { text-align: center; height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 20px; box-sizing: border-box; }
-        
-        /* Daily Quotes Style */
-        .quote-box { font-style: italic; font-size: 0.9rem; color: #ccc; margin-bottom: 25px; padding: 0 20px; line-height: 1.4; min-height: 40px; }
-
-        .streak-badge { font-size: 1.1rem; color: #ffeb3b; margin-bottom: 5px; }
-        .mantra { font-size: 2.1rem; font-weight: bold; margin: 10px 0; text-shadow: 0 0 15px var(--primary-orange); }
-
-        .counter-wrapper { position: relative; width: 240px; height: 240px; margin: 0 auto; }
+        :root { --orange: #f38630; --bg: #0d0905; }
+        body, html { margin: 0; padding: 0; height: 100%; background: var(--bg); color: white; font-family: sans-serif; overflow: hidden; }
+        .bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.95)), url('https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932') center/cover; z-index: -1; opacity: 0.6; }
+        .top-nav { position: fixed; top: 15px; width: 100%; display: flex; justify-content: space-between; padding: 0 15px; box-sizing: border-box; z-index: 100; }
+        .btn { background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 20px; border: 1px solid var(--orange); color: white; text-decoration: none; font-size: 0.8rem; cursor: pointer; }
+        .ticker { position: fixed; top: 65px; width: 100%; background: rgba(243,134,48,0.1); padding: 5px 0; font-size: 0.75rem; white-space: nowrap; overflow: hidden; color: #ffd700; }
+        .ticker-move { display: inline-block; animation: move 20s linear infinite; }
+        @keyframes move { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .main { text-align: center; height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 20px; }
+        .quote { font-style: italic; font-size: 0.85rem; opacity: 0.7; margin-bottom: 20px; min-height: 40px; }
+        .streak { color: #ffeb3b; font-size: 1.1rem; margin-bottom: 5px; }
+        .mantra { font-size: 2.2rem; font-weight: bold; margin-bottom: 15px; text-shadow: 0 0 15px var(--orange); }
+        .circle-box { position: relative; width: 220px; height: 220px; margin: 0 auto; }
         svg { transform: rotate(-90deg); }
-        .circle-bg { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 10; }
-        .circle-progress { fill: none; stroke: var(--primary-orange); stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 0.3s; }
-        .counter-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-
-        .stats-footer { margin-top: 30px; font-size: 0.85rem; opacity: 0.7; }
-        .float-text { position: absolute; color: white; font-weight: bold; pointer-events: none; animation: floatUp 1s ease-out forwards; z-index: 500; font-size: 1.3rem; }
-        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-120px); opacity: 0; } }
+        .progress { fill: none; stroke: var(--orange); stroke-width: 10; stroke-linecap: round; transition: 0.3s; }
+        .count-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .float { position: absolute; color: white; animation: float 1s forwards; font-weight: bold; pointer-events: none; }
+        @keyframes float { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-100px); } }
     </style>
 </head>
 <body onclick="handleTap(event)">
-
-    <audio id="bgMusic" loop>
-        <source src="https://www.chosic.com/wp-content/uploads/2021/07/The-Inner-Calling.mp3" type="audio/mpeg">
-    </audio>
-
+    <audio id="bgMusic" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-17.mp3"></audio>
+    <div class="bg"></div>
     <div class="top-nav">
-        <div class="nav-btn" id="musicToggle" onclick="toggleMusic(event)"><span>🔈</span> Music Off</div>
-        <a href="leaderboard.html" class="nav-btn"><span>🏆</span> Rank</a>
+        <div class="btn" onclick="toggleMusic(event)" id="musicBtn">🔈 Music Off</div>
+        <a href="leaderboard.html" class="btn">🏆 Rank</a>
     </div>
-
-    <div class="live-ticker">
-        <div class="ticker-content" id="liveTicker">Radhe Radhe... 🙏 Connecting with devotees...</div>
-    </div>
-
-    <div class="bg-overlay"></div>
-    
-    <div class="main-content">
-        <div class="streak-badge" id="streakDisplay">🔥 0 Days Streak</div>
-        
-        <div class="quote-box" id="quoteText">"The only way to reach Krishna is through pure love."</div>
-
-        <div class="welcome-section">
-            <div class="mantra">Radha Radha 🥺❤️</div>
+    <div class="ticker"><div class="ticker-move" id="liveTicker">Radhe Radhe... 🙏</div></div>
+    <div class="main">
+        <div class="streak" id="streakDisplay">🔥 0 Days Streak</div>
+        <div class="quote" id="quoteBox">"Loading wisdom..."</div>
+        <div class="mantra">Radha Radha</div>
+        <div class="circle-box">
+            <svg width="220" height="220"><circle cx="110" cy="110" r="100" stroke="rgba(255,255,255,0.05)" stroke-width="10" fill="none"/><circle id="prog" class="progress" cx="110" cy="110" r="100"/></svg>
+            <div class="count-inner"><span id="daily" style="font-size:4rem;font-weight:bold">0</span><br><small>DAILY</small></div>
         </div>
-
-        <div class="counter-wrapper">
-            <svg width="240" height="240">
-                <circle class="circle-bg" cx="120" cy="120" r="110"></circle>
-                <circle id="progressCircle" class="circle-progress" cx="120" cy="120" r="110"></circle>
-            </svg>
-            <div class="counter-inner">
-                <span id="dailyDisplay" style="font-size: 4rem; font-weight: bold;">0</span>
-                <div style="font-size: 0.75rem; color: var(--primary-orange);">DAILY CHANTS</div>
-            </div>
-        </div>
-
-        <div class="stats-footer">
-            TOTAL: <span id="totalDisplay" style="color: var(--primary-orange); font-weight: bold;">0</span>
-            <div style="margin-top: 10px; font-size: 0.6rem;">TAP TO START YOUR MALA</div>
-        </div>
+        <p style="margin-top:20px;opacity:0.6">TOTAL: <span id="total" style="color:var(--orange)">0</span></p>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot, increment, getDoc, collection, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, increment, collection, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
@@ -101,91 +55,51 @@
             messagingSenderId: "375289521394",
             appId: "1:375289521394:web:ced2cafa4d1743d5ab9c6b"
         };
+        const db = getFirestore(initializeApp(firebaseConfig));
+        const user = localStorage.getItem('jaapUserName');
+        const today = new Date().toLocaleDateString();
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        
-        let userName = localStorage.getItem('jaapUserName');
-        const todayStr = new Date().toLocaleDateString();
+        const quotes = ["Pure love is the way to Krishna.", "Always remember Radha Rani.", "Chant with heart.", "Peace starts with a prayer."];
+        document.getElementById('quoteBox').innerText = quotes[Math.floor(Math.random()*quotes.length)];
 
-        // Quotes Array
-        const quotes = [
-            "The mind is its own place, and in itself can make a heaven of hell.",
-            "Always remember Krishna, never forget Him.",
-            "Love is the only bridge between you and everything.",
-            "Surrender your soul to the divine grace of Radha Rani.",
-            "Every name you chant brings you closer to the supreme peace.",
-            "Radhe Radhe! Let your heart beat with the name of Krishna."
-        ];
+        if(!user) window.location.href="login.html";
 
-        if (!userName) { window.location.href = "login.html"; } else { setupApp(); }
+        onSnapshot(doc(db, "users", user), (ds) => {
+            if(ds.exists()){
+                const d = ds.data();
+                const dailyCount = d.lastDate === today ? d.dailyCount : 0;
+                document.getElementById('daily').innerText = dailyCount;
+                document.getElementById('total').innerText = d.totalCount;
+                document.getElementById('streakDisplay').innerText = `🔥 ${d.streak || 0} Days Streak`;
+                const circ = 2 * Math.PI * 100;
+                document.getElementById('prog').style.strokeDasharray = circ;
+                document.getElementById('prog').style.strokeDashoffset = circ - (dailyCount % 108 / 108) * circ;
+            }
+        });
 
-        function setupApp() {
-            // Set random quote
-            document.getElementById('quoteText').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
-            
-            const userRef = doc(db, "users", userName);
-            onSnapshot(userRef, (ds) => {
-                if (ds.exists()) {
-                    const data = ds.data();
-                    const daily = data.lastDate === todayStr ? (data.dailyCount || 0) : 0;
-                    document.getElementById('dailyDisplay').innerText = daily;
-                    document.getElementById('totalDisplay').innerText = data.totalCount || 0;
-                    document.getElementById('streakDisplay').innerText = `🔥 ${(data.streak || 0)} Days Streak`;
-                    updateCircle(daily);
-                }
-            });
+        onSnapshot(query(collection(db, "users"), orderBy("lastTimestamp", "desc"), limit(5)), (sn) => {
+            let t = ""; sn.forEach(d => t += ` • ${d.id} is chanting 🙏 `);
+            document.getElementById('liveTicker').innerText = t + t;
+        });
 
-            // Ticker Logic
-            const q = query(collection(db, "users"), orderBy("lastTimestamp", "desc"), limit(5));
-            onSnapshot(q, (snap) => {
-                let text = ""; snap.forEach(doc => { text += ` • ${doc.id} is chanting 🙏 `; });
-                document.getElementById('liveTicker').innerText = text + text;
-            });
-        }
-
-        // --- NEW: MUSIC LOGIC ---
         window.toggleMusic = (e) => {
             e.stopPropagation();
-            const music = document.getElementById('bgMusic');
-            const btn = document.getElementById('musicToggle');
-            if (music.paused) {
-                music.play();
-                btn.innerHTML = "<span>🔊</span> Music On";
-                btn.style.background = "var(--primary-orange)";
-            } else {
-                music.pause();
-                btn.innerHTML = "<span>🔈</span> Music Off";
-                btn.style.background = "rgba(243, 134, 48, 0.2)";
-            }
+            const m = document.getElementById('bgMusic');
+            const b = document.getElementById('musicBtn');
+            if(m.paused) { m.play(); b.innerHTML = "🔊 Music On"; b.style.background = "var(--orange)"; }
+            else { m.pause(); b.innerHTML = "🔈 Music Off"; b.style.background = "rgba(255,255,255,0.1)"; }
         };
 
         window.handleTap = async (e) => {
-            if (e.target.closest('.nav-btn')) return;
+            if(e.target.closest('.btn')) return;
+            const f = document.createElement('div'); f.className='float'; f.innerText='Radha Radha';
+            f.style.left=e.clientX+'px'; f.style.top=e.clientY+'px'; document.body.appendChild(f);
+            setTimeout(()=>f.remove(), 1000);
 
-            const f = document.createElement('div');
-            f.innerText = 'Radha Radha'; f.className = 'float-text';
-            f.style.left = `${e.clientX - 50}px`; f.style.top = `${e.clientY - 20}px`;
-            document.body.appendChild(f);
-            setTimeout(() => f.remove(), 1000);
-
-            const userRef = doc(db, "users", userName);
-            await setDoc(userRef, {
-                dailyCount: increment(1),
-                totalCount: increment(1),
-                lastDate: todayStr,
-                lastTimestamp: Date.now()
-            }, { merge: true });
-
-            if (navigator.vibrate) navigator.vibrate(40);
+            const userRef = doc(db, "users", user);
+            await setDoc(userRef, { dailyCount: increment(1), totalCount: increment(1), lastDate: today, lastTimestamp: Date.now() }, { merge: true });
+            if(navigator.vibrate) navigator.vibrate(40);
         };
-
-        function updateCircle(count) {
-            const circle = document.getElementById('progressCircle');
-            const circum = 2 * Math.PI * 110;
-            circle.style.strokeDasharray = circum;
-            circle.style.strokeDashoffset = circum - (count % 108 / 108) * circum;
-        }
     </script>
 </body>
 </html>
