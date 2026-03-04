@@ -26,18 +26,17 @@
             position: relative; border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* --- CROWN POSITIONING --- */
         .profile-wrapper { 
             position: relative; 
             margin-right: 15px;
-            padding-top: 10px; /* Space for crown */
+            padding-top: 10px; 
         }
 
         .crown {
             position: absolute;
-            top: -18px; /* Profile pic ke upar */
+            top: -18px; 
             left: 50%;
-            transform: translateX(-50%) rotate(-10deg); /* Center and tilt */
+            transform: translateX(-50%) rotate(-10deg);
             font-size: 1.8rem;
             z-index: 10;
             filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8));
@@ -48,9 +47,9 @@
             border: 2px solid rgba(255,255,255,0.2);
             object-fit: cover;
             display: block;
+            background: #222; /* Placeholder color */
         }
 
-        /* Rank Specific Styles */
         .rank-1 .profile-pic { border-color: var(--gold); box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); }
         .rank-2 .profile-pic { border-color: var(--silver); }
         .rank-3 .profile-pic { border-color: var(--bronze); }
@@ -70,7 +69,8 @@
     </div>
 
     <div class="leaderboard-container" id="leaderboardList">
-        </div>
+        <p style="text-align:center; opacity:0.5;">Loading devotees...</p>
+    </div>
 
     <a href="index.html" class="back-btn">Back to Jaap</a>
 
@@ -105,20 +105,22 @@
                 else if(rank === 2) crownEmoji = '<div class="crown">🥈</div>';
                 else if(rank === 3) crownEmoji = '<div class="crown">🥉</div>';
 
-                const profileImg = `https://ui-avatars.com/api/?name=${doc.id}&background=333&color=f38630&bold=true`;
+                // --- PHOTO FETCH LOGIC ---
+                // Pehle Firebase ka profilePic check karega, agar nahi hai toh Avatar dikhayega
+                const profileImg = data.profilePic ? data.profilePic : `https://ui-avatars.com/api/?name=${doc.id}&background=333&color=f38630&bold=true`;
 
                 listDiv.innerHTML += `
                     <div class="user-card rank-${rank}">
                         <div class="rank-num">${rank}</div>
                         <div class="profile-wrapper">
                             ${crownEmoji}
-                            <img src="${profileImg}" class="profile-pic">
+                            <img src="${profileImg}" class="profile-pic" onerror="this.src='https://ui-avatars.com/api/?name=${doc.id}'">
                         </div>
                         <div class="user-info">
                             <span class="user-name">${doc.id}</span>
                             <span style="font-size:0.8rem; opacity:0.6">Total Jaap</span>
                         </div>
-                        <div class="count-badge">${data.totalCount || 0}</div>
+                        <div class="count-badge">${(data.totalCount || 0).toLocaleString()}</div>
                     </div>
                 `;
             });
