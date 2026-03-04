@@ -4,159 +4,146 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
-    <title>Radha Rani Jaap - Infinity V5</title>
+    <title>Radha Rani Jaap - Nexus V6</title>
     
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Outfit:wght@900&display=swap" rel="stylesheet">
     
     <style>
         :root { 
-            --gold: #FFD700;
-            --orange: #FF8C00;
-            --bg-dark: #030201;
-            --glass-white: rgba(255, 255, 255, 0.08);
-            --border: rgba(255, 255, 255, 0.12);
+            --accent: #ff9f43;
+            --divine: #ffcc33;
+            --bg-base: #020100;
+            --surface: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            font-family: 'Outfit', sans-serif; 
-            background-color: var(--bg-dark); color: white; overflow: hidden;
+            font-family: 'Space Grotesk', sans-serif; 
+            background-color: var(--bg-base); color: white; overflow: hidden;
             user-select: none; -webkit-tap-highlight-color: transparent;
         }
 
-        /* 3D Parallax Background */
-        #darshanBg {
-            position: fixed; top: -10%; left: -10%; width: 120%; height: 120%;
-            background-size: cover; background-position: center;
-            z-index: -2; transition: filter 2s ease;
-            filter: brightness(0.3) blur(3px);
-        }
-
-        /* Animated Grid Overlay */
-        .grid-overlay {
+        #bgLayer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), 
-                              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 40px 40px; z-index: -1; opacity: 0.5;
+            background-size: cover; background-position: center;
+            z-index: -2; transition: filter 2s, transform 3s ease-in-out;
+            filter: brightness(0.3) contrast(1.1);
         }
 
-        /* Premium Top Bar */
-        .top-nav {
-            position: fixed; top: 50px; width: 88%; left: 6%;
-            display: flex; justify-content: space-between; z-index: 100;
+        .ambient-glow {
+            position: fixed; bottom: -20%; left: 50%; transform: translateX(-50%);
+            width: 150%; height: 60%; background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            opacity: 0.15; z-index: -1; filter: blur(80px);
         }
-        .nav-chip {
-            background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+
+        /* Top Header */
+        .header-nexus {
+            position: fixed; top: 45px; width: 90%; left: 5%;
+            display: flex; justify-content: space-between; align-items: center; z-index: 100;
+        }
+        .stat-pill {
+            background: var(--surface); backdrop-filter: blur(25px);
             padding: 10px 18px; border-radius: 18px; border: 1px solid var(--border);
-            font-size: 0.75rem; font-weight: 600; color: var(--gold); letter-spacing: 1px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; color: var(--divine);
         }
 
-        /* Main Jaap UI */
-        .viewport { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        /* Center Engine */
+        .nexus-core { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         
-        .mantra-text { 
-            font-size: 3.5rem; font-weight: 900; letter-spacing: -2px;
-            background: linear-gradient(to bottom, #fff, var(--gold));
+        .mantra-float {
+            font-family: 'Outfit', sans-serif; font-size: 3.2rem; font-weight: 900;
+            background: linear-gradient(180deg, #fff 30%, var(--divine));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 25px; filter: drop-shadow(0 0 20px rgba(255,140,0,0.4));
+            margin-bottom: 20px; animation: breathe 5s infinite ease-in-out;
         }
+        @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } }
 
-        .counter-box {
-            position: relative; width: 340px; height: 340px;
+        .counter-nexus {
+            position: relative; width: 320px; height: 320px;
             display: flex; align-items: center; justify-content: center;
+            transition: transform 0.1s;
         }
 
-        .glow-aura {
-            position: absolute; width: 200px; height: 200px;
-            background: var(--orange); border-radius: 50%;
-            filter: blur(100px); opacity: 0.2; z-index: 0;
-            animation: pulseAura 4s infinite alternate ease-in-out;
-        }
-        @keyframes pulseAura { from { transform: scale(1); opacity: 0.2; } to { transform: scale(1.4); opacity: 0.1; } }
-
-        .count-text { 
-            font-size: 9.5rem; font-weight: 900; margin: 0; z-index: 10;
-            font-variant-numeric: tabular-nums; letter-spacing: -5px;
-            background: linear-gradient(180deg, #fff, #999);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        .main-num {
+            font-family: 'Outfit', sans-serif; font-size: 8.5rem; line-height: 1;
+            margin: 0; z-index: 10; text-shadow: 0 0 30px rgba(0,0,0,0.5);
         }
 
-        /* Sankalp Capsule */
-        .capsule {
-            margin-top: 40px; background: var(--glass-white); padding: 14px 28px;
-            border-radius: 50px; border: 1px solid var(--border);
-            backdrop-filter: blur(25px); text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-        }
-        .capsule-label { font-size: 0.6rem; font-weight: 800; color: var(--orange); letter-spacing: 3px; margin-bottom: 4px; }
-        .capsule-bar { width: 120px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin: 8px auto 0; }
-        .capsule-fill { width: 0%; height: 100%; background: var(--gold); box-shadow: 0 0 10px var(--gold); transition: 0.5s; }
+        /* Advanced Progress Ring */
+        #ringInner { transition: stroke-dashoffset 0.4s cubic-bezier(0.4, 0, 0.2, 1); filter: drop-shadow(0 0 10px var(--accent)); }
 
-        /* Bottom Nav Dock */
-        .glass-dock {
+        /* Floating Info Card */
+        .mission-box {
+            margin-top: 40px; padding: 15px 30px; border-radius: 25px;
+            background: var(--surface); border: 1px solid var(--border);
+            backdrop-filter: blur(15px); text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .mission-label { font-size: 0.6rem; font-weight: 700; color: var(--accent); letter-spacing: 3px; }
+
+        /* Navigation Dock */
+        .nexus-dock {
             position: fixed; bottom: 35px; width: 85%; left: 7.5%;
-            background: rgba(15, 12, 10, 0.85); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border: 1px solid var(--border); border-radius: 35px;
-            display: flex; justify-content: space-around; padding: 16px 8px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8); z-index: 100;
+            background: rgba(10, 8, 5, 0.85); backdrop-filter: blur(30px);
+            border: 1px solid var(--border); border-radius: 30px;
+            display: flex; justify-content: space-around; padding: 15px 0; z-index: 100;
         }
-        .dock-tab { color: #888; text-decoration: none; font-size: 0.65rem; text-align: center; font-weight: 700; transition: 0.3s; }
-        .dock-tab span { display: block; font-size: 1.7rem; margin-bottom: 6px; transition: 0.3s; }
-        .dock-tab:active { transform: scale(0.8); color: var(--gold); }
+        .dock-item { color: #888; text-decoration: none; font-size: 0.65rem; font-weight: 700; text-align: center; }
+        .dock-item span { display: block; font-size: 1.7rem; margin-bottom: 5px; opacity: 0.6; }
+        .dock-item:active { transform: scale(0.9); color: var(--divine); }
 
-        /* Tap Ripple */
-        .ripple {
-            position: absolute; width: 6px; height: 6px; background: var(--gold);
-            border-radius: 50%; pointer-events: none; animation: rippleOut 0.8s ease-out forwards;
-            box-shadow: 0 0 15px var(--gold);
+        /* Particles */
+        .divine-spark {
+            position: absolute; pointer-events: none; width: 3px; height: 3px; background: white; border-radius: 50%;
+            box-shadow: 0 0 8px var(--divine); animation: fly 0.6s ease-out forwards;
         }
-        @keyframes rippleOut { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(20); opacity: 0; } }
+        @keyframes fly { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(0); } }
     </style>
 </head>
-<body onclick="onTap(event)">
+<body onclick="nexusTap(event)">
 
-    <div id="darshanBg"></div>
-    <div class="grid-overlay"></div>
-    <div class="bg-overlay"></div>
-    <audio id="bell" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" preload="auto"></audio>
+    <div id="bgLayer"></div>
+    <div class="ambient-glow"></div>
+    <audio id="bell" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
 
-    <div class="top-nav">
-        <div class="nav-chip" id="streakText">🔥 0 DAYS</div>
-        <div class="nav-chip" id="totalCount" style="color:#fff;">0 JAAP</div>
+    <div class="header-nexus">
+        <div class="stat-pill" id="streak">🔥 0 DAYS</div>
+        <div class="stat-pill" id="total" style="color:#fff;">0 TOTAL</div>
     </div>
 
-    <div class="viewport">
-        <div class="mantra-text">Radha Radha</div>
+    <div class="nexus-core">
+        <div class="mantra-float">Radha Radha</div>
         
-        <div class="counter-box" id="scaleRef">
-            <div class="glow-aura"></div>
-            <svg style="position:absolute; width: 100%; height:100%; transform: rotate(-90deg);">
-                <circle cx="170" cy="170" r="160" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="2" />
-                <circle id="ring" cx="170" cy="170" r="160" fill="none" stroke="url(#divineGrad)" stroke-width="10" 
-                stroke-dasharray="1005" stroke-dashoffset="1005" stroke-linecap="round" style="transition: 0.35s cubic-bezier(0.23, 1, 0.32, 1);" />
+        <div class="counter-nexus" id="coreWrapper">
+            <svg style="position:absolute; width: 110%; height:110%; transform: rotate(-90deg);">
+                <circle cx="176" cy="176" r="155" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="2" />
+                <circle id="ringInner" cx="176" cy="176" r="155" fill="none" stroke="url(#nexusGrad)" stroke-width="12" 
+                stroke-dasharray="974" stroke-dashoffset="974" stroke-linecap="round" />
                 <defs>
-                    <linearGradient id="divineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="var(--orange)" />
-                        <stop offset="100%" stop-color="var(--gold)" />
+                    <linearGradient id="nexusGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="var(--accent)" />
+                        <stop offset="100%" stop-color="var(--divine)" />
                     </linearGradient>
                 </defs>
             </svg>
-            <p class="count-text" id="dailyText">0</p>
+            <p class="main-num" id="dailyNum">0</p>
         </div>
 
-        <div class="capsule" id="goalContainer" style="display:none;">
-            <div class="capsule-label">SANKALP MISSION</div>
-            <div style="font-size: 1.1rem; font-weight: 600;" id="goalStatus">0 / 0</div>
-            <div class="capsule-bar"><div class="capsule-fill" id="fillBar"></div></div>
+        <div class="mission-box" id="sankalpCard" style="display:none;">
+            <div class="mission-label">SANKALP MISSION</div>
+            <div style="font-size: 1.2rem; font-weight: 700; margin: 5px 0;" id="sankalpStat">0 / 0</div>
+            <div style="width: 120px; height: 3px; background: rgba(255,255,255,0.05); border-radius: 10px; margin: auto;">
+                <div id="fill" style="height: 100%; background: var(--divine); width: 0%; transition: 0.5s;"></div>
+            </div>
         </div>
     </div>
 
-    <div class="glass-dock">
-        <div class="dock-tab" onclick="toggleModal(true)"><span>📜</span>SANKALP</div>
-        <div class="dock-tab" onclick="location.href='darshan.html'"><span>🖼️</span>DARSHAN</div>
-        <div class="dock-tab" onclick="location.href='leaderboard.html'"><span>🏆</span>RANK</div>
+    <div class="nexus-dock">
+        <div class="dock-item" onclick="toggleModal(true)"><span>📜</span>SANKALP</div>
+        <div class="dock-item" onclick="location.href='darshan.html'"><span>🖼️</span>DARSHAN</div>
+        <div class="dock-item" onclick="location.href='leaderboard.html'"><span>🏆</span>RANK</div>
     </div>
 
     <script type="module">
@@ -178,57 +165,61 @@
 
         if(!user) location.href = "login.html";
 
-        const darshanPhotos = [
+        const photoSet = [
             "https://images.unsplash.com/photo-1544924222-355b1f0ad5a7?q=80&w=1200",
             "https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1200",
             "https://images.unsplash.com/photo-1616013050162-4f366e6b6680?q=80&w=1200"
         ];
 
-        function syncDisplay(daily) {
-            const offset = 1005 - (daily % 108 / 108) * 1005;
-            document.getElementById('ring').style.strokeDashoffset = offset;
+        function syncNexus(val) {
+            const offset = 974 - (val % 108 / 108) * 974;
+            document.getElementById('ringInner').style.strokeDashoffset = offset;
             
-            const photoIdx = (new Date().getDate() + Math.floor(daily / 108)) % darshanPhotos.length;
-            document.getElementById('darshanBg').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('${darshanPhotos[photoIdx]}')`;
+            const pIdx = (new Date().getDate() + Math.floor(val / 108)) % photoSet.length;
+            document.getElementById('bgLayer').style.backgroundImage = `url('${photoSet[pIdx]}')`;
 
-            if(daily > 0 && daily % 108 === 0) {
-                confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#FFD700', '#FF8C00'] });
+            if(val > 0 && val % 108 === 0) {
+                confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#ffcc33', '#ff9f43'] });
                 document.getElementById('bell').play();
+                if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
             }
         }
 
-        onSnapshot(doc(db, "users", user), (snap) => {
-            if(snap.exists()) {
-                const data = snap.data();
+        onSnapshot(doc(db, "users", user), (ds) => {
+            if(ds.exists()) {
+                const data = ds.data();
                 const daily = data.lastDate === today ? data.dailyCount : 0;
-                document.getElementById('dailyText').innerText = daily;
-                document.getElementById('totalCount').innerText = `${(data.totalCount || 0).toLocaleString()} JAAP`;
-                document.getElementById('streakText').innerText = `🔥 ${data.streak || 0} DAYS`;
-                syncDisplay(daily);
+                document.getElementById('dailyNum').innerText = daily;
+                document.getElementById('total').innerText = `${(data.totalCount || 0).toLocaleString()} TOTAL`;
+                document.getElementById('streak').innerText = `🔥 ${data.streak || 0} DAYS`;
+                syncNexus(daily);
 
                 if(data.sankalpGoal && data.sankalpDate === today) {
-                    document.getElementById('goalContainer').style.display = 'block';
-                    document.getElementById('goalStatus').innerText = `${daily} / ${data.sankalpGoal}`;
-                    document.getElementById('fillBar').style.width = Math.min((daily/data.sankalpGoal)*100, 100) + "%";
+                    document.getElementById('sankalpCard').style.display = 'block';
+                    document.getElementById('sankalpStat').innerText = `${daily} / ${data.sankalpGoal}`;
+                    document.getElementById('fill').style.width = Math.min((daily/data.sankalpGoal)*100, 100) + "%";
                 }
             }
         });
 
-        window.onTap = async (e) => {
-            if(e.target.closest('.glass-dock')) return;
+        window.nexusTap = async (e) => {
+            if(e.target.closest('.nexus-dock')) return;
 
-            // Haptic Scale Effect
-            const ref = document.getElementById('scaleRef');
-            ref.style.transform = 'scale(0.96)';
-            setTimeout(() => ref.style.transform = 'scale(1)', 100);
+            // Nexus Visuals
+            const core = document.getElementById('coreWrapper');
+            core.style.transform = 'scale(0.96)';
+            setTimeout(() => core.style.transform = 'scale(1)', 100);
 
-            // Ripple
-            const rip = document.createElement('div');
-            rip.className = 'ripple';
-            rip.style.left = e.clientX + 'px';
-            rip.style.top = e.clientY + 'px';
-            document.body.appendChild(rip);
-            setTimeout(() => rip.remove(), 800);
+            for(let i=0; i<4; i++) {
+                const s = document.createElement('div');
+                s.className = 'divine-spark';
+                s.style.left = e.clientX + 'px';
+                s.style.top = e.clientY + 'px';
+                s.style.setProperty('--x', (Math.random() - 0.5) * 150 + 'px');
+                s.style.setProperty('--y', (Math.random() - 0.5) * 150 + 'px');
+                document.body.appendChild(s);
+                setTimeout(() => s.remove(), 600);
+            }
 
             if(navigator.vibrate) navigator.vibrate(40);
 
