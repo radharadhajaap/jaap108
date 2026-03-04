@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
-    <title>Radha Rani Jaap - Premium</title>
+    <title>Radha Rani Jaap - Ananda</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root { 
             --orange: #f38630; 
@@ -15,166 +16,159 @@
 
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            font-family: 'Poppins', 'Segoe UI', sans-serif; 
+            font-family: 'Poppins', sans-serif; 
             background-color: #080502; color: white; overflow: hidden;
             user-select: none; -webkit-tap-highlight-color: transparent;
         }
 
-        /* High-End Background Engine */
+        /* Parallax Background Layer */
         #darshanBg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: -5%; left: -5%; width: 110%; height: 110%;
             background-size: cover; background-position: center;
-            z-index: -2; transition: background-image 2s ease-in-out;
-            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9));
+            z-index: -2; transition: background-image 2s ease, transform 0.1s ease-out;
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9));
         }
 
         .bg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%);
+            background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.85) 100%);
             z-index: -1;
         }
 
-        /* Top Navigation */
-        .top-nav { 
-            position: fixed; top: 25px; width: 100%; 
+        /* Floating Premium Nav */
+        .bottom-nav { 
+            position: fixed; bottom: 30px; width: 80%; left: 10%;
             display: flex; justify-content: space-around; z-index: 100; 
+            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); padding: 12px; border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
-        .nav-btn { 
-            background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border); padding: 12px 22px; 
-            border-radius: 50px; color: white; font-size: 0.85rem; font-weight: 600;
-            cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3); transition: 0.3s;
-        }
-        .nav-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.2); }
+        .nav-item { color: white; text-decoration: none; font-size: 0.75rem; text-align: center; opacity: 0.8; transition: 0.3s; cursor: pointer; }
+        .nav-item i { display: block; font-size: 1.4rem; margin-bottom: 4px; }
+        .nav-item:active { transform: scale(0.9); opacity: 1; color: var(--gold); }
 
-        /* Sankalp Progress */
+        /* Sankalp Progress - Sleek Version */
         .sankalp-box { 
-            position: fixed; top: 100px; width: 88%; left: 6%; 
-            background: rgba(0,0,0,0.75); backdrop-filter: blur(10px);
-            border-radius: 20px; padding: 15px; border: 1px solid rgba(243,134,48,0.3); 
-            z-index: 90; display: none; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            position: fixed; top: 25px; width: 88%; left: 6%; 
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);
+            border-radius: 18px; padding: 12px 18px; border: 1px solid rgba(255,255,255,0.05); 
+            z-index: 90; display: none;
         }
-        .sankalp-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 10px; overflow: hidden; }
-        .sankalp-fill { height: 100%; background: linear-gradient(90deg, #ff9800, #ffeb3b); width: 0%; transition: 1s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+        .sankalp-bar { height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 8px; overflow: hidden; }
+        .sankalp-fill { height: 100%; background: linear-gradient(90deg, var(--orange), var(--gold)); width: 0%; transition: 0.8s; }
 
-        /* Main Jaap UI */
         .main { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         
         .mantra { 
-            font-size: 3rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
+            font-size: 3.2rem; font-weight: 800; letter-spacing: 2px;
             background: linear-gradient(to bottom, #fff, var(--gold));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-shadow: 0 10px 30px rgba(243, 134, 48, 0.4); margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(243, 134, 48, 0.4)); margin-bottom: 10px;
+            animation: breathe 4s infinite alternate;
         }
+        @keyframes breathe { from { transform: scale(1); opacity: 0.9; } to { transform: scale(1.05); opacity: 1; } }
 
         .mala-wrap { 
-            position: relative; width: 300px; height: 300px; 
+            position: relative; width: 320px; height: 320px; 
             display: flex; align-items: center; justify-content: center; 
         }
         
-        /* Inner Aura Glow */
         .aura {
-            position: absolute; width: 220px; height: 220px;
+            position: absolute; width: 200px; height: 200px;
             background: var(--orange); border-radius: 50%;
-            filter: blur(60px); opacity: 0.15; z-index: 0;
-            animation: pulse 3s infinite alternate;
+            filter: blur(80px); opacity: 0.2; z-index: 0;
         }
-        @keyframes pulse { from { opacity: 0.1; transform: scale(0.9); } to { opacity: 0.25; transform: scale(1.1); } }
 
-        .mala-svg { position: absolute; width: 100%; height: 100%; transform: rotate(-90deg); z-index: 5; }
-        
         .daily-num { 
-            font-size: 6.5rem; font-weight: 900; line-height: 1; margin: 0; 
+            font-size: 7rem; font-weight: 900; line-height: 1; margin: 0; 
             z-index: 10; font-variant-numeric: tabular-nums;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+            text-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
 
         .streak-tag {
-            background: linear-gradient(45deg, #ff5722, #f38630);
-            padding: 6px 16px; border-radius: 20px; font-size: 0.9rem;
-            font-weight: bold; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(255,87,34,0.3);
+            color: var(--gold); font-size: 0.9rem; letter-spacing: 2px;
+            font-weight: bold; margin-bottom: 10px; text-transform: uppercase;
         }
 
-        /* Floating Animation */
-        .float-radhe { 
+        /* Modal Styles */
+        #sankalpModal { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background: #1a140f; padding: 40px; border-radius: 30px; 
+            border: 1px solid var(--orange); width: 80%; max-width: 320px; text-align: center;
+        }
+        .modal-content input {
+            width: 100%; padding: 15px; background: #000; border: 1px solid #333;
+            color: white; border-radius: 12px; font-size: 1.5rem; text-align: center; margin: 20px 0;
+        }
+
+        /* Float Text */
+        .float-text { 
             position: absolute; color: var(--gold); font-weight: bold; 
-            pointer-events: none; animation: floatUp 1s ease-out forwards; 
-            font-size: 1.8rem; z-index: 200; text-shadow: 0 2px 10px rgba(0,0,0,1);
+            pointer-events: none; animation: floatUp 1.2s ease-out forwards; 
+            font-size: 1.8rem; z-index: 200;
         }
         @keyframes floatUp { 
-            0% { opacity: 1; transform: translateY(0) scale(1); } 
-            100% { opacity: 0; transform: translateY(-150px) scale(1.5); } 
-        }
-
-        /* Premium Modal */
-        #sankalpModal { 
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            background: #15100c; padding: 40px 30px; border-radius: 35px; 
-            border: 1px solid var(--orange); z-index: 1000; width: 80%; text-align: center;
-            box-shadow: 0 0 100px rgba(0,0,0,1);
-        }
-        input { 
-            width: 100%; padding: 18px; margin: 20px 0; border-radius: 15px; 
-            border: 1px solid #333; background: #000; color: white; 
-            text-align: center; font-size: 1.5rem; outline: none;
-        }
-        input:focus { border-color: var(--orange); }
-        .modal-btn {
-            background: var(--orange); color: white; border: none; padding: 18px;
-            width: 100%; border-radius: 15px; font-weight: bold; font-size: 1.1rem;
+            0% { opacity: 0; transform: translateY(0) scale(0.5); } 
+            20% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(-180px) scale(1.5); } 
         }
     </style>
 </head>
-<body onclick="handleTap(event)">
+<body onclick="handleTap(event)" onmousemove="handleParallax(event)">
 
     <div id="darshanBg"></div>
     <div class="bg-overlay"></div>
     <audio id="bellSound"><source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
 
-    <div class="top-nav">
-        <div class="nav-btn" onclick="openSankalp(event)"><span>📜</span> Sankalp</div>
-        <a href="leaderboard.html" class="nav-btn"><span>🏆</span> Rank</a>
-    </div>
-
     <div class="sankalp-box" id="sankalpDisplay">
-        <div style="display:flex; justify-content: space-between; font-size: 0.8rem; color: var(--gold);">
-            <span>🙏 Lakshya Progress</span>
-            <span><span id="sCurrent">0</span> / <span id="sGoal">0</span></span>
+        <div style="display:flex; justify-content: space-between; font-size: 0.7rem; font-weight: bold;">
+            <span>SANKALP PROGRESS</span>
+            <span id="sPercentText">0%</span>
         </div>
         <div class="sankalp-bar"><div class="sankalp-fill" id="sFill"></div></div>
     </div>
 
     <div class="main">
-        <div id="streak" class="streak-tag">🔥 0 DAY STREAK</div>
-        <div class="mantra">Radha Radha</div>
+        <div id="streak" class="streak-tag">🔥 0 Days</div>
+        <div class="mantra" id="mantraText">Radha Radha</div>
         
         <div class="mala-wrap">
-            <div class="aura"></div>
+            <div class="aura" id="auraEffect"></div>
             <svg class="mala-svg" id="malaSvg" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" />
-                <circle id="progCirc" cx="50" cy="50" r="46" fill="none" stroke="url(#grad)" stroke-width="4" stroke-dasharray="289" stroke-dashoffset="289" stroke-linecap="round" />
+                <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="2" />
+                <circle id="progCirc" cx="50" cy="50" r="46" fill="none" stroke="url(#grad)" stroke-width="4" stroke-dasharray="289" stroke-dashoffset="289" stroke-linecap="round" style="transition: stroke-dashoffset 0.5s ease;"/>
                 <defs>
-                    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#f38630;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#ffeb3b;stop-opacity:1" />
+                    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:var(--orange)" />
+                        <stop offset="100%" style="stop-color:var(--gold)" />
                     </linearGradient>
                 </defs>
             </svg>
             <div style="z-index:10; text-align: center;">
                 <p class="daily-num" id="dailyCount">0</p>
-                <p style="font-size: 0.8rem; letter-spacing: 5px; color: var(--orange); margin: -5px 0 0 0; font-weight: 800; opacity: 0.8;">JAAP</p>
+                <p style="font-size: 0.7rem; letter-spacing: 6px; color: var(--orange); margin-top: -5px; font-weight: 800;">CHANTED</p>
             </div>
         </div>
         
-        <p style="margin-top:40px; opacity:0.6; font-size: 0.9rem; letter-spacing: 1px;">LIFE TOTAL: <b id="totalCount" style="color:white; font-size: 1.1rem;">0</b></p>
+        <p style="margin-top:30px; opacity:0.5; font-size: 0.8rem; letter-spacing: 2px;">TOTAL: <span id="totalCount">0</span></p>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item" onclick="openSankalp(event)"><i>📜</i>Sankalp</div>
+        <div class="nav-item" onclick="location.href='leaderboard.html'"><i>🏆</i>Rank</div>
+        <div class="nav-item" onclick="location.reload()"><i>🔄</i>Reset</div>
     </div>
 
     <div id="sankalpModal">
-        <h2 style="color:var(--orange); margin:0;">Daily Sankalp</h2>
-        <p style="color:rgba(255,255,255,0.6); font-size: 0.9rem;">Aaj kitni mala ka sankalp hai?</p>
-        <input type="number" id="mInput" placeholder="0" inputmode="numeric">
-        <button class="modal-btn" onclick="setSankalp()">Sankalp Le 🙏</button>
+        <div class="modal-content">
+            <h2 style="color:var(--gold); margin:0;">Daily Goal</h2>
+            <input type="number" id="mInput" placeholder="Malas (1, 5, 11...)" inputmode="numeric">
+            <button onclick="setSankalp()" style="background:var(--orange); border:none; padding:15px; width:100%; border-radius:12px; color:white; font-weight:bold;">START YATRA 🙏</button>
+            <p onclick="document.getElementById('sankalpModal').style.display='none'" style="margin-top:15px; opacity:0.5; font-size:0.8rem;">Close</p>
+        </div>
     </div>
 
     <script type="module">
@@ -196,26 +190,33 @@
 
         if(!user) window.location.href = "login.html";
 
-        let rot = 0;
         const photos = [
             "https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932",
-            "https://images.unsplash.com/photo-1631553127988-34860639f727?q=80&w=1932",
             "https://images.unsplash.com/photo-1544924222-355b1f0ad5a7?q=80&w=1932",
             "https://images.unsplash.com/photo-1616013050162-4f366e6b6680?q=80&w=1932"
         ];
 
+        // Parallax Effect
+        window.handleParallax = (e) => {
+            const x = (window.innerWidth - e.pageX * 2) / 100;
+            const y = (window.innerHeight - e.pageY * 2) / 100;
+            document.getElementById('darshanBg').style.transform = `translate(${x}px, ${y}px)`;
+        };
+
         function updateUI(daily) {
-            // Background Logic
             const malaIdx = Math.floor(daily / 108);
             const photoIdx = (new Date().getDate() + malaIdx) % photos.length;
             const bg = document.getElementById('darshanBg');
-            const nextImg = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('${photos[photoIdx]}')`;
-            if(bg.style.backgroundImage !== nextImg) bg.style.backgroundImage = nextImg;
+            bg.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('${photos[photoIdx]}')`;
 
-            // Circle Logic
-            const circle = document.getElementById('progCirc');
             const offset = 289 - (daily % 108 / 108) * 289;
-            circle.style.strokeDashoffset = offset;
+            document.getElementById('progCirc').style.strokeDashoffset = offset;
+            
+            // Celebration on 108
+            if(daily > 0 && daily % 108 === 0) {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#f38630', '#ffcc33'] });
+                document.getElementById('bellSound').play();
+            }
         }
 
         onSnapshot(doc(db, "users", user), (ds) => {
@@ -224,19 +225,19 @@
                 const daily = d.lastDate === today ? d.dailyCount : 0;
                 document.getElementById('dailyCount').innerText = daily;
                 document.getElementById('totalCount').innerText = d.totalCount.toLocaleString();
-                document.getElementById('streak').innerText = `🔥 ${d.streak || 0} DAY STREAK`;
+                document.getElementById('streak').innerText = `🔥 ${d.streak || 0} DAYS`;
                 updateUI(daily);
 
                 if(d.sankalpGoal && d.sankalpDate === today) {
                     document.getElementById('sankalpDisplay').style.display = 'block';
-                    document.getElementById('sGoal').innerText = d.sankalpGoal;
-                    document.getElementById('sCurrent').innerText = daily;
-                    document.getElementById('sFill').style.width = Math.min((daily/d.sankalpGoal)*100, 100) + "%";
+                    const perc = Math.min(Math.round((daily/d.sankalpGoal)*100), 100);
+                    document.getElementById('sFill').style.width = perc + "%";
+                    document.getElementById('sPercentText').innerText = perc + "%";
                 }
             }
         });
 
-        window.openSankalp = (e) => { e.stopPropagation(); document.getElementById('sankalpModal').style.display = 'block'; };
+        window.openSankalp = (e) => { e.stopPropagation(); document.getElementById('sankalpModal').style.display = 'flex'; };
         
         window.setSankalp = async () => {
             const m = document.getElementById('mInput').value;
@@ -246,23 +247,21 @@
         };
 
         window.handleTap = async (e) => {
-            if(e.target.closest('.nav-btn') || e.target.closest('#sankalpModal')) return;
+            if(e.target.closest('.bottom-nav') || e.target.closest('.modal-content')) return;
 
-            // Instant Feedback
-            rot += (360 / 108);
-            document.getElementById('malaSvg').style.transform = `rotate(${rot - 90}deg)`;
+            // Visual Feedback
+            const f = document.createElement('div'); f.className='float-text'; f.innerText='Radhe';
+            f.style.left=e.clientX - 40 + 'px'; f.style.top=e.clientY - 20 + 'px'; document.body.appendChild(f);
+            setTimeout(()=>f.remove(), 1200);
 
-            const f = document.createElement('div'); f.className='float-radhe'; f.innerText='Radhe';
-            f.style.left=e.clientX+'px'; f.style.top=e.clientY+'px'; document.body.appendChild(f);
-            setTimeout(()=>f.remove(), 1000);
+            // Aura Pulse
+            const aura = document.getElementById('auraEffect');
+            aura.style.transform = 'scale(1.3)';
+            aura.style.opacity = '0.5';
+            setTimeout(() => { aura.style.transform = 'scale(1)'; aura.style.opacity = '0.2'; }, 150);
 
-            const cur = parseInt(document.getElementById('dailyCount').innerText) + 1;
-            updateUI(cur);
+            if(navigator.vibrate) navigator.vibrate(50);
 
-            if(cur % 108 === 0) document.getElementById('bellSound').play();
-            if(navigator.vibrate) navigator.vibrate(40);
-
-            // Sync to Firebase
             await setDoc(doc(db, "users", user), { 
                 dailyCount: increment(1), 
                 totalCount: increment(1), 
