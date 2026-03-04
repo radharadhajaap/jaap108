@@ -10,15 +10,16 @@
         
         .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932'); background-size: cover; z-index: -1; }
 
-        /* Floating Leaderboard Button */
-        .lb-button {
-            position: fixed; top: 20px; right: 20px; background: rgba(255,255,255,0.1);
-            padding: 10px 15px; border-radius: 30px; border: 1px solid var(--primary-orange);
-            text-decoration: none; color: white; font-size: 0.8rem; display: flex; align-items: center; gap: 8px; z-index: 100;
+        /* Navigation Buttons */
+        .top-nav { position: fixed; top: 20px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 100; }
+        
+        .nav-btn { 
+            background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 30px; 
+            border: 1px solid var(--primary-orange); text-decoration: none; color: white; 
+            font-size: 0.8rem; display: flex; align-items: center; gap: 8px; cursor: pointer;
         }
 
         .main-content { text-align: center; height: 100vh; display: flex; flex-direction: column; justify-content: center; }
-        
         .welcome-section { margin-bottom: 20px; }
         #welcomeMsg { color: var(--primary-orange); font-size: 1.1rem; }
         .mantra { font-size: 2rem; margin: 10px 0; font-weight: bold; text-shadow: 0 0 15px rgba(243, 134, 48, 0.5); }
@@ -30,16 +31,20 @@
         .counter-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
         .stats-footer { margin-top: 40px; font-size: 0.9rem; opacity: 0.8; letter-spacing: 1px; }
-        
         .float-text { position: absolute; color: white; font-weight: bold; pointer-events: none; animation: floatUp 1s ease-out forwards; z-index: 500; font-size: 1.4rem; }
         @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-120px) scale(1.2); opacity: 0; } }
     </style>
 </head>
 <body onclick="handleTap(event)">
 
-    <a href="leaderboard.html" class="lb-button">
-        <span>🏆</span> Leaderboard
-    </a>
+    <div class="top-nav">
+        <div class="nav-btn" onclick="resetDailyCount(event)">
+            <span>🔄</span> Reset Daily
+        </div>
+        <a href="leaderboard.html" class="nav-btn">
+            <span>🏆</span> Leaderboard
+        </a>
+    </div>
 
     <div class="bg-overlay"></div>
     
@@ -82,12 +87,10 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         
-        // --- AUTH CHECK LOGIC ---
         let userName = localStorage.getItem('jaapUserName');
         const todayStr = new Date().toLocaleDateString();
 
         if (!userName) {
-            // First time user, send to login
             window.location.href = "login.html";
         } else {
             setupApp();
@@ -95,7 +98,6 @@
 
         function setupApp() {
             document.getElementById('welcomeMsg').innerText = `Radhe Radhe, ${userName}!`;
-            
             const userRef = doc(db, "users", userName);
             onSnapshot(userRef, (ds) => {
                 if (ds.exists()) {
@@ -108,26 +110,30 @@
             });
         }
 
-        window.handleTap = async (e) => {
-            // Prevent tap if clicking on leaderboard button
-            if (e.target.closest('.lb-button')) return;
+        // --- RESET LOGIC ---
+        window.resetDailyCount = async (e) => {
+            e.stopPropagation(); // Stop tap event
+            const confirmReset = confirm("Kya aap aaj ka jaap count reset karna chahte hain?");
+            if (confirmReset) {
+                const userRef = doc(db, "users", userName);
+                await setDoc(userRef, { 
+                    dailyCount: 0,
+                    lastDate: todayStr 
+                }, { merge: true });
+                if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
+            }
+        };
 
-            // Float Animation
+        window.handleTap = async (e) => {
+            if (e.target.closest('.nav-btn')) return;
+
             const f = document.createElement('div');
             f.innerText = 'Radha Radha'; f.className = 'float-text';
             f.style.left = `${e.clientX - 50}px`; f.style.top = `${e.clientY - 20}px`;
             document.body.appendChild(f);
             setTimeout(() => f.remove(), 1000);
 
-            // Update DB
             const userRef = doc(db, "users", userName);
-            const userSnap = await getDoc(userRef);
-            
-            if (userSnap.exists() && userSnap.data().lastDate !== todayStr) {
-                // First tap of the new day
-                await setDoc(userRef, { dailyCount: 1, lastDate: todayStr }, { merge: true });
-            }
-
             await setDoc(userRef, {
                 dailyCount: increment(1),
                 totalCount: increment(1),
