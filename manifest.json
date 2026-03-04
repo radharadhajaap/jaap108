@@ -1,13 +1,18 @@
 {
-  "name": "Radha Rani Jaap",
-  "short_name": "Jaap",
+  "name": "Radha Rani Jaap Pro",
+  "short_name": "JaapPro",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#120c08",
+  "background_color": "#0d0905",
   "theme_color": "#f38630",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/2304/2304226.png",
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
