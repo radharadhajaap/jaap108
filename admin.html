@@ -3,62 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jaap App - Admin Panel</title>
+    <title>Jaap App - Master Admin v2.0</title>
     <style>
-        :root { --orange: #f38630; --bg: #0a0a0a; --red: #ff4d4d; }
-        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; padding: 20px; }
+        :root { --orange: #f38630; --bg: #0a0a0a; --red: #ff4d4d; --green: #2ecc71; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
+        
+        /* Stats Header */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: #1a1a1a; padding: 20px; border-radius: 12px; border-left: 4px solid var(--orange); }
+        .stat-card h3 { margin: 0; font-size: 0.8rem; color: #888; text-transform: uppercase; }
+        .stat-card p { margin: 10px 0 0; font-size: 1.8rem; font-weight: bold; color: var(--orange); }
+
+        /* Broadcast Section */
+        .admin-box { background: #111; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #333; }
+        input, textarea { background: #000; border: 1px solid #444; color: white; padding: 10px; border-radius: 5px; width: 100%; box-sizing: border-box; }
+        
+        .btn { padding: 10px 20px; border-radius: 6px; cursor: pointer; border: none; font-weight: bold; transition: 0.3s; }
+        .btn-primary { background: var(--orange); color: white; }
+        .btn-danger { background: var(--red); color: white; }
+        .btn-reset { background: #555; color: white; }
+
+        .search-bar { margin: 20px 0; font-size: 1.1rem; }
         
         #authSection { text-align: center; margin-top: 100px; }
-        .admin-container { max-width: 900px; margin: 0 auto; display: none; }
+        .admin-container { max-width: 1000px; margin: 0 auto; display: none; }
         
-        h2 { color: var(--orange); border-bottom: 2px solid var(--orange); padding-bottom: 10px; }
-        
-        .user-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #1a1a1a; border-radius: 10px; overflow: hidden; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #333; }
+        .user-table { width: 100%; border-collapse: collapse; background: #1a1a1a; border-radius: 12px; overflow: hidden; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
         th { background: #222; color: var(--orange); }
-
-        .user-dp { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid var(--orange); }
-        
-        input[type="number"] { width: 80px; padding: 5px; border-radius: 5px; border: 1px solid #444; background: #000; color: white; }
-        
-        .btn { padding: 8px 15px; border-radius: 5px; cursor: pointer; border: none; font-weight: bold; margin-right: 5px; }
-        .update-btn { background: var(--orange); color: white; }
-        .delete-btn { background: var(--red); color: white; }
-        .login-btn { background: var(--orange); color: white; padding: 10px 30px; margin-top: 10px; }
-        
-        input[type="password"] { padding: 10px; width: 250px; border-radius: 5px; }
+        tr:hover { background: #252525; }
+        .user-dp { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--orange); }
     </style>
 </head>
 <body>
 
     <div id="authSection">
-        <h2>Admin Access</h2>
-        <input type="password" id="adminPass" placeholder="Enter Admin Password">
+        <h2>🔒 Master Admin Access</h2>
+        <input type="password" id="adminPass" placeholder="Enter Admin Password" style="width: 300px; margin-bottom: 15px;">
         <br>
-        <button class="btn login-btn" onclick="checkAuth()">Login</button>
+        <button class="btn btn-primary" onclick="checkAuth()">Login Dashboard</button>
     </div>
 
     <div class="admin-container" id="adminDash">
-        <h2>Devotee Management</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>Devotee Master Control</h2>
+            <button class="btn btn-danger" onclick="location.reload()">Logout</button>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card"><h3>Total Devotees</h3><p id="statUsers">0</p></div>
+            <div class="stat-card"><h3>Global Jaap Count</h3><p id="statJaaps">0</p></div>
+            <div class="stat-card"><h3>Active Today</h3><p id="statToday">0</p></div>
+        </div>
+
+        <div class="admin-box">
+            <h3>📢 Global Announcement</h3>
+            <textarea id="globalMsg" placeholder="Sabhi bhakton ke liye message likhein..."></textarea>
+            <button class="btn btn-primary" style="margin-top:10px" onclick="updateBroadcast()">Update App Message</button>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="text" id="userSearch" placeholder="Search Devotee by Name..." oninput="filterUsers()" class="search-bar">
+            <button class="btn btn-reset" onclick="resetAllDaily()">Reset All Daily Counts</button>
+        </div>
+
         <table class="user-table">
             <thead>
                 <tr>
-                    <th>DP</th>
+                    <th>Profile</th>
                     <th>Name</th>
-                    <th>Daily</th>
-                    <th>Total</th>
+                    <th>Daily Jaap</th>
+                    <th>Total Jaap</th>
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="userList">
-                </tbody>
+            <tbody id="userList"></tbody>
         </table>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc, writeBatch, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // CONFIG (Ensure this matches your App)
         const firebaseConfig = {
             apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
             authDomain: "jaap-fdd80.firebaseapp.com",
@@ -70,64 +97,93 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        let allUsers = [];
 
-        // Simple Password Check
         window.checkAuth = () => {
-            const pass = document.getElementById('adminPass').value;
-            if(pass === "admin5") { // Change this password
+            if(document.getElementById('adminPass').value === "admin5") {
                 document.getElementById('authSection').style.display = 'none';
                 document.getElementById('adminDash').style.display = 'block';
-                loadUsers();
-            } else {
-                alert("Wrong Password!");
-            }
+                initDashboard();
+            } else { alert("Access Denied!"); }
         };
 
-        function loadUsers() {
+        function initDashboard() {
             onSnapshot(collection(db, "users"), (snapshot) => {
-                const list = document.getElementById('userList');
-                list.innerHTML = '';
-                
-                snapshot.forEach((userDoc) => {
-                    const data = userDoc.data();
-                    const id = userDoc.id;
-                    const dp = data.profilePic || `https://ui-avatars.com/api/?name=${id}`;
+                allUsers = [];
+                let totalJaaps = 0;
+                let activeToday = 0;
 
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td><img src="${dp}" class="user-dp"></td>
-                        <td>${id}</td>
-                        <td><input type="number" id="daily-${id}" value="${data.dailyCount || 0}"></td>
-                        <td><input type="number" id="total-${id}" value="${data.totalCount || 0}"></td>
-                        <td>
-                            <button class="btn update-btn" onclick="updateUser('${id}')">Save</button>
-                            <button class="btn delete-btn" onclick="deleteUser('${id}')">Delete</button>
-                        </td>
-                    `;
-                    list.appendChild(row);
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    allUsers.push({ id: doc.id, ...data });
+                    totalJaaps += (data.totalCount || 0);
+                    if(data.dailyCount > 0) activeToday++;
                 });
+
+                document.getElementById('statUsers').innerText = allUsers.length;
+                document.getElementById('statJaaps').innerText = totalJaaps.toLocaleString();
+                document.getElementById('statToday').innerText = activeToday;
+                renderUsers(allUsers);
             });
         }
 
-        // Update Function
-        window.updateUser = async (name) => {
-            const daily = parseInt(document.getElementById(`daily-${name}`).value);
-            const total = parseInt(document.getElementById(`total-${name}`).value);
-            
+        function renderUsers(data) {
+            const list = document.getElementById('userList');
+            list.innerHTML = '';
+            data.forEach(user => {
+                const dp = user.profilePic || `https://ui-avatars.com/api/?name=${user.id}&background=f38630&color=fff`;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><img src="${dp}" class="user-dp"></td>
+                    <td><b>${user.id}</b></td>
+                    <td><input type="number" id="d-${user.id}" value="${user.dailyCount || 0}"></td>
+                    <td><input type="number" id="t-${user.id}" value="${user.totalCount || 0}"></td>
+                    <td>
+                        <button class="btn btn-primary" onclick="updateUser('${user.id}')">Save</button>
+                        <button class="btn btn-danger" onclick="deleteUser('${user.id}')">Delete</button>
+                    </td>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        // Global Announcement Function
+        window.updateBroadcast = async () => {
+            const msg = document.getElementById('globalMsg').value;
             try {
-                await updateDoc(doc(db, "users", name), {
-                    dailyCount: daily,
-                    totalCount: total
-                });
-                alert(`${name} updated successfully!`);
-            } catch (e) { alert("Error updating user"); }
+                await updateDoc(doc(db, "appConfig", "settings"), { broadcastMsg: msg });
+                alert("Message updated for all users!");
+            } catch(e) { alert("Config document missing!"); }
         };
 
-        // Delete Function
-        window.deleteUser = async (name) => {
-            if(confirm(`Kya aap ${name} ka account delete karna chahte hain?`)) {
-                await deleteDoc(doc(db, "users", name));
+        // Reset Daily Count for Everyone
+        window.resetAllDaily = async () => {
+            if(confirm("Kya aap sabhi bhakton ka daily count zero karna chahte hain?")) {
+                const batch = writeBatch(db);
+                const querySnapshot = await getDocs(collection(db, "users"));
+                querySnapshot.forEach((doc) => {
+                    batch.update(doc.ref, { dailyCount: 0 });
+                });
+                await batch.commit();
+                alert("Daily counts reset successfully!");
             }
+        };
+
+        window.updateUser = async (name) => {
+            const daily = parseInt(document.getElementById(`d-${name}`).value);
+            const total = parseInt(document.getElementById(`t-${name}`).value);
+            await updateDoc(doc(db, "users", name), { dailyCount: daily, totalCount: total });
+            alert("Updated!");
+        };
+
+        window.deleteUser = async (name) => {
+            if(confirm(`Delete ${name}?`)) await deleteDoc(doc(db, "users", name));
+        };
+
+        window.filterUsers = () => {
+            const term = document.getElementById('userSearch').value.toLowerCase();
+            const filtered = allUsers.filter(u => u.id.toLowerCase().includes(term));
+            renderUsers(filtered);
         };
     </script>
 </body>
