@@ -3,124 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jaap Master Admin v3.0</title>
+    <title>Jaap Admin v4.0 - Divine Oversight</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
     
     <style>
         :root { 
-            --orange: #f38630; 
-            --orange-glow: rgba(243, 134, 48, 0.4);
-            --bg: #050505; 
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.1);
-            --red: #ff4d4d;
+            --gold: #f38630; --gold-glow: rgba(243, 134, 48, 0.4);
+            --bg: #050505; --card-bg: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1); --red: #ff4d4d;
         }
 
         body { 
-            background: var(--bg); 
-            background-image: radial-gradient(circle at top right, #1a1005, transparent);
-            color: #e0e0e0; 
-            font-family: 'Outfit', sans-serif; 
-            margin: 0; padding: 20px; 
-            min-height: 100vh;
+            background: var(--bg); color: #e0e0e0; font-family: 'Outfit', sans-serif; 
+            margin: 0; padding: 20px; min-height: 100vh;
         }
 
-        /* 1. AUTH SECTION */
+        /* 1. AUTH & CONTAINERS */
         #authSection { 
             max-width: 400px; margin: 150px auto; text-align: center; 
             padding: 40px; background: var(--card-bg); border-radius: 24px;
             backdrop-filter: blur(20px); border: 1px solid var(--border);
         }
 
-        /* 2. DASHBOARD LAYOUT */
         .admin-container { max-width: 1100px; margin: 0 auto; display: none; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
 
-        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-
-        /* 3. STAT CARDS */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        /* 2. STATS & LIVE INDICATORS */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .glass-card {
             background: var(--card-bg); backdrop-filter: blur(15px);
             border: 1px solid var(--border); border-radius: 20px; padding: 25px;
-            transition: 0.3s;
         }
-        .glass-card:hover { border-color: var(--orange); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .stat-label { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 2px; }
-        .stat-val { font-size: 2.5rem; font-weight: 900; background: linear-gradient(to right, #fff, var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 10px; }
+        .stat-val { font-size: 2.2rem; font-weight: 900; color: var(--gold); margin-top: 5px; }
 
-        /* 4. CONTROL BOXES */
-        .control-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 25px; margin-bottom: 30px; }
-        textarea, input { 
-            background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: white; 
-            padding: 12px 15px; border-radius: 10px; width: 100%; box-sizing: border-box; font-family: inherit;
+        .live-tag {
+            font-size: 0.6rem; color: #2ecc71; border: 1px solid #2ecc71;
+            padding: 2px 6px; border-radius: 4px; margin-left: 10px;
+            animation: blink 1s infinite;
         }
-        input:focus { border-color: var(--orange); outline: none; box-shadow: 0 0 10px var(--orange-glow); }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* 5. TABLE DESIGN */
-        .table-container { overflow-x: auto; }
-        .user-table { width: 100%; border-spacing: 0 10px; border-collapse: separate; }
-        .user-table th { padding: 15px; color: var(--orange); text-align: left; font-size: 0.9rem; text-transform: uppercase; }
+        /* 3. GOLDEN ROW (TOP PERFORMER) */
+        .top-devotee {
+            background: rgba(243, 134, 48, 0.12) !important;
+            border: 1px solid var(--gold) !important;
+            box-shadow: 0 0 15px var(--gold-glow);
+        }
+
+        /* 4. MODERN TABLE */
+        .table-container { overflow-x: auto; margin-top: 20px; }
+        .user-table { width: 100%; border-spacing: 0 8px; border-collapse: separate; }
         .user-table tr { background: rgba(255,255,255,0.03); transition: 0.2s; }
-        .user-table tr:hover { background: rgba(255,255,255,0.07); }
         .user-table td { padding: 15px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-        .user-table td:first-child { border-left: 1px solid var(--border); border-radius: 15px 0 0 15px; }
-        .user-table td:last-child { border-right: 1px solid var(--border); border-radius: 0 15px 15px 0; }
+        .user-table td:first-child { border-left: 1px solid var(--border); border-radius: 12px 0 0 12px; }
+        .user-table td:last-child { border-right: 1px solid var(--border); border-radius: 0 12px 12px 0; }
 
-        /* Buttons */
-        .btn { padding: 12px 25px; border-radius: 12px; cursor: pointer; border: none; font-weight: 700; transition: 0.3s; font-family: inherit; }
-        .btn-primary { background: var(--orange); color: white; box-shadow: 0 4px 15px var(--orange-glow); }
-        .btn-primary:hover { transform: scale(1.05); filter: brightness(1.1); }
+        /* 5. INPUTS & BUTTONS */
+        input, textarea { 
+            background: rgba(0,0,0,0.4); border: 1px solid var(--border); color: white; 
+            padding: 10px; border-radius: 8px; outline: none; width: 100%; box-sizing: border-box;
+        }
+        input:focus { border-color: var(--gold); }
+
+        .btn { padding: 10px 20px; border-radius: 10px; cursor: pointer; border: none; font-weight: 700; transition: 0.3s; }
+        .btn-gold { background: var(--gold); color: white; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: white; }
         .btn-danger { background: rgba(255, 77, 77, 0.1); color: var(--red); border: 1px solid var(--red); }
-        .btn-danger:hover { background: var(--red); color: white; }
-
-        .user-dp { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--orange); object-fit: cover; }
-        .status-pulse { height: 8px; width: 8px; background: #2ecc71; border-radius: 50%; display: inline-block; margin-right: 8px; box-shadow: 0 0 10px #2ecc71; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 0.5; transform: scale(0.9); } 70% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.5; transform: scale(0.9); } }
     </style>
 </head>
 <body>
 
     <div id="authSection">
-        <h2 style="color: var(--orange); font-weight: 900;">ADMIN LOGIN</h2>
-        <p style="color: #666; font-size: 0.9rem;">Master Control Access Only</p>
-        <input type="password" id="adminPass" placeholder="Enter Master Password" style="margin: 20px 0; text-align: center;">
-        <button class="btn btn-primary" onclick="checkAuth()" style="width: 100%;">ACCESS DASHBOARD</button>
+        <h2 style="color: var(--gold); font-weight: 900;">V4.0 ACCESS</h2>
+        <input type="password" id="adminPass" placeholder="Master Password" style="margin: 20px 0; text-align: center;">
+        <button class="btn btn-gold" onclick="checkAuth()" style="width: 100%;">UNSEAL DASHBOARD</button>
     </div>
 
     <div class="admin-container" id="adminDash">
-        <div class="header-flex">
-            <h1 style="font-weight: 900; letter-spacing: -1px;">Devotee <span style="color: var(--orange);">Command</span></h1>
-            <button class="btn btn-danger" onclick="location.reload()">LOCK SYSTEM</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h1 style="font-weight: 900;">Divine <span style="color: var(--gold);">Oversight</span></h1>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-outline" onclick="exportToCSV()">📂 EXPORT DATA</button>
+                <button class="btn btn-danger" onclick="location.reload()">LOCK</button>
+            </div>
         </div>
 
         <div class="stats-grid">
-            <div class="glass-card"><div class="stat-label">Total Devotees</div><div class="stat-val" id="statUsers">0</div></div>
-            <div class="glass-card"><div class="stat-label">Global Jaaps</div><div class="stat-val" id="statJaaps">0</div></div>
-            <div class="glass-card"><div class="stat-label">Active Now</div><div class="stat-val" id="statToday">0</div></div>
+            <div class="glass-card"><h3>Devotees</h3><p class="stat-val" id="statUsers">0</p></div>
+            <div class="glass-card"><h3>Global Count</h3><p class="stat-val" id="statJaaps">0</p></div>
+            <div class="glass-card"><h3>Reset Schedule</h3><p id="timer" style="color: #888;">00:00:00</p></div>
         </div>
 
-        <div class="control-box">
-            <h3 style="margin-top:0; color: var(--orange);">📢 Global App Announcement</h3>
-            <textarea id="globalMsg" rows="2" placeholder="Write message for all devotees..."></textarea>
-            <button class="btn btn-primary" style="margin-top:15px" onclick="updateBroadcast()">PUSH ANNOUNCEMENT</button>
+        <div class="glass-card" style="margin-bottom: 30px;">
+            <h3 style="margin-top:0; color: var(--gold);">📢 Global Announcement</h3>
+            <textarea id="globalMsg" rows="2" placeholder="Message for all users..."></textarea>
+            <button class="btn btn-gold" style="margin-top:10px" onclick="updateBroadcast()">PUSH TO USERS</button>
         </div>
 
-        <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center;">
-            <input type="text" id="userSearch" placeholder="🔍 Search devotee name..." oninput="filterUsers()" style="flex: 1;">
-            <button class="btn btn-danger" onclick="resetAllDaily()" style="white-space:nowrap;">RESET ALL DAILY</button>
+        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+            <input type="text" id="userSearch" placeholder="🔍 Search devotee..." oninput="filterUsers()">
         </div>
 
         <div class="table-container">
             <table class="user-table">
                 <thead>
-                    <tr>
-                        <th>Profile</th>
-                        <th>Devotee Name</th>
-                        <th>Daily Jaap</th>
-                        <th>Total Jaap</th>
-                        <th>Management</th>
+                    <tr style="background:transparent; color: var(--gold); font-size: 0.8rem;">
+                        <th>DEVOTEE</th><th>DAILY</th><th>TOTAL</th><th>ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody id="userList"></tbody>
@@ -141,88 +130,117 @@
             appId: "1:375289521394:web:ced2cafa4d1743d5ab9c6b"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        let allUsersData = [];
+        const db = getFirestore(initializeApp(firebaseConfig));
+        let allUsers = [];
 
         window.checkAuth = () => {
             if(document.getElementById('adminPass').value === "admin5") {
                 document.getElementById('authSection').style.display = 'none';
                 document.getElementById('adminDash').style.display = 'block';
-                loadDashboard();
-            } else { alert("❌ Unauthorized Access!"); }
+                startDashboard();
+                setupAutoResetTimer();
+            } else { alert("Access Denied!"); }
         };
 
-        function loadDashboard() {
-            onSnapshot(collection(db, "users"), (snapshot) => {
-                allUsersData = [];
+        function startDashboard() {
+            onSnapshot(collection(db, "users"), (snap) => {
+                allUsers = [];
                 let grandTotal = 0;
-                let online = 0;
-
-                snapshot.forEach(doc => {
-                    const d = doc.data();
-                    allUsersData.push({ id: doc.id, ...d });
-                    grandTotal += (d.totalCount || 0);
-                    if(d.dailyCount > 0) online++;
+                snap.forEach(d => {
+                    allUsers.push({ id: d.id, ...d.data() });
+                    grandTotal += (d.data().totalCount || 0);
                 });
+                
+                // Sort by Daily Count to Highlight Top Performer
+                allUsers.sort((a,b) => (b.dailyCount || 0) - (a.dailyCount || 0));
 
-                document.getElementById('statUsers').innerText = allUsersData.length;
+                document.getElementById('statUsers').innerText = allUsers.length;
                 document.getElementById('statJaaps').innerText = grandTotal.toLocaleString();
-                document.getElementById('statToday').innerText = online;
-                renderUsers(allUsersData);
+                renderUsers(allUsers);
             });
         }
 
         function renderUsers(data) {
             const list = document.getElementById('userList');
             list.innerHTML = '';
-            data.forEach(user => {
-                const dp = `https://ui-avatars.com/api/?name=${user.id}&background=f38630&color=fff&bold=true`;
+            const maxDaily = Math.max(...data.map(u => u.dailyCount || 0));
+
+            data.forEach(u => {
+                const isLive = u.lastTimestamp > (Date.now() - 5000);
+                const isTop = (u.dailyCount === maxDaily && maxDaily > 0);
                 const row = document.createElement('tr');
+                if(isTop) row.className = 'top-devotee';
+
                 row.innerHTML = `
-                    <td><img src="${dp}" class="user-dp"></td>
-                    <td><span class="status-pulse"></span><b>${user.id}</b></td>
-                    <td><input type="number" id="d-${user.id}" value="${user.dailyCount || 0}" style="width: 100px;"></td>
-                    <td><input type="number" id="t-${user.id}" value="${user.totalCount || 0}" style="width: 120px;"></td>
                     <td>
-                        <button class="btn btn-primary" onclick="updateUser('${user.id}')" style="padding: 8px 15px; font-size: 0.8rem;">SAVE</button>
-                        <button class="btn btn-danger" onclick="deleteUser('${user.id}')" style="padding: 8px 15px; font-size: 0.8rem;">BAN</button>
+                        <b>${u.id}</b> ${isLive ? '<span class="live-tag">TAPPING</span>' : ''}
+                        ${isTop ? ' 👑' : ''}
+                    </td>
+                    <td><input type="number" id="d-${u.id}" value="${u.dailyCount || 0}"></td>
+                    <td><input type="number" id="t-${u.id}" value="${u.totalCount || 0}"></td>
+                    <td style="display:flex; gap:5px;">
+                        <button class="btn btn-gold" style="padding:5px 10px" onclick="updateUser('${u.id}')">💾</button>
+                        <button class="btn btn-danger" style="padding:5px 10px" onclick="deleteUser('${u.id}')">🗑️</button>
                     </td>
                 `;
                 list.appendChild(row);
             });
         }
 
-        window.updateUser = async (name) => {
-            const daily = parseInt(document.getElementById(`d-${name}`).value);
-            const total = parseInt(document.getElementById(`t-${name}`).value);
-            await updateDoc(doc(db, "users", name), { dailyCount: daily, totalCount: total });
-            alert(`✅ ${name} updated!`);
+        // AUTO-RESET TIMER LOGIC
+        function setupAutoResetTimer() {
+            setInterval(() => {
+                const now = new Date();
+                const night = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+                const diff = night - now;
+                const h = Math.floor(diff / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+                document.getElementById('timer').innerText = `Reset in: ${h}h ${m}m ${s}s`;
+                
+                if(h === 0 && m === 0 && s === 0) resetDailyData();
+            }, 1000);
+        }
+
+        async function resetDailyData() {
+            const batch = writeBatch(db);
+            const query = await getDocs(collection(db, "users"));
+            query.forEach(d => batch.update(d.ref, { dailyCount: 0 }));
+            await batch.commit();
+            console.log("Daily Reset Executed Successfully");
+        }
+
+        window.exportToCSV = () => {
+            let csv = 'Devotee Name,Daily Count,Total Count\n';
+            allUsers.forEach(u => csv += `${u.id},${u.dailyCount},${u.totalCount}\n`);
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Devotee_Backup_${new Date().toLocaleDateString()}.csv`;
+            a.click();
         };
 
-        window.deleteUser = async (name) => {
-            if(confirm(`Permanently remove ${name} from list?`)) await deleteDoc(doc(db, "users", name));
+        window.updateUser = async (id) => {
+            const d = parseInt(document.getElementById(`d-${id}`).value);
+            const t = parseInt(document.getElementById(`t-${id}`).value);
+            await updateDoc(doc(db, "users", id), { dailyCount: d, totalCount: t });
+            alert("Updated!");
+        };
+
+        window.deleteUser = async (id) => {
+            if(confirm(`Delete ${id}?`)) await deleteDoc(doc(db, "users", id));
         };
 
         window.updateBroadcast = async () => {
             const msg = document.getElementById('globalMsg').value;
             await updateDoc(doc(db, "appConfig", "settings"), { broadcastMsg: msg });
-            alert("🚀 Broadcasted to all users!");
-        };
-
-        window.resetAllDaily = async () => {
-            if(confirm("Zero all daily counts for the new day?")) {
-                const batch = writeBatch(db);
-                const query = await getDocs(collection(db, "users"));
-                query.forEach(d => batch.update(d.ref, { dailyCount: 0 }));
-                await batch.commit();
-                alert("🌅 All daily counts reset!");
-            }
+            alert("Broadcasted!");
         };
 
         window.filterUsers = () => {
             const term = document.getElementById('userSearch').value.toLowerCase();
-            const filtered = allUsersData.filter(u => u.id.toLowerCase().includes(term));
+            const filtered = allUsers.filter(u => u.id.toLowerCase().includes(term));
             renderUsers(filtered);
         };
     </script>
