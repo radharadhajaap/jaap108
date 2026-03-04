@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jaap App - Admin Panel</title>
+    <style>
+        :root { --orange: #f38630; --bg: #0a0a0a; --red: #ff4d4d; }
+        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; padding: 20px; }
+        
+        #authSection { text-align: center; margin-top: 100px; }
+        .admin-container { max-width: 900px; margin: 0 auto; display: none; }
+        
+        h2 { color: var(--orange); border-bottom: 2px solid var(--orange); padding-bottom: 10px; }
+        
+        .user-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #1a1a1a; border-radius: 10px; overflow: hidden; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #333; }
+        th { background: #222; color: var(--orange); }
+
+        .user-dp { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid var(--orange); }
+        
+        input[type="number"] { width: 80px; padding: 5px; border-radius: 5px; border: 1px solid #444; background: #000; color: white; }
+        
+        .btn { padding: 8px 15px; border-radius: 5px; cursor: pointer; border: none; font-weight: bold; margin-right: 5px; }
+        .update-btn { background: var(--orange); color: white; }
+        .delete-btn { background: var(--red); color: white; }
+        .login-btn { background: var(--orange); color: white; padding: 10px 30px; margin-top: 10px; }
+        
+        input[type="password"] { padding: 10px; width: 250px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <div id="authSection">
+        <h2>Admin Access</h2>
+        <input type="password" id="adminPass" placeholder="Enter Admin Password">
+        <br>
+        <button class="btn login-btn" onclick="checkAuth()">Login</button>
+    </div>
+
+    <div class="admin-container" id="adminDash">
+        <h2>Devotee Management</h2>
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>DP</th>
+                    <th>Name</th>
+                    <th>Daily</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="userList">
+                </tbody>
+        </table>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
+            authDomain: "jaap-fdd80.firebaseapp.com",
+            projectId: "jaap-fdd80",
+            storageBucket: "jaap-fdd80.firebasestorage.app",
+            messagingSenderId: "375289521394",
+            appId: "1:375289521394:web:ced2cafa4d1743d5ab9c6b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Simple Password Check
+        window.checkAuth = () => {
+            const pass = document.getElementById('adminPass').value;
+            if(pass === "Radhe786") { // Change this password
+                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('adminDash').style.display = 'block';
+                loadUsers();
+            } else {
+                alert("Wrong Password!");
+            }
+        };
+
+        function loadUsers() {
+            onSnapshot(collection(db, "users"), (snapshot) => {
+                const list = document.getElementById('userList');
+                list.innerHTML = '';
+                
+                snapshot.forEach((userDoc) => {
+                    const data = userDoc.data();
+                    const id = userDoc.id;
+                    const dp = data.profilePic || `https://ui-avatars.com/api/?name=${id}`;
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><img src="${dp}" class="user-dp"></td>
+                        <td>${id}</td>
+                        <td><input type="number" id="daily-${id}" value="${data.dailyCount || 0}"></td>
+                        <td><input type="number" id="total-${id}" value="${data.totalCount || 0}"></td>
+                        <td>
+                            <button class="btn update-btn" onclick="updateUser('${id}')">Save</button>
+                            <button class="btn delete-btn" onclick="deleteUser('${id}')">Delete</button>
+                        </td>
+                    `;
+                    list.appendChild(row);
+                });
+            });
+        }
+
+        // Update Function
+        window.updateUser = async (name) => {
+            const daily = parseInt(document.getElementById(`daily-${name}`).value);
+            const total = parseInt(document.getElementById(`total-${name}`).value);
+            
+            try {
+                await updateDoc(doc(db, "users", name), {
+                    dailyCount: daily,
+                    totalCount: total
+                });
+                alert(`${name} updated successfully!`);
+            } catch (e) { alert("Error updating user"); }
+        };
+
+        // Delete Function
+        window.deleteUser = async (name) => {
+            if(confirm(`Kya aap ${name} ka account delete karna chahte hain?`)) {
+                await deleteDoc(doc(db, "users", name));
+            }
+        };
+    </script>
+</body>
+</html>
