@@ -14,14 +14,12 @@
             background-color: #0d0905; color: white; overflow: hidden;
         }
 
-        /* Fixed Background for Daily Darshan */
         .bg-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover; background-position: center;
-            z-index: -1; transition: background-image 1s ease-in-out;
+            z-index: -1; transition: background-image 1.5s ease-in-out;
         }
 
-        /* Glass Nav */
         .top-nav {
             position: fixed; top: 20px; width: 100%; display: flex;
             justify-content: space-evenly; padding: 0 10px; z-index: 100;
@@ -33,31 +31,33 @@
             text-decoration: none; cursor: pointer; display: flex; align-items: center; gap: 8px;
         }
 
-        /* Community Goal Section */
-        .global-section {
+        /* Sankalp UI */
+        .sankalp-box {
             position: fixed; top: 85px; width: 90%; left: 5%;
-            background: rgba(0, 0, 0, 0.5); border-radius: 15px;
-            padding: 10px; border: 1px solid rgba(243, 134, 48, 0.2);
-            text-align: center; font-size: 0.75rem;
+            background: rgba(0, 0, 0, 0.6); border-radius: 15px;
+            padding: 12px; border: 1px solid rgba(243, 134, 48, 0.3);
+            text-align: center; z-index: 90;
         }
-        .progress-track { height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 8px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #f38630, #ffcc33); width: 0%; transition: width 1s; }
+        .sankalp-progress { height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 8px; overflow: hidden; }
+        .sankalp-fill { height: 100%; background: linear-gradient(90deg, #4caf50, #8bc34a); width: 0%; transition: 1s; }
 
         .main-content { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .mantra-text { font-size: 2.2rem; font-weight: bold; text-shadow: 0 0 20px rgba(243, 134, 48, 0.8); }
 
-        .mantra-text { font-size: 2.2rem; font-weight: bold; margin-bottom: 5px; text-shadow: 0 0 20px rgba(243, 134, 48, 0.8); }
-
-        /* Digital Mala */
-        .mala-circle { position: relative; width: 280px; height: 280px; margin: 20px auto; display: flex; align-items: center; justify-content: center; }
-        .mala-svg { position: absolute; width: 100%; height: 100%; transform: rotate(-90deg); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .inner-stats { position: relative; z-index: 10; }
-        .daily-num { font-size: 5.5rem; font-weight: 800; line-height: 1; margin: 0; }
+        .mala-circle { position: relative; width: 260px; height: 260px; margin: 20px auto; display: flex; align-items: center; justify-content: center; }
+        .mala-svg { position: absolute; width: 100%; height: 100%; transform: rotate(-90deg); transition: 0.4s; }
         
-        .footer-info { margin-top: 30px; font-size: 0.9rem; opacity: 0.8; }
-        
-        /* Floating Radhe Animation */
-        .float-text { position: absolute; color: #ffcc33; font-weight: bold; pointer-events: none; animation: floatUp 0.8s ease-out forwards; font-size: 1.5rem; }
+        .daily-num { font-size: 5rem; font-weight: 800; line-height: 1; margin: 0; }
+        .float-text { position: absolute; color: #ffcc33; font-weight: bold; pointer-events: none; animation: floatUp 0.8s forwards; font-size: 1.5rem; }
         @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-100px); } }
+
+        /* Sankalp Modal */
+        #sankalpModal {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(20, 15, 10, 0.95); padding: 30px; border-radius: 20px;
+            border: 1px solid var(--orange); z-index: 1000; width: 80%; text-align: center;
+        }
+        .modal-input { width: 100%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 1px solid #444; background: #000; color: white; text-align: center; }
     </style>
 </head>
 <body onclick="handleTap(event)">
@@ -66,40 +66,47 @@
     <audio id="bellSound"><source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
 
     <div class="top-nav">
-        <div class="nav-btn" onclick="toggleMeditation(event)" id="timerBtn"><span>🧘</span> Timer</div>
-        <a href="leaderboard.html" class="nav-btn"><span>🏆</span> Leaderboard</a>
+        <div class="nav-btn" onclick="openSankalp(event)"><span>📜</span> Sankalp</div>
+        <a href="leaderboard.html" class="nav-btn"><span>🏆</span> Rank</a>
     </div>
 
-    <div class="global-section">
-        <span style="color: #ffcc33;">🌍 Community Goal:</span> 1,00,000 | <b><span id="globalDone">0</span></b>
-        <div class="progress-track"><div class="progress-fill" id="goalFill"></div></div>
+    <div class="sankalp-box" id="sankalpDisplay" style="display:none;">
+        <div style="font-size: 0.75rem; color: #ffcc33; margin-bottom: 5px;">
+            🙏 Sankalp Progress: <span id="sankalpCurrent">0</span> / <span id="sankalpGoal">0</span>
+        </div>
+        <div class="sankalp-progress"><div class="sankalp-fill" id="sankalpFill"></div></div>
     </div>
 
     <div class="main-content">
-        <div id="streakDisplay" style="color:#ffeb3b; font-size: 1.1rem; margin-bottom: 10px;">🔥 0 Day Streak</div>
+        <div id="streakDisplay" style="color:#ffeb3b; font-size: 1rem; margin-bottom: 10px;">🔥 0 Day Streak</div>
         <div class="mantra-text">Radha Radha</div>
         
         <div class="mala-circle">
             <svg class="mala-svg" id="malaSvg" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" stroke-dasharray="2,2" />
-                <circle id="progressCircle" cx="50" cy="50" r="45" fill="none" stroke="#f38630" stroke-width="3" stroke-dasharray="282.7" stroke-dashoffset="282.7" style="transition: 0.3s;"/>
-                <circle cx="50" cy="5" r="3" fill="#ffcc33" />
+                <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+                <circle id="progressCircle" cx="50" cy="50" r="45" fill="none" stroke="#f38630" stroke-width="3" stroke-dasharray="282.7" stroke-dashoffset="282.7" />
             </svg>
-            <div class="inner-stats">
+            <div style="position:relative; z-index:10;">
                 <p class="daily-num" id="dailyDisplay">0</p>
-                <p style="font-size: 0.7rem; letter-spacing: 3px; margin: 0; color: var(--orange);">DAILY JAAP</p>
+                <p style="font-size: 0.7rem; letter-spacing: 2px; margin: 0; color: var(--orange);">DAILY JAAP</p>
             </div>
         </div>
 
-        <div class="footer-info">
+        <div style="margin-top: 20px; opacity: 0.8; font-size: 0.9rem;">
             MY TOTAL: <b id="totalDisplay" style="color:var(--orange)">0</b>
-            <p style="font-size: 0.6rem; margin-top: 15px; opacity: 0.5;">TAP ANYWHERE TO CHANT</p>
         </div>
+    </div>
+
+    <div id="sankalpModal">
+        <h3 style="color:var(--orange)">Aaj ka Sankalp</h3>
+        <p style="font-size:0.8rem; opacity:0.8;">Aap aaj kitni mala (1 mala = 108 jaap) karne ka sankalp lete hain?</p>
+        <input type="number" id="malaInput" class="modal-input" placeholder="Enter number of Malas">
+        <button onclick="setSankalp()" style="background:var(--orange); border:none; padding:12px 25px; border-radius:10px; color:white; font-weight:bold;">Sankalp Lein 🙏</button>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot, increment, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
@@ -115,70 +122,76 @@
         const userName = localStorage.getItem('jaapUserName');
         const today = new Date().toLocaleDateString();
 
-        if(!userName) window.location.href = "login.html";
-
         let rotation = 0;
+        let userSankalp = 0;
 
-        // Daily Darshan Images
         const darshanImages = [
             "https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932",
             "https://images.unsplash.com/photo-1544924222-355b1f0ad5a7?q=80&w=1932",
             "https://images.unsplash.com/photo-1506191696232-49195305149b?q=80&w=1932"
         ];
 
-        function initApp() {
-            // Set Daily Image
+        function init() {
+            // Set Daily Darshan
             const dayIdx = new Date().getDate() % darshanImages.length;
             document.getElementById('dailyDarshanBg').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url('${darshanImages[dayIdx]}')`;
 
-            // Listen for User Data
+            // Load Data
             onSnapshot(doc(db, "users", userName), (ds) => {
                 if(ds.exists()) {
-                    const data = ds.data();
-                    const daily = data.lastDate === today ? data.dailyCount : 0;
+                    const d = ds.data();
+                    const daily = d.lastDate === today ? d.dailyCount : 0;
                     document.getElementById('dailyDisplay').innerText = daily;
-                    document.getElementById('totalDisplay').innerText = data.totalCount;
-                    document.getElementById('streakDisplay').innerText = `🔥 ${data.streak || 0} Day Streak`;
+                    document.getElementById('totalDisplay').innerText = d.totalCount;
+                    document.getElementById('streakDisplay').innerText = `🔥 ${d.streak || 0} Day Streak`;
                     
-                    const circle = document.getElementById('progressCircle');
-                    circle.style.strokeDashoffset = 282.7 - (daily % 108 / 108) * 282.7;
-                }
-            });
+                    document.getElementById('progressCircle').style.strokeDashoffset = 282.7 - (daily % 108 / 108) * 282.7;
 
-            // Community Goal
-            onSnapshot(collection(db, "users"), (snap) => {
-                let total = 0; snap.forEach(d => total += (d.data().totalCount || 0));
-                document.getElementById('globalDone').innerText = total.toLocaleString();
-                document.getElementById('goalFill').style.width = Math.min((total / 100000) * 100, 100) + "%";
+                    // Update Sankalp UI
+                    if(d.sankalpGoal && d.sankalpDate === today) {
+                        document.getElementById('sankalpDisplay').style.display = 'block';
+                        document.getElementById('sankalpGoal').innerText = d.sankalpGoal;
+                        document.getElementById('sankalpCurrent').innerText = daily;
+                        const progress = Math.min((daily / d.sankalpGoal) * 100, 100);
+                        document.getElementById('sankalpFill').style.width = progress + "%";
+                        if(daily >= d.sankalpGoal && d.sankalpGoal > 0) {
+                            document.getElementById('sankalpCurrent').innerText = "DONE! ✨";
+                        }
+                    }
+                }
             });
         }
 
+        window.openSankalp = (e) => { e.stopPropagation(); document.getElementById('sankalpModal').style.display = 'block'; };
+
+        window.setSankalp = async () => {
+            const malas = document.getElementById('malaInput').value;
+            if(!malas || malas <= 0) return alert("Please enter valid number of malas.");
+            const goal = malas * 108;
+            await setDoc(doc(db, "users", userName), { sankalpGoal: goal, sankalpDate: today }, { merge: true });
+            document.getElementById('sankalpModal').style.display = 'none';
+        };
+
         window.handleTap = async (e) => {
-            if(e.target.closest('.nav-btn')) return;
+            if(e.target.closest('.nav-btn') || e.target.closest('#sankalpModal')) return;
 
             rotation += (360 / 108);
             document.getElementById('malaSvg').style.transform = `rotate(${rotation - 90}deg)`;
 
-            const f = document.createElement('div');
-            f.className = 'float-text'; f.innerText = 'Radhe';
+            const f = document.createElement('div'); f.className = 'float-text'; f.innerText = 'Radhe';
             f.style.left = e.clientX + 'px'; f.style.top = e.clientY + 'px';
             document.body.appendChild(f);
             setTimeout(() => f.remove(), 800);
 
-            const userRef = doc(db, "users", userName);
-            await setDoc(userRef, {
-                dailyCount: increment(1),
-                totalCount: increment(1),
-                lastDate: today,
-                lastTimestamp: Date.now()
-            }, { merge: true });
+            await setDoc(doc(db, "users", userName), { dailyCount: increment(1), totalCount: increment(1), lastDate: today, lastTimestamp: Date.now() }, { merge: true });
 
-            const currentDaily = parseInt(document.getElementById('dailyDisplay').innerText);
-            if((currentDaily + 1) % 108 === 0) document.getElementById('bellSound').play();
+            if((parseInt(document.getElementById('dailyDisplay').innerText) + 1) % 108 === 0) {
+                document.getElementById('bellSound').play();
+            }
             if(navigator.vibrate) navigator.vibrate(40);
         };
 
-        initApp();
+        init();
     </script>
 </body>
 </html>
