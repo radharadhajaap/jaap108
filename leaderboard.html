@@ -2,77 +2,124 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jaap Leaderboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Devotee Leaderboard - High End</title>
     <style>
         :root {
-            --gold: #FFD700; --silver: #C0C0C0; --bronze: #CD7F32;
-            --orange: #f38630; --bg: #120c08;
+            --gold: linear-gradient(135deg, #FFD700, #FFA500);
+            --silver: linear-gradient(135deg, #C0C0C0, #8E8E8E);
+            --bronze: linear-gradient(135deg, #CD7F32, #8B4513);
+            --orange: #f38630;
+            --bg: #0d0905;
+            --glass: rgba(255, 255, 255, 0.05);
         }
 
         body {
-            margin: 0; background-color: var(--bg); color: white;
-            font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center;
+            margin: 0; padding: 0; background-color: var(--bg); color: white;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-image: radial-gradient(circle at top, #2c1a0a, #0d0905);
+            min-height: 100vh; display: flex; flex-direction: column; align-items: center;
         }
 
-        .header { padding: 30px; text-align: center; }
-        .header h1 { margin: 0; color: var(--orange); letter-spacing: 2px; }
+        .header { 
+            padding: 40px 20px 20px; text-align: center; width: 100%;
+            background: linear-gradient(to bottom, rgba(13,9,5,1), transparent);
+            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);
+        }
+        
+        .header h1 { 
+            margin: 0; font-size: 1.8rem; letter-spacing: 3px;
+            background: linear-gradient(to bottom, #fff, var(--orange));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
 
-        .leaderboard-container { width: 95%; max-width: 450px; margin-top: 20px; }
+        .leaderboard-container { 
+            width: 90%; max-width: 450px; margin-top: 10px; padding-bottom: 100px;
+        }
 
         .user-card {
-            display: flex; align-items: center; background: rgba(255, 255, 255, 0.08);
-            margin-bottom: 20px; padding: 15px; border-radius: 15px;
-            position: relative; border: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; 
+            background: var(--glass);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            margin-bottom: 12px; padding: 12px 18px; border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: transform 0.2s;
+        }
+        
+        /* Premium Glow for Top 3 */
+        .rank-1 { border: 1px solid rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.05); }
+        .rank-2 { border: 1px solid rgba(192, 192, 192, 0.3); }
+        .rank-3 { border: 1px solid rgba(205, 127, 50, 0.3); }
+
+        .rank-num { 
+            font-size: 1.1rem; font-weight: 900; width: 35px; 
+            font-style: italic; color: rgba(255,255,255,0.3);
         }
 
-        .profile-wrapper { 
-            position: relative; 
-            margin-right: 15px;
-            padding-top: 10px; 
-        }
-
-        .crown {
-            position: absolute;
-            top: -18px; 
-            left: 50%;
-            transform: translateX(-50%) rotate(-10deg);
-            font-size: 1.8rem;
-            z-index: 10;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8));
-        }
+        .profile-wrapper { position: relative; margin-right: 15px; }
 
         .profile-pic {
-            width: 60px; height: 60px; border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.2);
-            object-fit: cover;
-            display: block;
-            background: #222; /* Placeholder color */
+            width: 55px; height: 55px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.1);
+            object-fit: cover; background: #222;
         }
 
-        .rank-1 .profile-pic { border-color: var(--gold); box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); }
-        .rank-2 .profile-pic { border-color: var(--silver); }
-        .rank-3 .profile-pic { border-color: var(--bronze); }
+        /* Top 3 Medals */
+        .medal {
+            position: absolute; top: -10px; right: -5px;
+            width: 24px; height: 24px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: bold; color: #000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .rank-1 .medal { background: var(--gold); }
+        .rank-2 .medal { background: var(--silver); }
+        .rank-3 .medal { background: var(--bronze); }
 
-        .rank-num { font-size: 1.2rem; font-weight: 800; width: 30px; color: rgba(255,255,255,0.5); }
         .user-info { flex: 1; }
-        .user-name { font-size: 1.1rem; font-weight: 600; display: block; }
-        .count-badge { background: var(--orange); padding: 5px 12px; border-radius: 8px; font-weight: bold; }
+        .user-name { 
+            font-size: 1rem; font-weight: 700; display: block; 
+            color: rgba(255,255,255,0.9); margin-bottom: 2px;
+        }
+        .jaap-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--orange); font-weight: bold; }
 
-        .back-btn { margin: 20px; color: var(--orange); text-decoration: none; border: 1px solid; padding: 8px 20px; border-radius: 20px; }
+        .count-badge { 
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem; font-weight: 800;
+            color: #fff; text-shadow: 0 0 10px rgba(243, 134, 48, 0.5);
+        }
+
+        /* Floating Back Button */
+        .nav-footer {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: 100%; display: flex; justify-content: center; z-index: 1000;
+        }
+        .back-btn { 
+            background: linear-gradient(135deg, var(--orange), #ff5722);
+            color: white; text-decoration: none; padding: 12px 35px; 
+            border-radius: 50px; font-weight: bold; font-size: 0.9rem;
+            box-shadow: 0 10px 25px rgba(243, 134, 48, 0.4);
+            transition: 0.3s;
+        }
+        .back-btn:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>🏆 LEADERBOARD</h1>
+        <h1>Devotee Rankings</h1>
     </div>
 
     <div class="leaderboard-container" id="leaderboardList">
-        <p style="text-align:center; opacity:0.5;">Loading devotees...</p>
+        <div style="text-align:center; padding: 50px; opacity: 0.5;">
+            <p>Gathering devotees...</p>
+        </div>
     </div>
 
-    <a href="index.html" class="back-btn">Back to Jaap</a>
+    <div class="nav-footer">
+        <a href="index.html" class="back-btn">← Back to Jaap</a>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -90,7 +137,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const q = query(collection(db, "users"), orderBy("totalCount", "desc"), limit(10));
+        const q = query(collection(db, "users"), orderBy("totalCount", "desc"), limit(20));
 
         onSnapshot(q, (snapshot) => {
             const listDiv = document.getElementById('leaderboardList');
@@ -99,26 +146,24 @@
             snapshot.docs.forEach((doc, index) => {
                 const data = doc.data();
                 const rank = index + 1;
-                let crownEmoji = '';
+                let medalHtml = '';
                 
-                if(rank === 1) crownEmoji = '<div class="crown">👑</div>';
-                else if(rank === 2) crownEmoji = '<div class="crown">🥈</div>';
-                else if(rank === 3) crownEmoji = '<div class="crown">🥉</div>';
+                if(rank === 1) medalHtml = '<div class="medal">1</div>';
+                else if(rank === 2) medalHtml = '<div class="medal">2</div>';
+                else if(rank === 3) medalHtml = '<div class="medal">3</div>';
 
-                // --- PHOTO FETCH LOGIC ---
-                // Pehle Firebase ka profilePic check karega, agar nahi hai toh Avatar dikhayega
-                const profileImg = data.profilePic ? data.profilePic : `https://ui-avatars.com/api/?name=${doc.id}&background=333&color=f38630&bold=true`;
+                const profileImg = data.profilePic ? data.profilePic : `https://ui-avatars.com/api/?name=${doc.id}&background=1a0f05&color=f38630&bold=true`;
 
                 listDiv.innerHTML += `
                     <div class="user-card rank-${rank}">
-                        <div class="rank-num">${rank}</div>
+                        <div class="rank-num">#${rank}</div>
                         <div class="profile-wrapper">
-                            ${crownEmoji}
+                            ${medalHtml}
                             <img src="${profileImg}" class="profile-pic" onerror="this.src='https://ui-avatars.com/api/?name=${doc.id}'">
                         </div>
                         <div class="user-info">
                             <span class="user-name">${doc.id}</span>
-                            <span style="font-size:0.8rem; opacity:0.6">Total Jaap</span>
+                            <span class="jaap-label">Total Jaap</span>
                         </div>
                         <div class="count-badge">${(data.totalCount || 0).toLocaleString()}</div>
                     </div>
