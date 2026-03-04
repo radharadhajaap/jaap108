@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jaap Leaderboard</title>
+    <style>
+        :root {
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+            --orange: #f38630;
+            --bg: #120c08;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            background: rgba(243, 134, 48, 0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header h1 {
+            margin: 0;
+            color: var(--orange);
+            letter-spacing: 2px;
+        }
+
+        .leaderboard-container {
+            width: 90%;
+            max-width: 500px;
+            margin-top: 20px;
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 12px;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.2s;
+        }
+
+        .user-card:hover {
+            transform: scale(1.02);
+        }
+
+        .rank {
+            font-size: 1.2rem;
+            font-weight: bold;
+            width: 40px;
+        }
+
+        /* Top 3 Colors */
+        .rank-1 { color: var(--gold); }
+        .rank-2 { color: var(--silver); }
+        .rank-3 { color: var(--bronze); }
+
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid var(--orange);
+            background: #222;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 1.1rem;
+            font-weight: 500;
+            display: block;
+        }
+
+        .user-total {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .count-badge {
+            background: var(--orange);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            color: var(--orange);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border: 1px solid var(--orange);
+            padding: 8px 20px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🏆 TOP CHANTERS</h1>
+        <p style="opacity:0.6; font-size: 0.8rem;">Real-time Jaap Rankings</p>
+    </div>
+
+    <div class="leaderboard-container" id="leaderboardList">
+        <p style="text-align: center; margin-top: 50px;">Merging data from Vaikuntha...</p>
+    </div>
+
+    <a href="index.html" class="back-btn">← Back to Jaap</a>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Your Firebase Config (Same as index.html)
+        const firebaseConfig = {
+            apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
+            authDomain: "jaap-fdd80.firebaseapp.com",
+            projectId: "jaap-fdd80",
+            storageBucket: "jaap-fdd80.firebasestorage.app",
+            messagingSenderId: "375289521394",
+            appId: "1:375289521394:web:ced2cafa4d1743d5ab9c6b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Fetch Top 10 Users
+        const q = query(collection(db, "users"), orderBy("totalCount", "desc"), limit(10));
+
+        onSnapshot(q, (snapshot) => {
+            const listDiv = document.getElementById('leaderboardList');
+            listDiv.innerHTML = '';
+
+            snapshot.docs.forEach((doc, index) => {
+                const data = doc.data();
+                const name = doc.id;
+                const total = data.totalCount || 0;
+                const rank = index + 1;
+
+                // Profile Image based on name (UI Avatars)
+                const profileImg = `https://ui-avatars.com/api/?name=${name}&background=f38630&color=fff&rounded=true`;
+
+                const card = `
+                    <div class="user-card">
+                        <div class="rank rank-${rank}">#${rank}</div>
+                        <img src="${profileImg}" class="profile-pic" alt="user">
+                        <div class="user-info">
+                            <span class="user-name">${name}</span>
+                            <span class="user-total">Total Jaap</span>
+                        </div>
+                        <div class="count-badge">${total.toLocaleString()}</div>
+                    </div>
+                `;
+                listDiv.innerHTML += card;
+            });
+        });
+    </script>
+</body>
+</html>
