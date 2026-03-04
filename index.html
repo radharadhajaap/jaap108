@@ -6,79 +6,134 @@
     <link rel="manifest" href="manifest.json">
     <title>Radha Rani Jaap Pro</title>
     <style>
-        :root { --orange: #f38630; --bg: #0d0905; --glass: rgba(255,255,255,0.08); }
-        body.day { --bg: #fdf5e6; color: #5d4037; } /* Day Theme Styles */
-        body.night { --bg: #0d0905; color: white; } /* Night Theme Styles */
-
-        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; transition: 0.5s; overflow: hidden; }
-        .bg-img { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; object-fit: cover; }
+        :root { --orange: #f38630; --text: #ffffff; }
         
-        /* Top Navigation */
-        .top-nav { position: fixed; top: 15px; width: 100%; display: flex; justify-content: space-between; padding: 0 15px; box-sizing: border-box; z-index: 100; }
-        .nav-btn { background: var(--glass); padding: 8px 12px; border-radius: 20px; border: 1px solid var(--orange); color: inherit; font-size: 0.7rem; cursor: pointer; text-decoration: none; backdrop-filter: blur(5px); }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            background-color: #0d0905; color: var(--text);
+            overflow: hidden;
+        }
 
-        /* Global Goal Bar */
-        .global-goal { position: fixed; top: 60px; width: 90%; left: 5%; background: var(--glass); border-radius: 10px; padding: 8px; text-align: center; font-size: 0.75rem; border: 1px solid rgba(243,134,48,0.2); }
-        .progress-bar { height: 4px; background: #333; border-radius: 10px; margin-top: 5px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--orange); width: 0%; transition: 1s; }
+        /* Fixed Background Styling */
+        .bg-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), 
+                        url('https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932');
+            background-size: cover; background-position: center;
+            z-index: -1;
+        }
 
-        .main { text-align: center; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+        /* Glassmorphism Navigation */
+        .top-nav {
+            position: fixed; top: 20px; width: 100%; display: flex;
+            justify-content: space-evenly; padding: 0 10px; z-index: 100;
+        }
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 18px; border-radius: 50px;
+            color: white; font-size: 0.8rem; cursor: pointer;
+            text-decoration: none; display: flex; align-items: center; gap: 8px;
+        }
+
+        /* Global Progress Bar */
+        .global-section {
+            position: fixed; top: 85px; width: 90%; left: 5%;
+            background: rgba(0, 0, 0, 0.4); border-radius: 15px;
+            padding: 10px; border: 1px solid rgba(243, 134, 48, 0.3);
+            text-align: center; font-size: 0.75rem;
+        }
+        .progress-track {
+            height: 6px; background: rgba(255,255,255,0.1);
+            border-radius: 10px; margin-top: 8px; overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%; background: linear-gradient(90deg, #f38630, #ffcc33);
+            width: 0%; transition: width 1s ease-in-out;
+        }
+
+        .main-content {
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+        }
+
+        .mantra-text {
+            font-size: 2.2rem; font-weight: bold; margin-bottom: 5px;
+            text-shadow: 0 0 20px rgba(243, 134, 48, 0.8); color: white;
+        }
+
+        /* Digital Mala UI */
+        .mala-circle {
+            position: relative; width: 280px; height: 280px;
+            margin: 20px auto; display: flex; align-items: center; justify-content: center;
+        }
+        .mala-beads-svg {
+            position: absolute; width: 100%; height: 100%;
+            transform: rotate(-90deg); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .inner-stats { position: relative; z-index: 10; }
+        .daily-num { font-size: 5.5rem; font-weight: 800; line-height: 1; margin: 0; }
         
-        /* Meditation Timer */
-        #timerDisplay { font-size: 1.2rem; color: var(--orange); margin-bottom: 10px; font-weight: bold; }
-
-        /* Digital Mala Animation */
-        .mala-container { position: relative; width: 260px; height: 260px; margin: 20px auto; }
-        .mala-beads { position: absolute; width: 100%; height: 100%; border: 2px dashed rgba(243,134,48,0.3); border-radius: 50%; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .bead-dot { position: absolute; width: 12px; height: 12px; background: var(--orange); border-radius: 50%; left: 50%; transform: translateX(-50%); top: -6px; box-shadow: 0 0 10px var(--orange); }
-
-        .counter-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
-        .current-count { font-size: 5rem; font-weight: 900; line-height: 1; }
+        .footer-info { margin-top: 30px; font-size: 0.9rem; opacity: 0.8; }
         
-        .footer-stats { margin-top: 20px; font-size: 0.8rem; opacity: 0.7; }
-        .float-text { position: absolute; pointer-events: none; animation: floatUp 0.8s ease-out forwards; font-weight: bold; font-size: 1.5rem; color: var(--orange); }
-        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-120px); } }
+        /* Tap Animations */
+        .float-radhe {
+            position: absolute; color: #ffcc33; font-weight: bold;
+            pointer-events: none; animation: floatUp 0.8s ease-out forwards;
+            font-size: 1.5rem; text-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-100px) scale(1.2); }
+        }
     </style>
 </head>
-<body class="night" onclick="handleTap(event)">
+<body onclick="handleTap(event)">
 
+    <div class="bg-container"></div>
     <audio id="bellSound"><source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
-    <audio id="bgMusic" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-    
-    <img id="bgImg" class="bg-img" src="https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932">
 
     <div class="top-nav">
-        <div class="nav-btn" onclick="toggleMeditation(event)" id="timerBtn">🧘 Timer</div>
-        <div class="nav-btn" onclick="toggleTheme(event)">🌓 Theme</div>
-        <a href="leaderboard.html" class="nav-btn">🏆 Rank</a>
+        <div class="nav-btn" onclick="toggleMeditation(event)"><span>🧘</span> Timer</div>
+        <div class="nav-btn" onclick="toggleTheme(event)"><span>🌓</span> Theme</div>
+        <a href="leaderboard.html" class="nav-btn"><span>🏆</span> Rank</a>
     </div>
 
-    <div class="global-goal">
-        🌍 Global Goal: <span id="globalTarget">1,00,000</span> | Done: <span id="globalDone">0</span>
-        <div class="progress-bar"><div class="progress-fill" id="goalFill"></div></div>
+    <div class="global-section">
+        <span style="color: #ffcc33;">🌍 Community Goal:</span> 1,00,000 | <b><span id="globalDone">0</span></b>
+        <div class="progress-track"><div class="progress-fill" id="goalFill"></div></div>
     </div>
 
-    <div class="main">
-        <div id="timerDisplay">READY TO CHANT</div>
-        <div class="streak" id="streakDisplay" style="color:#ffeb3b; margin-bottom:10px;">🔥 0 Day Streak</div>
+    <div class="main-content">
+        <div id="streakDisplay" style="color:#ffeb3b; font-size: 1.1rem; margin-bottom: 10px;">🔥 0 Day Streak</div>
+        <div class="mantra-text">Radha Radha</div>
         
-        <div class="mala-container">
-            <div class="mala-beads" id="malaBeads"><div class="bead-dot"></div></div>
-            <div class="counter-inner">
-                <span id="dailyDisplay" class="current-count">0</span>
-                <div style="font-size: 0.8rem; letter-spacing: 2px;">DAILY JAAP</div>
+        <div class="mala-circle">
+            <svg class="mala-beads-svg" id="malaSvg" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" stroke-dasharray="2,2" />
+                <circle id="progressCircle" cx="50" cy="50" r="45" fill="none" stroke="#f38630" stroke-width="3" stroke-linecap="round" stroke-dasharray="282.7" stroke-dashoffset="282.7" style="transition: stroke-dashoffset 0.3s;"/>
+                <circle cx="50" cy="5" r="3" fill="#ffcc33">
+                    <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite" />
+                </circle>
+            </svg>
+            <div class="inner-stats">
+                <p class="daily-num" id="dailyDisplay">0</p>
+                <p style="font-size: 0.8rem; letter-spacing: 3px; margin: 0; color: var(--orange);">MALA COUNT</p>
             </div>
         </div>
 
-        <div class="footer-stats">
-            MY TOTAL: <span id="totalDisplay" style="color:var(--orange); font-weight:bold;">0</span>
-            <div style="margin-top:10px; font-size:0.6rem;">TAP ANYWHERE TO ROTATE MALA</div>
+        <div class="footer-info">
+            TOTAL JAAP: <b id="totalDisplay" style="color:var(--orange)">0</b>
+            <p style="font-size: 0.7rem; margin-top: 15px; opacity: 0.5;">TAP ANYWHERE TO CHANT</p>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot, increment, getDoc, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, increment, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
@@ -96,80 +151,45 @@
 
         if(!userName) window.location.href = "login.html";
 
-        let currentRotation = 0;
-        let timerSeconds = 0;
-        let timerInterval = null;
+        let rotation = 0;
 
-        // --- 1. GLOBAL GOAL & DATA SYNC ---
         onSnapshot(doc(db, "users", userName), (ds) => {
             if(ds.exists()) {
                 const data = ds.data();
-                document.getElementById('dailyDisplay').innerText = data.lastDate === today ? data.dailyCount : 0;
+                const daily = data.lastDate === today ? data.dailyCount : 0;
+                document.getElementById('dailyDisplay').innerText = daily;
                 document.getElementById('totalDisplay').innerText = data.totalCount;
                 document.getElementById('streakDisplay').innerText = `🔥 ${data.streak || 0} Day Streak`;
+                
+                // Update Circular Progress
+                const circle = document.getElementById('progressCircle');
+                const offset = 282.7 - (daily % 108 / 108) * 282.7;
+                circle.style.strokeDashoffset = offset;
             }
         });
 
-        // Global Goal Logic (Sum of all users' totals)
         onSnapshot(collection(db, "users"), (snap) => {
             let total = 0;
             snap.forEach(d => total += (d.data().totalCount || 0));
             document.getElementById('globalDone').innerText = total.toLocaleString();
-            const percent = Math.min((total / 100000) * 100, 100);
-            document.getElementById('goalFill').style.width = percent + "%";
+            document.getElementById('goalFill').style.width = Math.min((total / 100000) * 100, 100) + "%";
         });
 
-        // --- 2. THEME LOGIC ---
-        window.toggleTheme = (e) => {
-            e.stopPropagation();
-            const b = document.body;
-            if(b.classList.contains('night')) {
-                b.classList.replace('night', 'day');
-                document.getElementById('bgImg').src = "https://images.unsplash.com/photo-1500382017468-9049fee74a62?q=80&w=1932";
-            } else {
-                b.classList.replace('day', 'night');
-                document.getElementById('bgImg').src = "https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932";
-            }
-        };
-
-        // --- 3. MEDITATION TIMER ---
-        window.toggleMeditation = (e) => {
-            e.stopPropagation();
-            if(timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-                document.getElementById('timerBtn').innerText = "🧘 Timer";
-                document.getElementById('timerDisplay').innerText = "SESSION ENDED";
-                document.getElementById('bgMusic').pause();
-            } else {
-                timerSeconds = 0;
-                document.getElementById('bgMusic').play();
-                timerInterval = setInterval(() => {
-                    timerSeconds++;
-                    const m = Math.floor(timerSeconds / 60);
-                    const s = timerSeconds % 60;
-                    document.getElementById('timerDisplay').innerText = `MEDITATING: ${m}m ${s}s`;
-                }, 1000);
-                document.getElementById('timerBtn').innerText = "⏹ Stop";
-            }
-        };
-
-        // --- 4. TAP & MALA ANIMATION ---
         window.handleTap = async (e) => {
             if(e.target.closest('.nav-btn')) return;
 
-            // Rotate Mala
-            currentRotation += (360 / 108);
-            document.getElementById('malaBeads').style.transform = `rotate(${currentRotation}deg)`;
+            // Animate Mala Rotation
+            rotation += (360 / 108);
+            document.getElementById('malaSvg').style.transform = `rotate(${rotation - 90}deg)`;
 
-            // Float Text
+            // Floating Text
             const f = document.createElement('div');
-            f.className = 'float-text'; f.innerText = 'Radhe';
+            f.className = 'float-radhe'; f.innerText = 'Radhe';
             f.style.left = e.clientX + 'px'; f.style.top = e.clientY + 'px';
             document.body.appendChild(f);
             setTimeout(() => f.remove(), 800);
 
-            // Update Database
+            // Firebase Update
             const userRef = doc(db, "users", userName);
             await setDoc(userRef, {
                 dailyCount: increment(1),
@@ -177,10 +197,6 @@
                 lastDate: today,
                 lastTimestamp: Date.now()
             }, { merge: true });
-
-            // Bell Sound every 108
-            const daily = parseInt(document.getElementById('dailyDisplay').innerText);
-            if((daily + 1) % 108 === 0) document.getElementById('bellSound').play();
 
             if(navigator.vibrate) navigator.vibrate(40);
         };
