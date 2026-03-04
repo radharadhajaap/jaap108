@@ -1,51 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Jaap App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="manifest" href="manifest.json">
+    <title>Radha Rani Jaap Pro</title>
     <style>
-        :root { --orange: #f38630; --bg: #0d0905; }
-        body, html { margin: 0; padding: 0; height: 100%; background: var(--bg); color: white; font-family: sans-serif; overflow: hidden; }
-        .bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.95)), url('https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932') center/cover; z-index: -1; opacity: 0.6; }
+        :root { --orange: #f38630; --bg: #0d0905; --glass: rgba(255,255,255,0.08); }
+        body.day { --bg: #fdf5e6; color: #5d4037; } /* Day Theme Styles */
+        body.night { --bg: #0d0905; color: white; } /* Night Theme Styles */
+
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; transition: 0.5s; overflow: hidden; }
+        .bg-img { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; object-fit: cover; }
+        
+        /* Top Navigation */
         .top-nav { position: fixed; top: 15px; width: 100%; display: flex; justify-content: space-between; padding: 0 15px; box-sizing: border-box; z-index: 100; }
-        .btn { background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 20px; border: 1px solid var(--orange); color: white; text-decoration: none; font-size: 0.8rem; cursor: pointer; }
-        .ticker { position: fixed; top: 65px; width: 100%; background: rgba(243,134,48,0.1); padding: 5px 0; font-size: 0.75rem; white-space: nowrap; overflow: hidden; color: #ffd700; }
-        .ticker-move { display: inline-block; animation: move 20s linear infinite; }
-        @keyframes move { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        .main { text-align: center; height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 20px; }
-        .quote { font-style: italic; font-size: 0.85rem; opacity: 0.7; margin-bottom: 20px; min-height: 40px; }
-        .streak { color: #ffeb3b; font-size: 1.1rem; margin-bottom: 5px; }
-        .mantra { font-size: 2.2rem; font-weight: bold; margin-bottom: 15px; text-shadow: 0 0 15px var(--orange); }
-        .circle-box { position: relative; width: 220px; height: 220px; margin: 0 auto; }
-        svg { transform: rotate(-90deg); }
-        .progress { fill: none; stroke: var(--orange); stroke-width: 10; stroke-linecap: round; transition: 0.3s; }
-        .count-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-        .float { position: absolute; color: white; animation: float 1s forwards; font-weight: bold; pointer-events: none; }
-        @keyframes float { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-100px); } }
+        .nav-btn { background: var(--glass); padding: 8px 12px; border-radius: 20px; border: 1px solid var(--orange); color: inherit; font-size: 0.7rem; cursor: pointer; text-decoration: none; backdrop-filter: blur(5px); }
+
+        /* Global Goal Bar */
+        .global-goal { position: fixed; top: 60px; width: 90%; left: 5%; background: var(--glass); border-radius: 10px; padding: 8px; text-align: center; font-size: 0.75rem; border: 1px solid rgba(243,134,48,0.2); }
+        .progress-bar { height: 4px; background: #333; border-radius: 10px; margin-top: 5px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--orange); width: 0%; transition: 1s; }
+
+        .main { text-align: center; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+        
+        /* Meditation Timer */
+        #timerDisplay { font-size: 1.2rem; color: var(--orange); margin-bottom: 10px; font-weight: bold; }
+
+        /* Digital Mala Animation */
+        .mala-container { position: relative; width: 260px; height: 260px; margin: 20px auto; }
+        .mala-beads { position: absolute; width: 100%; height: 100%; border: 2px dashed rgba(243,134,48,0.3); border-radius: 50%; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .bead-dot { position: absolute; width: 12px; height: 12px; background: var(--orange); border-radius: 50%; left: 50%; transform: translateX(-50%); top: -6px; box-shadow: 0 0 10px var(--orange); }
+
+        .counter-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+        .current-count { font-size: 5rem; font-weight: 900; line-height: 1; }
+        
+        .footer-stats { margin-top: 20px; font-size: 0.8rem; opacity: 0.7; }
+        .float-text { position: absolute; pointer-events: none; animation: floatUp 0.8s ease-out forwards; font-weight: bold; font-size: 1.5rem; color: var(--orange); }
+        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-120px); } }
     </style>
 </head>
-<body onclick="handleTap(event)">
-    <audio id="bgMusic" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-17.mp3"></audio>
-    <div class="bg"></div>
+<body class="night" onclick="handleTap(event)">
+
+    <audio id="bellSound"><source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
+    <audio id="bgMusic" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+    
+    <img id="bgImg" class="bg-img" src="https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932">
+
     <div class="top-nav">
-        <div class="btn" onclick="toggleMusic(event)" id="musicBtn">🔈 Music Off</div>
-        <a href="leaderboard.html" class="btn">🏆 Rank</a>
+        <div class="nav-btn" onclick="toggleMeditation(event)" id="timerBtn">🧘 Timer</div>
+        <div class="nav-btn" onclick="toggleTheme(event)">🌓 Theme</div>
+        <a href="leaderboard.html" class="nav-btn">🏆 Rank</a>
     </div>
-    <div class="ticker"><div class="ticker-move" id="liveTicker">Radhe Radhe... 🙏</div></div>
+
+    <div class="global-goal">
+        🌍 Global Goal: <span id="globalTarget">1,00,000</span> | Done: <span id="globalDone">0</span>
+        <div class="progress-bar"><div class="progress-fill" id="goalFill"></div></div>
+    </div>
+
     <div class="main">
-        <div class="streak" id="streakDisplay">🔥 0 Days Streak</div>
-        <div class="quote" id="quoteBox">"Loading wisdom..."</div>
-        <div class="mantra">Radha Radha</div>
-        <div class="circle-box">
-            <svg width="220" height="220"><circle cx="110" cy="110" r="100" stroke="rgba(255,255,255,0.05)" stroke-width="10" fill="none"/><circle id="prog" class="progress" cx="110" cy="110" r="100"/></svg>
-            <div class="count-inner"><span id="daily" style="font-size:4rem;font-weight:bold">0</span><br><small>DAILY</small></div>
+        <div id="timerDisplay">READY TO CHANT</div>
+        <div class="streak" id="streakDisplay" style="color:#ffeb3b; margin-bottom:10px;">🔥 0 Day Streak</div>
+        
+        <div class="mala-container">
+            <div class="mala-beads" id="malaBeads"><div class="bead-dot"></div></div>
+            <div class="counter-inner">
+                <span id="dailyDisplay" class="current-count">0</span>
+                <div style="font-size: 0.8rem; letter-spacing: 2px;">DAILY JAAP</div>
+            </div>
         </div>
-        <p style="margin-top:20px;opacity:0.6">TOTAL: <span id="total" style="color:var(--orange)">0</span></p>
+
+        <div class="footer-stats">
+            MY TOTAL: <span id="totalDisplay" style="color:var(--orange); font-weight:bold;">0</span>
+            <div style="margin-top:10px; font-size:0.6rem;">TAP ANYWHERE TO ROTATE MALA</div>
+        </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot, increment, collection, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, increment, getDoc, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
@@ -55,49 +88,100 @@
             messagingSenderId: "375289521394",
             appId: "1:375289521394:web:ced2cafa4d1743d5ab9c6b"
         };
-        const db = getFirestore(initializeApp(firebaseConfig));
-        const user = localStorage.getItem('jaapUserName');
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const userName = localStorage.getItem('jaapUserName');
         const today = new Date().toLocaleDateString();
 
-        const quotes = ["Pure love is the way to Krishna.", "Always remember Radha Rani.", "Chant with heart.", "Peace starts with a prayer."];
-        document.getElementById('quoteBox').innerText = quotes[Math.floor(Math.random()*quotes.length)];
+        if(!userName) window.location.href = "login.html";
 
-        if(!user) window.location.href="login.html";
+        let currentRotation = 0;
+        let timerSeconds = 0;
+        let timerInterval = null;
 
-        onSnapshot(doc(db, "users", user), (ds) => {
-            if(ds.exists()){
-                const d = ds.data();
-                const dailyCount = d.lastDate === today ? d.dailyCount : 0;
-                document.getElementById('daily').innerText = dailyCount;
-                document.getElementById('total').innerText = d.totalCount;
-                document.getElementById('streakDisplay').innerText = `🔥 ${d.streak || 0} Days Streak`;
-                const circ = 2 * Math.PI * 100;
-                document.getElementById('prog').style.strokeDasharray = circ;
-                document.getElementById('prog').style.strokeDashoffset = circ - (dailyCount % 108 / 108) * circ;
+        // --- 1. GLOBAL GOAL & DATA SYNC ---
+        onSnapshot(doc(db, "users", userName), (ds) => {
+            if(ds.exists()) {
+                const data = ds.data();
+                document.getElementById('dailyDisplay').innerText = data.lastDate === today ? data.dailyCount : 0;
+                document.getElementById('totalDisplay').innerText = data.totalCount;
+                document.getElementById('streakDisplay').innerText = `🔥 ${data.streak || 0} Day Streak`;
             }
         });
 
-        onSnapshot(query(collection(db, "users"), orderBy("lastTimestamp", "desc"), limit(5)), (sn) => {
-            let t = ""; sn.forEach(d => t += ` • ${d.id} is chanting 🙏 `);
-            document.getElementById('liveTicker').innerText = t + t;
+        // Global Goal Logic (Sum of all users' totals)
+        onSnapshot(collection(db, "users"), (snap) => {
+            let total = 0;
+            snap.forEach(d => total += (d.data().totalCount || 0));
+            document.getElementById('globalDone').innerText = total.toLocaleString();
+            const percent = Math.min((total / 100000) * 100, 100);
+            document.getElementById('goalFill').style.width = percent + "%";
         });
 
-        window.toggleMusic = (e) => {
+        // --- 2. THEME LOGIC ---
+        window.toggleTheme = (e) => {
             e.stopPropagation();
-            const m = document.getElementById('bgMusic');
-            const b = document.getElementById('musicBtn');
-            if(m.paused) { m.play(); b.innerHTML = "🔊 Music On"; b.style.background = "var(--orange)"; }
-            else { m.pause(); b.innerHTML = "🔈 Music Off"; b.style.background = "rgba(255,255,255,0.1)"; }
+            const b = document.body;
+            if(b.classList.contains('night')) {
+                b.classList.replace('night', 'day');
+                document.getElementById('bgImg').src = "https://images.unsplash.com/photo-1500382017468-9049fee74a62?q=80&w=1932";
+            } else {
+                b.classList.replace('day', 'night');
+                document.getElementById('bgImg').src = "https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932";
+            }
         };
 
-        window.handleTap = async (e) => {
-            if(e.target.closest('.btn')) return;
-            const f = document.createElement('div'); f.className='float'; f.innerText='Radha Radha';
-            f.style.left=e.clientX+'px'; f.style.top=e.clientY+'px'; document.body.appendChild(f);
-            setTimeout(()=>f.remove(), 1000);
+        // --- 3. MEDITATION TIMER ---
+        window.toggleMeditation = (e) => {
+            e.stopPropagation();
+            if(timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                document.getElementById('timerBtn').innerText = "🧘 Timer";
+                document.getElementById('timerDisplay').innerText = "SESSION ENDED";
+                document.getElementById('bgMusic').pause();
+            } else {
+                timerSeconds = 0;
+                document.getElementById('bgMusic').play();
+                timerInterval = setInterval(() => {
+                    timerSeconds++;
+                    const m = Math.floor(timerSeconds / 60);
+                    const s = timerSeconds % 60;
+                    document.getElementById('timerDisplay').innerText = `MEDITATING: ${m}m ${s}s`;
+                }, 1000);
+                document.getElementById('timerBtn').innerText = "⏹ Stop";
+            }
+        };
 
-            const userRef = doc(db, "users", user);
-            await setDoc(userRef, { dailyCount: increment(1), totalCount: increment(1), lastDate: today, lastTimestamp: Date.now() }, { merge: true });
+        // --- 4. TAP & MALA ANIMATION ---
+        window.handleTap = async (e) => {
+            if(e.target.closest('.nav-btn')) return;
+
+            // Rotate Mala
+            currentRotation += (360 / 108);
+            document.getElementById('malaBeads').style.transform = `rotate(${currentRotation}deg)`;
+
+            // Float Text
+            const f = document.createElement('div');
+            f.className = 'float-text'; f.innerText = 'Radhe';
+            f.style.left = e.clientX + 'px'; f.style.top = e.clientY + 'px';
+            document.body.appendChild(f);
+            setTimeout(() => f.remove(), 800);
+
+            // Update Database
+            const userRef = doc(db, "users", userName);
+            await setDoc(userRef, {
+                dailyCount: increment(1),
+                totalCount: increment(1),
+                lastDate: today,
+                lastTimestamp: Date.now()
+            }, { merge: true });
+
+            // Bell Sound every 108
+            const daily = parseInt(document.getElementById('dailyDisplay').innerText);
+            if((daily + 1) % 108 === 0) document.getElementById('bellSound').play();
+
             if(navigator.vibrate) navigator.vibrate(40);
         };
     </script>
