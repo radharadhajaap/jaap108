@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Radha Rani Jaap - Ultimate v12</title>
+    <title>Radha Radha Jaap v13.0</title>
     
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
     
     <style>
         :root { 
@@ -22,23 +21,10 @@
             touch-action: manipulation; -webkit-tap-highlight-color: transparent;
         }
 
-        /* 1. LAYERED BACKGROUND */
-        #bgLayer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-size: cover; background-position: center; z-index: -2;
-            transition: filter 2s, transform 3s; filter: brightness(0.3) blur(1px);
-        }
-        .aura {
-            position: fixed; bottom: -10%; left: 50%; transform: translateX(-50%);
-            width: 140%; height: 50%; background: radial-gradient(circle, var(--orange) 0%, transparent 70%);
-            opacity: 0.15; z-index: -1; filter: blur(60px);
-        }
-
-        /* 2. TOP NAVIGATION (CHIPS) */
+        /* Top Navigation */
         .top-nav {
             position: fixed; top: 50px; width: 90%; left: 5%;
             display: flex; justify-content: space-between; z-index: 100;
-            transition: opacity 0.5s;
         }
         .chip {
             background: var(--glass); backdrop-filter: blur(20px);
@@ -46,30 +32,25 @@
             font-size: 0.75rem; font-weight: 700; color: var(--gold);
         }
 
-        /* 3. CENTER ENGINE (COUNTER) */
+        /* Center Display */
         .main-stage {
             height: 100vh; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; transition: 0.5s;
+            align-items: center; justify-content: center;
         }
         .mantra-text {
-            font-size: 1.2rem; letter-spacing: 10px; font-weight: 100;
-            text-transform: uppercase; color: var(--gold); margin-bottom: 30px;
-        }
-        .counter-wrapper {
-            position: relative; width: 320px; height: 320px;
-            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; letter-spacing: 10px; font-weight: 300;
+            text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
         }
         .count-display {
-            font-size: 10rem; font-weight: 900; margin: 0; z-index: 10;
-            background: linear-gradient(#fff 40%, var(--gold));
+            font-size: 10rem; font-weight: 900; margin: 0;
+            background: linear-gradient(#fff, var(--gold));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        #ring { transition: stroke-dashoffset 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        /* 4. BOTTOM ERGONOMIC CARDS */
+        /* Bottom Footer (Fixing your icons) */
         .bottom-shelf {
             position: fixed; bottom: 0; width: 100%; padding-bottom: 40px;
-            background: linear-gradient(transparent, #000 60%); z-index: 50;
+            background: linear-gradient(transparent, #000 70%); z-index: 50;
         }
         .stats-row {
             display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
@@ -77,87 +58,58 @@
         }
         .card {
             background: var(--glass); border: 1px solid var(--border);
-            padding: 15px; border-radius: 22px; backdrop-filter: blur(15px);
-            text-align: center;
+            padding: 15px; border-radius: 22px; text-align: center;
         }
-        .card-label { font-size: 0.6rem; color: #888; letter-spacing: 2px; text-transform: uppercase; }
-        .card-val { font-size: 1.1rem; font-weight: 700; margin-top: 4px; }
+        .card-label { font-size: 0.6rem; color: #888; text-transform: uppercase; }
+        .card-val { font-size: 1.2rem; font-weight: 700; }
 
-        /* 5. NAVIGATION DOCK */
         .dock {
             width: 85%; margin: 0 auto; background: rgba(255,255,255,0.05);
             border: 1px solid var(--border); border-radius: 35px;
             display: flex; justify-content: space-around; padding: 15px 0;
         }
-        .dock-item { font-size: 1.5rem; opacity: 0.6; cursor: pointer; }
-
-        /* GUPT MODE CLASS */
-        .gupt { opacity: 0 !important; pointer-events: none; }
-
-        /* PARTICLES */
-        .spark {
-            position: absolute; pointer-events: none; width: 4px; height: 4px;
-            background: var(--gold); border-radius: 50%;
-            box-shadow: 0 0 10px var(--gold); animation: flyOut 0.6s forwards;
-        }
-        @keyframes flyOut { 0% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(0); } }
+        .dock-item { font-size: 1.5rem; cursor: pointer; transition: 0.2s; }
+        .dock-item:active { transform: scale(0.8); opacity: 0.5; }
     </style>
 </head>
-<body onpointerdown="handleGlobalTouch(event)" ondblclick="toggleGuptMode()">
+<body onpointerdown="handleTap(event)">
 
-    <div id="bgLayer"></div>
-    <div class="aura"></div>
-    <audio id="bell" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" preload="auto"></audio>
+    <audio id="bell" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
 
-    <div id="uiOverlay">
-        <div class="top-nav" id="topNav">
-            <div class="chip" id="streakDisp">🔥 0 DAYS</div>
-            <div class="chip" id="totalDisp" style="color:#fff;">0 TOTAL</div>
-        </div>
+    <div class="top-nav">
+        <div class="chip" id="streakDisp">🔥 0 DAYS</div>
+        <div class="chip" id="totalDisp">0 TOTAL</div>
+    </div>
 
-        <div class="main-stage" id="stage">
-            <div class="mantra-text">Radha Radha</div>
-            <div class="counter-wrapper" id="ringBox">
-                <svg width="340" height="340" style="position:absolute; transform: rotate(-90deg);">
-                    <circle cx="170" cy="170" r="155" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="2" />
-                    <circle id="ring" cx="170" cy="170" r="155" fill="none" stroke="url(#divGrad)" stroke-width="12" 
-                    stroke-dasharray="974" stroke-dashoffset="974" stroke-linecap="round" />
-                    <defs>
-                        <linearGradient id="divGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="var(--orange)" />
-                            <stop offset="100%" stop-color="var(--gold)" />
-                        </linearGradient>
-                    </defs>
-                </svg>
-                <h1 class="count-display" id="mainNum">0</h1>
+    <div class="main-stage">
+        <div class="mantra-text">RADHA RADHA</div>
+        <h1 class="count-display" id="mainNum">0</h1>
+    </div>
+
+    <div class="bottom-shelf">
+        <div class="stats-row">
+            <div class="card">
+                <div class="card-label">Mala Count</div>
+                <div class="card-val" id="malaVal">0.0</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Session Target</div>
+                <div class="card-val" id="targetVal">108</div>
             </div>
         </div>
-
-        <div class="bottom-shelf" id="bottomUI">
-            <div class="stats-row">
-                <div class="card">
-                    <div class="card-label">Mala Count</div>
-                    <div class="card-val" id="malaVal">0.0</div>
-                </div>
-                <div class="card">
-                    <div class="card-label">Session Target</div>
-                    <div class="card-val" id="targetVal">108</div>
-                </div>
-            </div>
-            <nav class="dock">
-                <div class="dock-item">📜</div>
-                <div class="dock-item">🖼️</div>
-                <div class="dock-item">🏆</div>
-                <div class="dock-item">⚙️</div>
-            </nav>
-        </div>
+        
+        <nav class="dock">
+            <div class="dock-item" onclick="openSankalp()">📜</div>
+            <div class="dock-item" onclick="location.href='darshan.html'">🖼️</div>
+            <div class="dock-item" onclick="location.href='leaderboard.html'">🏆</div>
+            <div class="dock-item" onclick="openSettings()">⚙️</div>
+        </nav>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // CONFIG: Replace with your actual Firebase details
         const firebaseConfig = {
             apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
             authDomain: "jaap-fdd80.firebaseapp.com",
@@ -168,91 +120,53 @@
         };
 
         const db = getFirestore(initializeApp(firebaseConfig));
-        const user = localStorage.getItem('jaapUserName') || "Guest_User";
+        const user = localStorage.getItem('jaapUserName') || "Guest";
         const today = new Date().toLocaleDateString();
 
         let localCount = 0;
-        let syncTimeout = null;
 
-        // 1. DYNAMIC UI SYNC
-        function updateUIRender(val, total, streak) {
-            document.getElementById('mainNum').innerText = val;
-            document.getElementById('totalDisp').innerText = `${total.toLocaleString()} TOTAL`;
-            document.getElementById('streakDisp').innerText = `🔥 ${streak} DAYS`;
-            document.getElementById('malaVal').innerText = (val / 108).toFixed(1);
-
-            // Ring Logic (r=155, C=974)
-            const offset = 974 - (val % 108 / 108) * 974;
-            document.getElementById('ring').style.strokeDashoffset = offset;
-
-            // Background Photos
-            const photos = [
-                "https://images.unsplash.com/photo-1544924222-355b1f0ad5a7?q=80&w=1200",
-                "https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1200"
-            ];
-            const idx = (new Date().getDate() + Math.floor(val / 108)) % photos.length;
-            document.getElementById('bgLayer').style.backgroundImage = `url('${photos[idx]}')`;
-
-            // Milestone Celebration
-            if(val > 0 && val % 108 === 0) {
-                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#FFD700', '#FF8C00'] });
-                document.getElementById('bell').play();
-            }
-        }
-
-        // 2. FIREBASE REAL-TIME LISTEN
+        // 1. DATA SYNC
         onSnapshot(doc(db, "users", user), (snap) => {
-            if(snap.exists()) {
+            if(snap.exists()){
                 const d = snap.data();
-                const daily = d.lastDate === today ? d.dailyCount : 0;
-                localCount = daily;
-                updateUIRender(daily, d.totalCount || 0, d.streak || 0);
+                localCount = d.lastDate === today ? d.dailyCount : 0;
+                document.getElementById('mainNum').innerText = localCount;
+                document.getElementById('malaVal').innerText = (localCount / 108).toFixed(1);
+                document.getElementById('totalDisp').innerText = `${(d.totalCount || 0).toLocaleString()} TOTAL`;
+                document.getElementById('streakDisp').innerText = `🔥 ${d.streak || 0} DAYS`;
+                if(d.sankalpGoal) document.getElementById('targetVal').innerText = d.sankalpGoal;
             }
         });
 
-        // 3. TITANIUM ENGINE TAPPING
-        window.handleGlobalTouch = (e) => {
+        // 2. TAP LOGIC
+        window.handleTap = async (e) => {
             if(e.target.closest('.dock')) return;
-
+            
             localCount++;
-            updateUIRender(localCount, parseInt(document.getElementById('totalDisp').innerText) + 1, 0);
-
-            // Visual Haptics
-            const rb = document.getElementById('ringBox');
-            rb.style.transform = 'scale(0.96)';
-            setTimeout(() => rb.style.transform = 'scale(1)', 80);
-
-            // Particles
-            for(let i=0; i<3; i++) {
-                const s = document.createElement('div');
-                s.className = 'spark';
-                s.style.left = e.clientX + 'px'; s.style.top = e.clientY + 'px';
-                s.style.setProperty('--x', (Math.random() - 0.5) * 150 + 'px');
-                s.style.setProperty('--y', (Math.random() - 0.5) * 150 + 'px');
-                document.body.appendChild(s);
-                setTimeout(() => s.remove(), 600);
+            if(navigator.vibrate) navigator.vibrate(40);
+            if(localCount % 108 === 0) {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.8 } });
+                document.getElementById('bell').play();
             }
 
-            if(navigator.vibrate) navigator.vibrate(40);
-
-            // Debounced Sync
-            clearTimeout(syncTimeout);
-            syncTimeout = setTimeout(async () => {
-                await setDoc(doc(db, "users", user), {
-                    dailyCount: increment(localCount - (localCount - 1)), // Incremental sync logic
-                    totalCount: increment(1),
-                    lastDate: today,
-                    lastTimestamp: Date.now()
-                }, { merge: true });
-            }, 1500);
+            await setDoc(doc(db, "users", user), {
+                dailyCount: increment(1),
+                totalCount: increment(1),
+                lastDate: today
+            }, { merge: true });
         };
 
-        // 4. GUPT MODE TOGGLE
-        window.toggleGuptMode = () => {
-            document.getElementById('topNav').classList.toggle('gupt');
-            document.getElementById('bottomUI').classList.toggle('gupt');
-            document.getElementById('stage').classList.toggle('gupt');
-            if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+        // 3. NAVIGATION FUNCTIONS
+        window.openSankalp = () => {
+            const goal = prompt("Apna Target (Sankalp) likhein:", "108");
+            if(goal) {
+                setDoc(doc(db, "users", user), { sankalpGoal: parseInt(goal) }, { merge: true });
+                alert("Jai Ho! Sankalp set ho gaya.");
+            }
+        };
+
+        window.openSettings = () => {
+            alert("Settings Update: Jald hi naye sounds aur themes aane wale hain!");
         };
     </script>
 </body>
