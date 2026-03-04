@@ -10,120 +10,111 @@
             --silver: linear-gradient(135deg, #C0C0C0, #8E8E8E);
             --bronze: linear-gradient(135deg, #CD7F32, #8B4513);
             --orange: #f38630;
-            --bg: #0d0905;
+            --bg: #050301;
             --glass: rgba(255, 255, 255, 0.05);
         }
 
         body {
             margin: 0; padding: 0; background-color: var(--bg); color: white;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-image: radial-gradient(circle at top, #2c1a0a, #0d0905);
-            min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-image: radial-gradient(circle at top right, #2c1a0a, #050301);
+            min-height: 100vh; overflow-x: hidden;
         }
 
         .header { 
-            padding: 40px 20px 20px; text-align: center; width: 100%;
-            background: linear-gradient(to bottom, rgba(13,9,5,1), transparent);
-            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);
+            padding: 30px 20px; text-align: center; position: sticky; top: 0; z-index: 100;
+            background: rgba(5, 3, 1, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         
         .header h1 { 
-            margin: 0; font-size: 1.8rem; letter-spacing: 3px;
+            margin: 0; font-size: 1.5rem; letter-spacing: 2px;
             background: linear-gradient(to bottom, #fff, var(--orange));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            font-weight: 900;
+            font-weight: 800; text-transform: uppercase;
         }
 
         .leaderboard-container { 
-            width: 90%; max-width: 450px; margin-top: 10px; padding-bottom: 100px;
+            width: 92%; max-width: 480px; margin: 20px auto; padding-bottom: 120px;
         }
 
         .user-card {
             display: flex; align-items: center; 
             background: var(--glass);
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            margin-bottom: 12px; padding: 12px 18px; border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.08);
-            transition: transform 0.2s;
+            margin-bottom: 10px; padding: 14px; border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.05);
+            animation: slideUp 0.4s ease forwards; opacity: 0;
         }
         
-        /* Premium Glow for Top 3 */
-        .rank-1 { border: 1px solid rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.05); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .rank-1 { border: 1px solid rgba(255, 215, 0, 0.4); background: rgba(255, 215, 0, 0.03); box-shadow: 0 10px 30px rgba(255, 215, 0, 0.05); }
         .rank-2 { border: 1px solid rgba(192, 192, 192, 0.3); }
         .rank-3 { border: 1px solid rgba(205, 127, 50, 0.3); }
 
-        .rank-num { 
-            font-size: 1.1rem; font-weight: 900; width: 35px; 
-            font-style: italic; color: rgba(255,255,255,0.3);
-        }
+        .rank-num { font-size: 0.9rem; font-weight: 900; width: 30px; color: var(--orange); opacity: 0.8; }
 
         .profile-wrapper { position: relative; margin-right: 15px; }
-
         .profile-pic {
-            width: 55px; height: 55px; border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.1);
-            object-fit: cover; background: #222;
+            width: 50px; height: 50px; border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.1);
+            object-fit: cover; background: #111;
         }
 
-        /* Top 3 Medals */
         .medal {
-            position: absolute; top: -10px; right: -5px;
-            width: 24px; height: 24px; border-radius: 50%;
+            position: absolute; top: -8px; right: -8px;
+            width: 22px; height: 22px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; font-weight: bold; color: #000;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            font-size: 0.65rem; font-weight: bold; color: #000; z-index: 2;
         }
-        .rank-1 .medal { background: var(--gold); }
+        .rank-1 .medal { background: var(--gold); box-shadow: 0 0 15px #FFD700; }
         .rank-2 .medal { background: var(--silver); }
         .rank-3 .medal { background: var(--bronze); }
 
         .user-info { flex: 1; }
-        .user-name { 
-            font-size: 1rem; font-weight: 700; display: block; 
-            color: rgba(255,255,255,0.9); margin-bottom: 2px;
-        }
-        .jaap-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--orange); font-weight: bold; }
+        .user-name { font-size: 0.95rem; font-weight: 600; color: #fff; display: block; }
+        .jaap-label { font-size: 0.6rem; text-transform: uppercase; color: #888; letter-spacing: 1px; }
 
         .count-badge { 
-            font-family: 'Courier New', monospace;
-            font-size: 1.1rem; font-weight: 800;
-            color: #fff; text-shadow: 0 0 10px rgba(243, 134, 48, 0.5);
+            font-size: 1.1rem; font-weight: 800; color: var(--gold);
+            text-align: right; min-width: 80px;
         }
 
-        /* Floating Back Button */
         .nav-footer {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 100%; display: flex; justify-content: center; z-index: 1000;
+            position: fixed; bottom: 30px; left: 0; width: 100%;
+            display: flex; justify-content: center; z-index: 1000;
         }
         .back-btn { 
-            background: linear-gradient(135deg, var(--orange), #ff5722);
-            color: white; text-decoration: none; padding: 12px 35px; 
-            border-radius: 50px; font-weight: bold; font-size: 0.9rem;
-            box-shadow: 0 10px 25px rgba(243, 134, 48, 0.4);
-            transition: 0.3s;
+            background: #fff; color: #000; text-decoration: none; padding: 14px 40px; 
+            border-radius: 20px; font-weight: 800; font-size: 0.85rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); transition: 0.3s;
         }
-        .back-btn:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>Devotee Rankings</h1>
+        <h1>Global Devotees</h1>
     </div>
 
     <div class="leaderboard-container" id="leaderboardList">
-        <div style="text-align:center; padding: 50px; opacity: 0.5;">
-            <p>Gathering devotees...</p>
+        <div class="user-card" style="opacity: 0.3; filter: blur(2px);">
+            <div class="rank-num">#--</div>
+            <div class="profile-wrapper"><div class="profile-pic"></div></div>
+            <div class="user-info"><span class="user-name">Loading...</span></div>
         </div>
     </div>
 
     <div class="nav-footer">
-        <a href="index.html" class="back-btn">← Back to Jaap</a>
+        <a href="index.html" class="back-btn">RETURN TO JAAP</a>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, query, orderBy, limit, onSnapshot, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
@@ -137,38 +128,50 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const q = query(collection(db, "users"), orderBy("totalCount", "desc"), limit(20));
+        // FAST FETCH: Offline data persistence enable karein
+        try {
+            enableIndexedDbPersistence(db);
+        } catch (err) {
+            console.log("Persistence failed");
+        }
 
-        onSnapshot(q, (snapshot) => {
+        // Limit ko 15 rakha hai taaki rendering fast ho
+        const q = query(collection(db, "users"), orderBy("totalCount", "desc"), limit(15));
+
+        onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
             const listDiv = document.getElementById('leaderboardList');
-            listDiv.innerHTML = '';
+            
+            // Check if data is from cache for instant show
+            if (!snapshot.metadata.fromCache) {
+                console.log("Fetched from Server");
+            }
 
+            let htmlContent = '';
             snapshot.docs.forEach((doc, index) => {
                 const data = doc.data();
                 const rank = index + 1;
-                let medalHtml = '';
+                const name = doc.id;
+                const count = (data.totalCount || 0).toLocaleString();
                 
-                if(rank === 1) medalHtml = '<div class="medal">1</div>';
-                else if(rank === 2) medalHtml = '<div class="medal">2</div>';
-                else if(rank === 3) medalHtml = '<div class="medal">3</div>';
+                let medal = rank <= 3 ? `<div class="medal">${rank}</div>` : '';
+                const pPic = `https://ui-avatars.com/api/?name=${name}&background=333&color=fff&bold=true`;
 
-                const profileImg = data.profilePic ? data.profilePic : `https://ui-avatars.com/api/?name=${doc.id}&background=1a0f05&color=f38630&bold=true`;
-
-                listDiv.innerHTML += `
-                    <div class="user-card rank-${rank}">
+                htmlContent += `
+                    <div class="user-card rank-${rank}" style="animation-delay: ${index * 0.05}s">
                         <div class="rank-num">#${rank}</div>
                         <div class="profile-wrapper">
-                            ${medalHtml}
-                            <img src="${profileImg}" class="profile-pic" onerror="this.src='https://ui-avatars.com/api/?name=${doc.id}'">
+                            ${medal}
+                            <img src="${data.profilePic || pPic}" class="profile-pic" loading="lazy">
                         </div>
                         <div class="user-info">
-                            <span class="user-name">${doc.id}</span>
-                            <span class="jaap-label">Total Jaap</span>
+                            <span class="user-name">${name}</span>
+                            <span class="jaap-label">Jaap Completed</span>
                         </div>
-                        <div class="count-badge">${(data.totalCount || 0).toLocaleString()}</div>
+                        <div class="count-badge">${count}</div>
                     </div>
                 `;
             });
+            listDiv.innerHTML = htmlContent;
         });
     </script>
 </body>
