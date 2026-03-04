@@ -6,131 +6,78 @@
     <title>Jaap Leaderboard</title>
     <style>
         :root {
-            --gold: #ffd700;
-            --silver: #c0c0c0;
-            --bronze: #cd7f32;
-            --orange: #f38630;
-            --bg: #120c08;
+            --gold: #FFD700; --silver: #C0C0C0; --bronze: #CD7F32;
+            --orange: #f38630; --bg: #120c08;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg);
-            color: white;
-            font-family: 'Segoe UI', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            margin: 0; background-color: var(--bg); color: white;
+            font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center;
         }
 
-        .header {
-            width: 100%;
-            padding: 20px;
-            text-align: center;
-            background: rgba(243, 134, 48, 0.1);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
+        .header { padding: 30px; text-align: center; }
+        .header h1 { margin: 0; color: var(--orange); letter-spacing: 2px; }
 
-        .header h1 {
-            margin: 0;
-            color: var(--orange);
-            letter-spacing: 2px;
-        }
-
-        .leaderboard-container {
-            width: 90%;
-            max-width: 500px;
-            margin-top: 20px;
-        }
+        .leaderboard-container { width: 95%; max-width: 450px; margin-top: 20px; }
 
         .user-card {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.05);
-            margin-bottom: 12px;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: transform 0.2s;
+            display: flex; align-items: center; background: rgba(255, 255, 255, 0.08);
+            margin-bottom: 20px; padding: 15px; border-radius: 15px;
+            position: relative; border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .user-card:hover {
-            transform: scale(1.02);
+        /* --- CROWN POSITIONING --- */
+        .profile-wrapper { 
+            position: relative; 
+            margin-right: 15px;
+            padding-top: 10px; /* Space for crown */
         }
 
-        .rank {
-            font-size: 1.2rem;
-            font-weight: bold;
-            width: 40px;
+        .crown {
+            position: absolute;
+            top: -18px; /* Profile pic ke upar */
+            left: 50%;
+            transform: translateX(-50%) rotate(-10deg); /* Center and tilt */
+            font-size: 1.8rem;
+            z-index: 10;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8));
         }
-
-        /* Top 3 Colors */
-        .rank-1 { color: var(--gold); }
-        .rank-2 { color: var(--silver); }
-        .rank-3 { color: var(--bronze); }
 
         .profile-pic {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 15px;
-            border: 2px solid var(--orange);
-            background: #222;
-        }
-
-        .user-info {
-            flex: 1;
-        }
-
-        .user-name {
-            font-size: 1.1rem;
-            font-weight: 500;
+            width: 60px; height: 60px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            object-fit: cover;
             display: block;
         }
 
-        .user-total {
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
+        /* Rank Specific Styles */
+        .rank-1 .profile-pic { border-color: var(--gold); box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); }
+        .rank-2 .profile-pic { border-color: var(--silver); }
+        .rank-3 .profile-pic { border-color: var(--bronze); }
 
-        .count-badge {
-            background: var(--orange);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
+        .rank-num { font-size: 1.2rem; font-weight: 800; width: 30px; color: rgba(255,255,255,0.5); }
+        .user-info { flex: 1; }
+        .user-name { font-size: 1.1rem; font-weight: 600; display: block; }
+        .count-badge { background: var(--orange); padding: 5px 12px; border-radius: 8px; font-weight: bold; }
 
-        .back-btn {
-            margin-top: 20px;
-            color: var(--orange);
-            text-decoration: none;
-            font-size: 0.9rem;
-            border: 1px solid var(--orange);
-            padding: 8px 20px;
-            border-radius: 20px;
-        }
+        .back-btn { margin: 20px; color: var(--orange); text-decoration: none; border: 1px solid; padding: 8px 20px; border-radius: 20px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>🏆 TOP CHANTERS</h1>
-        <p style="opacity:0.6; font-size: 0.8rem;">Real-time Jaap Rankings</p>
+        <h1>🏆 LEADERBOARD</h1>
     </div>
 
     <div class="leaderboard-container" id="leaderboardList">
-        <p style="text-align: center; margin-top: 50px;">Merging data from Vaikuntha...</p>
-    </div>
+        </div>
 
-    <a href="index.html" class="back-btn">← Back to Jaap</a>
+    <a href="index.html" class="back-btn">Back to Jaap</a>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Your Firebase Config (Same as index.html)
         const firebaseConfig = {
             apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
             authDomain: "jaap-fdd80.firebaseapp.com",
@@ -143,7 +90,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Fetch Top 10 Users
         const q = query(collection(db, "users"), orderBy("totalCount", "desc"), limit(10));
 
         onSnapshot(q, (snapshot) => {
@@ -152,25 +98,29 @@
 
             snapshot.docs.forEach((doc, index) => {
                 const data = doc.data();
-                const name = doc.id;
-                const total = data.totalCount || 0;
                 const rank = index + 1;
+                let crownEmoji = '';
+                
+                if(rank === 1) crownEmoji = '<div class="crown">👑</div>';
+                else if(rank === 2) crownEmoji = '<div class="crown">🥈</div>';
+                else if(rank === 3) crownEmoji = '<div class="crown">🥉</div>';
 
-                // Profile Image based on name (UI Avatars)
-                const profileImg = `https://ui-avatars.com/api/?name=${name}&background=f38630&color=fff&rounded=true`;
+                const profileImg = `https://ui-avatars.com/api/?name=${doc.id}&background=333&color=f38630&bold=true`;
 
-                const card = `
-                    <div class="user-card">
-                        <div class="rank rank-${rank}">#${rank}</div>
-                        <img src="${profileImg}" class="profile-pic" alt="user">
-                        <div class="user-info">
-                            <span class="user-name">${name}</span>
-                            <span class="user-total">Total Jaap</span>
+                listDiv.innerHTML += `
+                    <div class="user-card rank-${rank}">
+                        <div class="rank-num">${rank}</div>
+                        <div class="profile-wrapper">
+                            ${crownEmoji}
+                            <img src="${profileImg}" class="profile-pic">
                         </div>
-                        <div class="count-badge">${total.toLocaleString()}</div>
+                        <div class="user-info">
+                            <span class="user-name">${doc.id}</span>
+                            <span style="font-size:0.8rem; opacity:0.6">Total Jaap</span>
+                        </div>
+                        <div class="count-badge">${data.totalCount || 0}</div>
                     </div>
                 `;
-                listDiv.innerHTML += card;
             });
         });
     </script>
