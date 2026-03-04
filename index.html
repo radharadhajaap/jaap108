@@ -3,73 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Radha Rani Jaap & Leaderboard</title>
+    <title>Radha Rani Jaap</title>
     <style>
         :root { --primary-orange: #f38630; --bg-dark: #120c08; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-dark); font-family: sans-serif; color: white; user-select: none; overflow-x: hidden; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-dark); font-family: sans-serif; color: white; user-select: none; overflow: hidden; }
         
         .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1932'); background-size: cover; z-index: -1; }
 
-        #nameOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; }
-        input { padding: 12px; border-radius: 8px; border: none; margin-top: 15px; width: 70%; font-size: 1.1rem; text-align: center; }
-        button { margin-top: 15px; padding: 10px 30px; background: var(--primary-orange); border: none; border-radius: 5px; color: white; font-weight: bold; cursor: pointer; }
+        /* Floating Leaderboard Button */
+        .lb-button {
+            position: fixed; top: 20px; right: 20px; background: rgba(255,255,255,0.1);
+            padding: 10px 15px; border-radius: 30px; border: 1px solid var(--primary-orange);
+            text-decoration: none; color: white; font-size: 0.8rem; display: flex; align-items: center; gap: 8px; z-index: 100;
+        }
 
-        .main-content { text-align: center; padding-top: 20px; padding-bottom: 300px; }
-        .counter-wrapper { position: relative; width: 220px; height: 220px; margin: 20px auto; }
+        .main-content { text-align: center; height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+        
+        .welcome-section { margin-bottom: 20px; }
+        #welcomeMsg { color: var(--primary-orange); font-size: 1.1rem; }
+        .mantra { font-size: 2rem; margin: 10px 0; font-weight: bold; text-shadow: 0 0 15px rgba(243, 134, 48, 0.5); }
+
+        .counter-wrapper { position: relative; width: 260px; height: 260px; margin: 0 auto; }
         svg { transform: rotate(-90deg); }
-        .circle-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 8; }
-        .circle-progress { fill: none; stroke: var(--primary-orange); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 0.3s; }
+        .circle-bg { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 10; }
+        .circle-progress { fill: none; stroke: var(--primary-orange); stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 0.3s; }
         .counter-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
-        /* Leaderboard Style */
-        .leaderboard-section { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); margin: 20px; padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
-        .leaderboard-title { color: var(--primary-orange); font-weight: bold; margin-bottom: 10px; font-size: 1.2rem; }
-        .lb-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
-        .lb-rank { color: var(--primary-orange); width: 30px; text-align: left; }
-        .lb-name { flex: 1; text-align: left; }
+        .stats-footer { margin-top: 40px; font-size: 0.9rem; opacity: 0.8; letter-spacing: 1px; }
         
-        .float-text { position: absolute; color: white; font-weight: bold; pointer-events: none; animation: floatUp 1s ease-out forwards; z-index: 500; }
-        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-100px); opacity: 0; } }
+        .float-text { position: absolute; color: white; font-weight: bold; pointer-events: none; animation: floatUp 1s ease-out forwards; z-index: 500; font-size: 1.4rem; }
+        @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-120px) scale(1.2); opacity: 0; } }
     </style>
 </head>
 <body onclick="handleTap(event)">
-    <div id="nameOverlay">
-        <h2>Radhe Radhe</h2>
-        <p>Enter your name to start</p>
-        <input type="text" id="userNameInput" placeholder="Your Name">
-        <button onclick="saveName()">Start Jaap</button>
-    </div>
+
+    <a href="leaderboard.html" class="lb-button">
+        <span>🏆</span> Leaderboard
+    </a>
 
     <div class="bg-overlay"></div>
     
     <div class="main-content">
-        <div id="welcomeMsg" style="color: var(--primary-orange); font-size: 1.2rem;">Jai Shree Krishna</div>
-        <div style="font-size: 1.8rem; margin: 10px 0;">Radha Radha 🥺❤️</div>
+        <div class="welcome-section">
+            <div id="welcomeMsg">Radhe Radhe</div>
+            <div class="mantra">Radha Radha 🥺❤️</div>
+        </div>
 
         <div class="counter-wrapper">
-            <svg width="220" height="220">
-                <circle class="circle-bg" cx="110" cy="110" r="100"></circle>
-                <circle id="progressCircle" class="circle-progress" cx="110" cy="110" r="100"></circle>
+            <svg width="260" height="260">
+                <circle class="circle-bg" cx="130" cy="130" r="120"></circle>
+                <circle id="progressCircle" class="circle-progress" cx="130" cy="130" r="120"></circle>
             </svg>
             <div class="counter-inner">
-                <span id="dailyDisplay" style="font-size: 3.5rem; font-weight: bold;">0</span>
-                <div style="font-size: 0.8rem; letter-spacing: 2px;">DAILY</div>
+                <span id="dailyDisplay" style="font-size: 5rem; font-weight: bold;">0</span>
+                <div style="font-size: 0.9rem; color: var(--primary-orange); margin-top: -10px;">DAILY</div>
             </div>
         </div>
 
-        <div style="margin-bottom: 20px;">TOTAL: <span id="totalDisplay" style="font-weight: bold;">0</span></div>
-
-        <div class="leaderboard-section">
-            <div class="leaderboard-title">🏆 TOP CHANTERS</div>
-            <div id="lb-list">
-                <div style="opacity: 0.5;">Loading ranks...</div>
-            </div>
+        <div class="stats-footer">
+            TOTAL JAAP: <span id="totalDisplay" style="color: var(--primary-orange); font-weight: bold;">0</span>
+            <div style="margin-top: 10px; font-size: 0.7rem;">TAP ANYWHERE TO CHANT</div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot, increment, collection, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
@@ -82,73 +81,50 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        
+        // --- AUTH CHECK LOGIC ---
         let userName = localStorage.getItem('jaapUserName');
         const todayStr = new Date().toLocaleDateString();
 
-        if (userName) {
-            document.getElementById('nameOverlay').style.display = 'none';
+        if (!userName) {
+            // First time user, send to login
+            window.location.href = "login.html";
+        } else {
             setupApp();
         }
-
-        window.saveName = () => {
-            const input = document.getElementById('userNameInput').value.trim();
-            if (input) {
-                userName = input;
-                localStorage.setItem('jaapUserName', userName);
-                document.getElementById('nameOverlay').style.display = 'none';
-                setupApp();
-            }
-        };
 
         function setupApp() {
             document.getElementById('welcomeMsg').innerText = `Radhe Radhe, ${userName}!`;
             
-            // Listen to User Stats
-            onSnapshot(doc(db, "users", userName), (ds) => {
+            const userRef = doc(db, "users", userName);
+            onSnapshot(userRef, (ds) => {
                 if (ds.exists()) {
                     const data = ds.data();
-                    // Reset Daily Count if it's a new day
                     const daily = data.lastDate === todayStr ? (data.dailyCount || 0) : 0;
                     document.getElementById('dailyDisplay').innerText = daily;
                     document.getElementById('totalDisplay').innerText = data.totalCount || 0;
                     updateCircle(daily);
                 }
             });
-
-            // Listen to Leaderboard (Top 5)
-            const q = query(collection(db, "users"), orderBy("totalCount", "desc"), limit(5));
-            onSnapshot(q, (snapshot) => {
-                const lbList = document.getElementById('lb-list');
-                lbList.innerHTML = '';
-                snapshot.docs.forEach((doc, index) => {
-                    const data = doc.data();
-                    lbList.innerHTML += `
-                        <div class="lb-row">
-                            <span class="lb-rank">#${index+1}</span>
-                            <span class="lb-name">${doc.id}</span>
-                            <span class="lb-score">${data.totalCount || 0}</span>
-                        </div>`;
-                });
-            });
         }
 
         window.handleTap = async (e) => {
-            if (!userName || e.target.closest('#nameOverlay')) return;
+            // Prevent tap if clicking on leaderboard button
+            if (e.target.closest('.lb-button')) return;
 
             // Float Animation
             const f = document.createElement('div');
             f.innerText = 'Radha Radha'; f.className = 'float-text';
-            f.style.left = `${e.clientX - 40}px`; f.style.top = `${e.clientY - 20}px`;
+            f.style.left = `${e.clientX - 50}px`; f.style.top = `${e.clientY - 20}px`;
             document.body.appendChild(f);
             setTimeout(() => f.remove(), 1000);
 
             // Update DB
             const userRef = doc(db, "users", userName);
-            const userSnap = await (await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js")).getDoc(userRef);
+            const userSnap = await getDoc(userRef);
             
-            let dailyInc = 1;
-            // If date changed, reset daily to 1
             if (userSnap.exists() && userSnap.data().lastDate !== todayStr) {
+                // First tap of the new day
                 await setDoc(userRef, { dailyCount: 1, lastDate: todayStr }, { merge: true });
             }
 
@@ -163,7 +139,7 @@
 
         function updateCircle(count) {
             const circle = document.getElementById('progressCircle');
-            const circumference = 2 * Math.PI * 100;
+            const circumference = 2 * Math.PI * 120;
             circle.style.strokeDasharray = circumference;
             circle.style.strokeDashoffset = circumference - (count % 108 / 108) * circumference;
         }
