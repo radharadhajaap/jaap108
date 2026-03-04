@@ -1,0 +1,15 @@
+{
+  "name": "Radha Rani Jaap",
+  "short_name": "Jaap",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#120c08",
+  "theme_color": "#f38630",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2304/2304226.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
