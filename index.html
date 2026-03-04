@@ -9,137 +9,132 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;900&display=swap" rel="stylesheet">
     
-    <style>
-        :root { 
-            --orange: #f38630; 
-            --gold: #ffcc33;
-            --glass: rgba(255, 255, 255, 0.07);
-            --glass-border: rgba(255, 255, 255, 0.15);
-        }
+  <style>
+    :root { 
+        --orange: #f38630; 
+        --gold: #ffcc33;
+        --deep-bg: #050301;
+        --glass: rgba(255, 255, 255, 0.08);
+        --glass-border: rgba(255, 255, 255, 0.12);
+        --glow: rgba(243, 134, 48, 0.3);
+    }
 
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            font-family: 'Poppins', sans-serif; 
-            background-color: #050301; color: white; overflow: hidden;
-            user-select: none; -webkit-tap-highlight-color: transparent;
-        }
+    body, html { 
+        margin: 0; padding: 0; width: 100%; height: 100%; 
+        font-family: 'Poppins', sans-serif; 
+        background-color: var(--deep-bg); color: white; overflow: hidden;
+        user-select: none; -webkit-tap-highlight-color: transparent;
+    }
 
-        /* 3D Parallax Background */
-        #darshanBg {
-            position: fixed; top: -10%; left: -10%; width: 120%; height: 120%;
-            background-size: cover; background-position: center;
-            z-index: -2; transition: background-image 2s ease-in-out;
-            filter: brightness(0.6);
-        }
+    /* Animated Background Layer */
+    #darshanBg {
+        position: fixed; top: -5%; left: -5%; width: 110%; height: 110%;
+        background-size: cover; background-position: center;
+        z-index: -2; transition: all 1.5s ease;
+        filter: brightness(0.5) saturate(1.2);
+    }
 
-        .bg-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, transparent 10%, #000 100%);
-            z-index: -1;
-        }
+    .bg-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: radial-gradient(circle at 50% 50%, transparent 20%, var(--deep-bg) 110%);
+        z-index: -1;
+    }
 
-        /* Status Chips */
-        .status-container {
-            position: fixed; top: 40px; width: 90%; left: 5%;
-            display: flex; justify-content: space-between; z-index: 100;
-        }
-        .chip {
-            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            padding: 10px 18px; border-radius: 50px; border: 1px solid var(--glass-border);
-            font-size: 0.75rem; font-weight: 600; color: var(--gold); letter-spacing: 1px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+    /* Premium Chips */
+    .status-container {
+        position: fixed; top: 45px; width: 90%; left: 5%;
+        display: flex; justify-content: space-between; z-index: 100;
+    }
+    .chip {
+        background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+        padding: 12px 20px; border-radius: 24px; border: 1px solid var(--glass-border);
+        font-size: 0.7rem; font-weight: 700; color: var(--gold); letter-spacing: 1.5px;
+        box-shadow: inset 0 0 10px rgba(255,255,255,0.05), 0 10px 25px rgba(0,0,0,0.4);
+        text-transform: uppercase;
+    }
 
-        /* Main Jaap Engine */
-        .main { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        
-        .mantra { 
-            font-size: 3.5rem; font-weight: 900; text-transform: uppercase;
-            background: linear-gradient(to bottom, #fff, var(--gold));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(243,134,48,0.4));
-            animation: breathe 4s infinite alternate ease-in-out;
-        }
-        @keyframes breathe { from { transform: scale(1); } to { transform: scale(1.05); } }
+    /* Main Engine */
+    .main { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+    
+    .mantra-container {
+        text-align: center; margin-bottom: 30px;
+        animation: float 6s infinite ease-in-out;
+    }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        .counter-container {
-            position: relative; width: 350px; height: 350px;
-            display: flex; align-items: center; justify-content: center;
-        }
+    .mantra { 
+        font-size: 3.2rem; font-weight: 900; letter-spacing: -1px;
+        background: linear-gradient(180deg, #fff 0%, var(--gold) 100%);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 25px var(--glow));
+    }
 
-        .glow-aura {
-            position: absolute; width: 220px; height: 220px;
-            background: var(--orange); border-radius: 50%;
-            filter: blur(80px); opacity: 0.15; z-index: 0;
-        }
+    .counter-view {
+        position: relative; width: 320px; height: 320px;
+        display: flex; align-items: center; justify-content: center;
+    }
 
-        .daily-num { 
-            font-size: 8rem; font-weight: 900; line-height: 1; margin: 0; 
-            z-index: 10; font-variant-numeric: tabular-nums;
-            text-shadow: 0 10px 40px rgba(0,0,0,0.8);
-        }
+    .daily-num { 
+        font-size: 8.5rem; font-weight: 900; line-height: 1; margin: 0; 
+        z-index: 10; font-family: 'Inter', sans-serif;
+        background: linear-gradient(to bottom, #fff, #888);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
 
-        /* Progress Ring */
-        #ring { transition: stroke-dashoffset 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    /* Progress Info Card */
+    .info-card {
+        margin-top: 50px; background: var(--glass); padding: 15px 30px;
+        border-radius: 20px; border: 1px solid var(--glass-border);
+        backdrop-filter: blur(15px); text-align: center;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    }
+    .info-label { font-size: 0.6rem; color: var(--orange); font-weight: 800; letter-spacing: 2px; }
+    .info-val { font-size: 1.1rem; font-weight: 600; color: #fff; }
 
-        /* Floating Navigation Dock */
-        .dock {
-            position: fixed; bottom: 35px; width: 85%; left: 7.5%;
-            background: rgba(20, 15, 10, 0.8); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border); border-radius: 35px;
-            display: flex; justify-content: space-around; padding: 16px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.7); z-index: 100;
-        }
-        .dock-item { color: white; text-decoration: none; font-size: 0.7rem; text-align: center; font-weight: 700; opacity: 0.7; transition: 0.3s; }
-        .dock-item span { display: block; font-size: 1.6rem; margin-bottom: 5px; }
-        .dock-item:active { transform: scale(0.85); opacity: 1; color: var(--gold); }
+    /* Dock Update */
+    .dock {
+        position: fixed; bottom: 35px; width: 88%; left: 6%;
+        background: rgba(15, 10, 5, 0.85); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+        border: 1px solid var(--glass-border); border-radius: 30px;
+        display: flex; justify-content: space-around; padding: 18px 10px;
+        box-shadow: 0 -10px 40px rgba(0,0,0,0.5); z-index: 100;
+    }
+    .dock-item { color: #888; text-decoration: none; font-size: 0.65rem; text-align: center; font-weight: 700; transition: 0.3s; }
+    .dock-item span { display: block; font-size: 1.7rem; margin-bottom: 6px; filter: grayscale(1); transition: 0.3s; }
+    .dock-item.active, .dock-item:active { color: var(--gold); }
+    .dock-item.active span, .dock-item:active span { filter: grayscale(0) drop-shadow(0 0 10px var(--orange)); }
 
-        /* Custom Sankalp Modal */
-        #sankalpModal {
-            display: none; position: fixed; top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center;
-        }
-        .modal-card {
-            background: #15110d; padding: 40px 30px; border-radius: 35px; border: 1px solid var(--orange);
-            width: 80%; max-width: 320px; text-align: center;
-        }
-        .modal-card input {
-            width: 90%; padding: 15px; margin: 20px 0; border-radius: 15px; border: 1px solid #333;
-            background: #000; color: white; font-size: 1.8rem; text-align: center; outline: none;
-        }
+    /* Ripple Particle */
+    .divine-spark {
+        position: absolute; width: 4px; height: 4px; background: var(--gold);
+        border-radius: 50%; pointer-events: none; animation: spark 0.6s ease-out forwards;
+    }
+    @keyframes spark {
+        0% { transform: scale(1); opacity: 1; }
+        100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+    }
+</style>
 
-        /* Haptic Ripple Effect */
-        .ripple {
-            position: absolute; width: 10px; height: 10px; background: var(--gold);
-            border-radius: 50%; pointer-events: none; animation: rippleAnim 0.8s ease-out forwards;
-            box-shadow: 0 0 20px var(--gold);
-        }
-        @keyframes rippleAnim {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(15); opacity: 0; }
-        }
-    </style>
-</head>
-<body onclick="handleGlobalTap(event)">
-
+<body onclick="divineTap(event)">
     <div id="darshanBg"></div>
     <div class="bg-overlay"></div>
-    <audio id="bellSound"><source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
-
+    
     <div class="status-container">
-        <div class="chip" id="streakChip">🔥 0 DAYS</div>
-        <div class="chip" id="totalChip" style="color:#fff;">TOTAL: 0</div>
+        <div class="chip" id="streakChip">🔥 0 Days</div>
+        <div class="chip" style="color:#fff;" id="totalChip">0 Jaap</div>
     </div>
 
     <div class="main">
-        <div class="mantra">Radha Radha</div>
-        
-        <div class="counter-container">
-            <div class="glow-aura"></div>
-            <svg style="position:absolute; width: 100%; height:100%; transform: rotate(-90deg);">
-                <circle cx="175" cy="175" r="160" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="2" />
-                <circle id="ring" cx="175" cy="175" r="160" fill="none" stroke="url(#divineGrad)" stroke-width="8" 
-                stroke-dasharray="1005" stroke-dashoffset="1005" stroke-linecap="round" />
+        <div class="mantra-container">
+            <div class="mantra">Radha Radha</div>
+            <div style="font-size: 0.7rem; color: var(--orange); letter-spacing: 4px; font-weight: 600;">KRIPA BARSEGI</div>
+        </div>
+
+        <div class="counter-view">
+            <svg style="position:absolute; width: 110%; height:110%; transform: rotate(-90deg);">
+                <circle cx="176" cy="176" r="150" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="2" />
+                <circle id="ring" cx="176" cy="176" r="150" fill="none" stroke="url(#divineGrad)" stroke-width="10" 
+                stroke-dasharray="943" stroke-dashoffset="943" stroke-linecap="round" style="transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);" />
                 <defs>
                     <linearGradient id="divineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" style="stop-color: var(--orange);" />
@@ -147,14 +142,14 @@
                     </linearGradient>
                 </defs>
             </svg>
-            
-            <div style="z-index: 20; text-align: center;">
-                <p class="daily-num" id="dailyText">0</p>
-                <div id="goalView" style="display:none; margin-top: 10px;">
-                    <div style="font-size: 0.7rem; color: var(--gold); font-weight: 800; letter-spacing: 3px;">
-                        TARGET: <span id="goalStat">0/0</span>
-                    </div>
-                </div>
+            <p class="daily-num" id="dailyText">0</p>
+        </div>
+
+        <div class="info-card" id="goalCard" style="display:none;">
+            <div class="info-label">SANKALP PROGRESS</div>
+            <div class="info-val" id="goalStat">0 / 0</div>
+            <div style="width: 100px; height: 3px; background: rgba(255,255,255,0.1); margin: 8px auto; border-radius: 5px;">
+                <div id="goalBar" style="width: 0%; height: 100%; background: var(--gold); border-radius: 5px; transition: 0.5s;"></div>
             </div>
         </div>
     </div>
@@ -165,99 +160,26 @@
         <div class="dock-item" onclick="window.location.href='leaderboard.html'"><span>🏆</span>RANK</div>
     </div>
 
-    <div id="sankalpModal">
-        <div class="modal-card">
-            <h2 style="color:var(--gold); margin:0; letter-spacing: 1px;">Aadhyatmik Goal</h2>
-            <p style="opacity:0.6; font-size:0.8rem; margin-top:10px;">Aaj kitni Mala karni hai?</p>
-            <input type="number" id="mInput" placeholder="1, 5, 11, 21..." inputmode="numeric">
-            <button onclick="saveSankalp()" style="background:var(--orange); border:none; padding:18px; width:100%; border-radius:15px; color:white; font-weight:bold; font-size:1.1rem; box-shadow: 0 10px 20px rgba(243,134,48,0.3);">START JAAP 🙏</button>
-            <p onclick="toggleModal(false)" style="margin-top:20px; opacity:0.4; font-size:0.8rem;">Cancel</p>
-        </div>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
-            authDomain: "jaap-fdd80.firebaseapp.com",
-            projectId: "jaap-fdd80",
-            storageBucket: "jaap-fdd80.firebasestorage.app",
-            messagingSenderId: "375289521394",
-            appId: "1:375289521394:web:ced2cafa4d1743d5ab9c6b"
-        };
-
-        const db = getFirestore(initializeApp(firebaseConfig));
-        const user = localStorage.getItem('jaapUserName');
-        const today = new Date().toLocaleDateString();
-
-        if(!user) window.location.href = "login.html";
-
-        const photos = [
-            "https://images.unsplash.com/photo-1544924222-355b1f0ad5a7?q=80&w=1200",
-            "https://images.unsplash.com/photo-1620121692029-d088224efc74?q=80&w=1200",
-            "https://images.unsplash.com/photo-1616013050162-4f366e6b6680?q=80&w=1200"
-        ];
-
-        function syncUI(daily) {
-            const offset = 1005 - (daily % 108 / 108) * 1005;
-            document.getElementById('ring').style.strokeDashoffset = offset;
-
-            const photoIdx = (new Date().getDate() + Math.floor(daily / 108)) % photos.length;
-            document.getElementById('darshanBg').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.85)), url('${photos[photoIdx]}')`;
-
-            if(daily > 0 && daily % 108 === 0) {
-                confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#f38630', '#ffcc33', '#ffffff'] });
-                document.getElementById('bellSound').play();
-            }
-        }
-
-        onSnapshot(doc(db, "users", user), (ds) => {
-            if(ds.exists()) {
-                const data = ds.data();
-                const daily = data.lastDate === today ? data.dailyCount : 0;
-                document.getElementById('dailyText').innerText = daily;
-                document.getElementById('totalChip').innerText = `TOTAL: ${data.totalCount.toLocaleString()}`;
-                document.getElementById('streakChip').innerText = `🔥 ${data.streak || 0} DAYS`;
-                syncUI(daily);
-
-                if(data.sankalpGoal && data.sankalpDate === today) {
-                    document.getElementById('goalView').style.display = 'block';
-                    document.getElementById('goalStat').innerText = `${daily}/${data.sankalpGoal}`;
-                }
-            }
-        });
-
-        window.handleGlobalTap = async (e) => {
+    <script>
+        // Use your existing Firebase logic, but update the divineTap function:
+        window.divineTap = async (e) => {
             if(e.target.closest('.dock') || e.target.closest('.modal-card')) return;
 
-            const rip = document.createElement('div');
-            rip.className = 'ripple';
-            rip.style.left = e.clientX + 'px';
-            rip.style.top = e.clientY + 'px';
-            document.body.appendChild(rip);
-            setTimeout(() => rip.remove(), 800);
-
-            if(navigator.vibrate) navigator.vibrate(50);
-
-            await setDoc(doc(db, "users", user), { 
-                dailyCount: increment(1), 
-                totalCount: increment(1), 
-                lastDate: today, 
-                lastTimestamp: Date.now() 
-            }, { merge: true });
-        };
-
-        window.toggleModal = (show) => { document.getElementById('sankalpModal').style.display = show ? 'flex' : 'none'; };
-        
-        window.saveSankalp = async () => {
-            const m = document.getElementById('mInput').value;
-            if(m > 0) {
-                await setDoc(doc(db, "users", user), { sankalpGoal: m * 108, sankalpDate: today }, { merge: true });
-                toggleModal(false);
+            // Premium Spark Effect
+            for(let i=0; i<8; i++) {
+                const spark = document.createElement('div');
+                spark.className = 'divine-spark';
+                spark.style.left = e.clientX + 'px';
+                spark.style.top = e.clientY + 'px';
+                spark.style.setProperty('--dx', (Math.random() - 0.5) * 150 + 'px');
+                spark.style.setProperty('--dy', (Math.random() - 0.5) * 150 + 'px');
+                document.body.appendChild(spark);
+                setTimeout(() => spark.remove(), 600);
             }
-        };
+
+            // Your existing Firebase increment logic here...
+        }
     </script>
 </body>
+
 </html>
