@@ -4,171 +4,157 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
-    <title>Radha Rani Jaap - Ananda</title>
+    <title>Radha Rani Jaap - Divine</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root { 
             --orange: #f38630; 
             --gold: #ffcc33;
-            --glass: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
         }
 
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            font-family: 'Poppins', sans-serif; 
-            background-color: #080502; color: white; overflow: hidden;
+            font-family: 'Segoe UI', sans-serif; 
+            background-color: #0d0905; color: white; overflow: hidden;
             user-select: none; -webkit-tap-highlight-color: transparent;
         }
 
-        /* Parallax Background Layer */
+        /* Dynamic Parallax Background */
         #darshanBg {
-            position: fixed; top: -5%; left: -5%; width: 110%; height: 110%;
+            position: fixed; top: -10%; left: -10%; width: 120%; height: 120%;
             background-size: cover; background-position: center;
-            z-index: -2; transition: background-image 2s ease, transform 0.1s ease-out;
+            z-index: -2; transition: background-image 2.5s ease-in-out;
             background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9));
         }
 
         .bg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.85) 100%);
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.85) 100%);
             z-index: -1;
         }
 
-        /* Floating Premium Nav */
-        .bottom-nav { 
-            position: fixed; bottom: 30px; width: 80%; left: 10%;
-            display: flex; justify-content: space-around; z-index: 100; 
-            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border); padding: 12px; border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        /* Premium Top Status Bar */
+        .status-bar {
+            position: fixed; top: 20px; width: 90%; left: 5%;
+            display: flex; justify-content: space-between; align-items: center; z-index: 100;
         }
-        .nav-item { color: white; text-decoration: none; font-size: 0.75rem; text-align: center; opacity: 0.8; transition: 0.3s; cursor: pointer; }
-        .nav-item i { display: block; font-size: 1.4rem; margin-bottom: 4px; }
-        .nav-item:active { transform: scale(0.9); opacity: 1; color: var(--gold); }
-
-        /* Sankalp Progress - Sleek Version */
-        .sankalp-box { 
-            position: fixed; top: 25px; width: 88%; left: 6%; 
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);
-            border-radius: 18px; padding: 12px 18px; border: 1px solid rgba(255,255,255,0.05); 
-            z-index: 90; display: none;
+        .chip {
+            background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 8px 16px; border-radius: 20px; border: 1px solid var(--glass-border);
+            font-size: 0.8rem; font-weight: bold; color: var(--gold);
         }
-        .sankalp-bar { height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 8px; overflow: hidden; }
-        .sankalp-fill { height: 100%; background: linear-gradient(90deg, var(--orange), var(--gold)); width: 0%; transition: 0.8s; }
 
+        /* Main Counter Circle */
         .main { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         
-        .mantra { 
-            font-size: 3.2rem; font-weight: 800; letter-spacing: 2px;
-            background: linear-gradient(to bottom, #fff, var(--gold));
+        .mantra-text {
+            font-size: 3.5rem; font-weight: 900; letter-spacing: 1px;
+            background: linear-gradient(180deg, #fff 30%, var(--gold) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px rgba(243, 134, 48, 0.4)); margin-bottom: 10px;
-            animation: breathe 4s infinite alternate;
+            margin-bottom: 20px; text-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        @keyframes breathe { from { transform: scale(1); opacity: 0.9; } to { transform: scale(1.05); opacity: 1; } }
 
-        .mala-wrap { 
-            position: relative; width: 320px; height: 320px; 
-            display: flex; align-items: center; justify-content: center; 
+        .counter-container {
+            position: relative; width: 320px; height: 320px;
+            display: flex; align-items: center; justify-content: center;
         }
-        
-        .aura {
-            position: absolute; width: 200px; height: 200px;
+
+        .aura-glow {
+            position: absolute; width: 240px; height: 240px;
             background: var(--orange); border-radius: 50%;
             filter: blur(80px); opacity: 0.2; z-index: 0;
+            animation: pulseAura 4s infinite alternate;
+        }
+        @keyframes pulseAura { from { transform: scale(1); opacity: 0.15; } to { transform: scale(1.2); opacity: 0.3; } }
+
+        .daily-count {
+            font-size: 7.5rem; font-weight: 900; line-height: 1; margin: 0;
+            z-index: 10; font-family: 'Monaco', monospace;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.8));
         }
 
-        .daily-num { 
-            font-size: 7rem; font-weight: 900; line-height: 1; margin: 0; 
-            z-index: 10; font-variant-numeric: tabular-nums;
-            text-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        /* Floating Tap Ripple */
+        .ripple {
+            position: absolute; border: 2px solid var(--gold);
+            border-radius: 50%; transform: scale(0);
+            animation: rippleEffect 0.6s ease-out; pointer-events: none;
+        }
+        @keyframes rippleEffect {
+            to { transform: scale(4); opacity: 0; }
         }
 
-        .streak-tag {
-            color: var(--gold); font-size: 0.9rem; letter-spacing: 2px;
-            font-weight: bold; margin-bottom: 10px; text-transform: uppercase;
+        /* Bottom Floating Bar */
+        .dock {
+            position: fixed; bottom: 30px; width: 85%; left: 7.5%;
+            background: rgba(20, 15, 10, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 25px;
+            display: flex; justify-content: space-around; padding: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 100;
         }
+        .dock-item { color: white; text-decoration: none; font-size: 0.7rem; text-align: center; font-weight: 600; opacity: 0.8; }
+        .dock-item span { display: block; font-size: 1.5rem; margin-bottom: 4px; }
 
-        /* Modal Styles */
-        #sankalpModal { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center;
+        /* Goal View */
+        .goal-indicator {
+            position: absolute; bottom: -60px; width: 100%; text-align: center;
         }
-        .modal-content {
-            background: #1a140f; padding: 40px; border-radius: 30px; 
-            border: 1px solid var(--orange); width: 80%; max-width: 320px; text-align: center;
+        .progress-track {
+            width: 200px; height: 4px; background: rgba(255,255,255,0.1);
+            margin: 10px auto; border-radius: 10px; overflow: hidden;
         }
-        .modal-content input {
-            width: 100%; padding: 15px; background: #000; border: 1px solid #333;
-            color: white; border-radius: 12px; font-size: 1.5rem; text-align: center; margin: 20px 0;
-        }
-
-        /* Float Text */
-        .float-text { 
-            position: absolute; color: var(--gold); font-weight: bold; 
-            pointer-events: none; animation: floatUp 1.2s ease-out forwards; 
-            font-size: 1.8rem; z-index: 200;
-        }
-        @keyframes floatUp { 
-            0% { opacity: 0; transform: translateY(0) scale(0.5); } 
-            20% { opacity: 1; }
-            100% { opacity: 0; transform: translateY(-180px) scale(1.5); } 
+        .progress-fill {
+            height: 100%; background: var(--orange); width: 0%; transition: 0.5s;
         }
     </style>
 </head>
-<body onclick="handleTap(event)" onmousemove="handleParallax(event)">
+<body onclick="createRipple(event)">
 
     <div id="darshanBg"></div>
     <div class="bg-overlay"></div>
     <audio id="bellSound"><source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
 
-    <div class="sankalp-box" id="sankalpDisplay">
-        <div style="display:flex; justify-content: space-between; font-size: 0.7rem; font-weight: bold;">
-            <span>SANKALP PROGRESS</span>
-            <span id="sPercentText">0%</span>
-        </div>
-        <div class="sankalp-bar"><div class="sankalp-fill" id="sFill"></div></div>
+    <div class="status-bar">
+        <div class="chip" id="streakDisplay">🔥 0 DAY STREAK</div>
+        <div class="chip" style="color: white; border-color: var(--orange);">RANK: #1</div>
     </div>
 
     <div class="main">
-        <div id="streak" class="streak-tag">🔥 0 Days</div>
-        <div class="mantra" id="mantraText">Radha Radha</div>
+        <div class="mantra-text">Radha Radha</div>
         
-        <div class="mala-wrap">
-            <div class="aura" id="auraEffect"></div>
-            <svg class="mala-svg" id="malaSvg" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="2" />
-                <circle id="progCirc" cx="50" cy="50" r="46" fill="none" stroke="url(#grad)" stroke-width="4" stroke-dasharray="289" stroke-dashoffset="289" stroke-linecap="round" style="transition: stroke-dashoffset 0.5s ease;"/>
+        <div class="counter-container">
+            <div class="aura-glow"></div>
+            <svg style="position:absolute; width: 100%; height:100%; transform: rotate(-90deg);">
+                <circle cx="160" cy="160" r="145" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
+                <circle id="ring" cx="160" cy="160" r="145" fill="none" stroke="url(#goldGrad)" stroke-width="6" 
+                stroke-dasharray="911" stroke-dashoffset="911" stroke-linecap="round" style="transition: 0.4s;" />
                 <defs>
-                    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:var(--orange)" />
-                        <stop offset="100%" style="stop-color:var(--gold)" />
+                    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color: #f38630;" />
+                        <stop offset="100%" style="stop-color: #ffcc33;" />
                     </linearGradient>
                 </defs>
             </svg>
-            <div style="z-index:10; text-align: center;">
-                <p class="daily-num" id="dailyCount">0</p>
-                <p style="font-size: 0.7rem; letter-spacing: 6px; color: var(--orange); margin-top: -5px; font-weight: 800;">CHANTED</p>
+            
+            <div style="z-index: 20; text-align: center;">
+                <p class="daily-count" id="countText">0</p>
+                <p style="letter-spacing: 5px; font-size: 0.8rem; color: var(--orange); margin: 0; font-weight: 800;">JAAP COMPLETE</p>
+            </div>
+
+            <div class="goal-indicator" id="goalBar" style="display: none;">
+                <div style="font-size: 0.7rem; color: var(--gold); font-weight: bold;">SANKALP: <span id="gText">0/0</span></div>
+                <div class="progress-track"><div class="progress-fill" id="gFill"></div></div>
             </div>
         </div>
-        
-        <p style="margin-top:30px; opacity:0.5; font-size: 0.8rem; letter-spacing: 2px;">TOTAL: <span id="totalCount">0</span></p>
+
+        <p style="margin-top: 100px; opacity: 0.4; font-size: 0.8rem;">LIFETIME TOTAL: <span id="lifeTotal">0</span></p>
     </div>
 
-    <div class="bottom-nav">
-        <div class="nav-item" onclick="openSankalp(event)"><i>📜</i>Sankalp</div>
-        <div class="nav-item" onclick="location.href='leaderboard.html'"><i>🏆</i>Rank</div>
-        <div class="nav-item" onclick="location.reload()"><i>🔄</i>Reset</div>
-    </div>
-
-    <div id="sankalpModal">
-        <div class="modal-content">
-            <h2 style="color:var(--gold); margin:0;">Daily Goal</h2>
-            <input type="number" id="mInput" placeholder="Malas (1, 5, 11...)" inputmode="numeric">
-            <button onclick="setSankalp()" style="background:var(--orange); border:none; padding:15px; width:100%; border-radius:12px; color:white; font-weight:bold;">START YATRA 🙏</button>
-            <p onclick="document.getElementById('sankalpModal').style.display='none'" style="margin-top:15px; opacity:0.5; font-size:0.8rem;">Close</p>
-        </div>
+    <div class="dock">
+        <div class="dock-item" onclick="openSankalp()"><span>📜</span>SANKALP</div>
+        <div class="dock-item" onclick="window.location.href='leaderboard.html'"><span>🏆</span>LEADERBOARD</div>
+        <div class="dock-item" onclick="window.location.reload()"><span>✨</span>DARSHAN</div>
     </div>
 
     <script type="module">
@@ -196,25 +182,17 @@
             "https://images.unsplash.com/photo-1616013050162-4f366e6b6680?q=80&w=1932"
         ];
 
-        // Parallax Effect
-        window.handleParallax = (e) => {
-            const x = (window.innerWidth - e.pageX * 2) / 100;
-            const y = (window.innerHeight - e.pageY * 2) / 100;
-            document.getElementById('darshanBg').style.transform = `translate(${x}px, ${y}px)`;
-        };
-
         function updateUI(daily) {
-            const malaIdx = Math.floor(daily / 108);
-            const photoIdx = (new Date().getDate() + malaIdx) % photos.length;
-            const bg = document.getElementById('darshanBg');
-            bg.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('${photos[photoIdx]}')`;
+            // Ring animation (911 is the circumference of r=145)
+            const offset = 911 - (daily % 108 / 108) * 911;
+            document.getElementById('ring').style.strokeDashoffset = offset;
 
-            const offset = 289 - (daily % 108 / 108) * 289;
-            document.getElementById('progCirc').style.strokeDashoffset = offset;
-            
-            // Celebration on 108
+            // Background change every mala
+            const photoIdx = (new Date().getDate() + Math.floor(daily / 108)) % photos.length;
+            document.getElementById('darshanBg').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.85)), url('${photos[photoIdx]}')`;
+
             if(daily > 0 && daily % 108 === 0) {
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#f38630', '#ffcc33'] });
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#f38630', '#ffcc33'] });
                 document.getElementById('bellSound').play();
             }
         }
@@ -223,42 +201,28 @@
             if(ds.exists()) {
                 const d = ds.data();
                 const daily = d.lastDate === today ? d.dailyCount : 0;
-                document.getElementById('dailyCount').innerText = daily;
-                document.getElementById('totalCount').innerText = d.totalCount.toLocaleString();
-                document.getElementById('streak').innerText = `🔥 ${d.streak || 0} DAYS`;
+                document.getElementById('countText').innerText = daily;
+                document.getElementById('lifeTotal').innerText = d.totalCount.toLocaleString();
+                document.getElementById('streakDisplay').innerText = `🔥 ${d.streak || 0} DAY STREAK`;
                 updateUI(daily);
 
                 if(d.sankalpGoal && d.sankalpDate === today) {
-                    document.getElementById('sankalpDisplay').style.display = 'block';
-                    const perc = Math.min(Math.round((daily/d.sankalpGoal)*100), 100);
-                    document.getElementById('sFill').style.width = perc + "%";
-                    document.getElementById('sPercentText').innerText = perc + "%";
+                    document.getElementById('goalBar').style.display = 'block';
+                    document.getElementById('gText').innerText = `${daily} / ${d.sankalpGoal}`;
+                    document.getElementById('gFill').style.width = Math.min((daily/d.sankalpGoal)*100, 100) + "%";
                 }
             }
         });
 
-        window.openSankalp = (e) => { e.stopPropagation(); document.getElementById('sankalpModal').style.display = 'flex'; };
-        
-        window.setSankalp = async () => {
-            const m = document.getElementById('mInput').value;
-            if(!m || m <= 0) return;
-            await setDoc(doc(db, "users", user), { sankalpGoal: m * 108, sankalpDate: today }, { merge: true });
-            document.getElementById('sankalpModal').style.display = 'none';
-        };
+        window.createRipple = async (e) => {
+            if(e.target.closest('.dock')) return;
 
-        window.handleTap = async (e) => {
-            if(e.target.closest('.bottom-nav') || e.target.closest('.modal-content')) return;
-
-            // Visual Feedback
-            const f = document.createElement('div'); f.className='float-text'; f.innerText='Radhe';
-            f.style.left=e.clientX - 40 + 'px'; f.style.top=e.clientY - 20 + 'px'; document.body.appendChild(f);
-            setTimeout(()=>f.remove(), 1200);
-
-            // Aura Pulse
-            const aura = document.getElementById('auraEffect');
-            aura.style.transform = 'scale(1.3)';
-            aura.style.opacity = '0.5';
-            setTimeout(() => { aura.style.transform = 'scale(1)'; aura.style.opacity = '0.2'; }, 150);
+            const rip = document.createElement('div');
+            rip.className = 'ripple';
+            rip.style.left = e.clientX + 'px';
+            rip.style.top = e.clientY + 'px';
+            document.body.appendChild(rip);
+            setTimeout(() => rip.remove(), 600);
 
             if(navigator.vibrate) navigator.vibrate(50);
 
@@ -268,6 +232,13 @@
                 lastDate: today, 
                 lastTimestamp: Date.now() 
             }, { merge: true });
+        };
+
+        window.openSankalp = () => {
+            const m = prompt("Kitni Mala ka Sankalp hai?");
+            if(m && !isNaN(m)) {
+                setDoc(doc(db, "users", user), { sankalpGoal: m * 108, sankalpDate: today }, { merge: true });
+            }
         };
     </script>
 </body>
