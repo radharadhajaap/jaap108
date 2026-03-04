@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radha Rani Jaap - Login</title>
+    <style>
+        :root { --orange: #f38630; --bg: #120c08; }
+        body {
+            margin: 0; padding: 0; background-color: var(--bg); color: white;
+            font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh;
+        }
+        .login-card {
+            width: 90%; max-width: 400px; background: rgba(255,255,255,0.05);
+            padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); text-align: center;
+        }
+        .profile-upload {
+            position: relative; width: 100px; height: 100px; margin: 0 auto 20px;
+        }
+        #profilePreview {
+            width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px dashed var(--orange);
+        }
+        .upload-icon {
+            position: absolute; bottom: 0; right: 0; background: var(--orange);
+            width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer;
+        }
+        input {
+            width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.3); color: white; box-sizing: border-box;
+        }
+        button {
+            width: 100%; padding: 12px; margin-top: 20px; border-radius: 8px; border: none;
+            background: var(--orange); color: white; font-weight: bold; cursor: pointer; font-size: 1rem;
+        }
+        .loading { opacity: 0.5; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+<div class="login-card" id="loginForm">
+    <h2 style="color: var(--orange); margin-bottom: 5px;">Radhe Radhe</h2>
+    <p style="opacity: 0.7; font-size: 0.9rem; margin-bottom: 25px;">Create your spiritual profile</p>
+
+    <div class="profile-upload">
+        <img id="profilePreview" src="https://ui-avatars.com/api/?name=User&background=333&color=f38630" alt="Profile">
+        <label for="fileInput" class="upload-icon">📷</label>
+        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+    </div>
+
+    <input type="text" id="userName" placeholder="Full Name" required>
+    <input type="tel" id="userPhone" placeholder="Mobile Number" required>
+    
+    <button id="submitBtn" onclick="handleLogin()">Join Jaap App</button>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
+        authDomain: "jaap-fdd80.firebaseapp.com",
+        projectId: "jaap-fdd80",
+        storageBucket: "jaap-fdd80.firebasestorage.app",
+        messagingSenderId: "375289521394",
+        appId: "1:375289521394:web:ced2cafa4d1743d5ab9c6b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let compressedImageBase64 = "";
+
+    // --- Profile Picture Compression Logic ---
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(event) {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 200; // Small size for fast loading
+                const scaleSize = MAX_WIDTH / img.width;
+                canvas.width = MAX_WIDTH;
+                canvas.height = img.height * scaleSize;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                // Compress to 0.7 quality
+                compressedImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                document.getElementById('profilePreview').src = compressedImageBase64;
+            };
+        };
+    });
+
+    // --- Save to Firebase and Redirect ---
+    window.handleLogin = async () => {
+        const name = document.getElementById('userName').value.trim();
+        const phone = document.getElementById('userPhone').value.trim();
+        const btn = document.getElementById('submitBtn');
+
+        if (!name || !phone) {
+            alert("Please fill all details");
+            return;
+        }
+
+        btn.innerText = "Setting up...";
+        btn.classList.add('loading');
+
+        try {
+            const userRef = doc(db, "users", name);
+            await setDoc(userRef, {
+                fullName: name,
+                mobile: phone,
+                profilePic: compressedImageBase64, // Storing as small string
+                totalCount: 0,
+                dailyCount: 0,
+                lastDate: new Date().toLocaleDateString()
+            }, { merge: true });
+
+            // Local storage for session
+            localStorage.setItem('jaapUserName', name);
+            
+            // Redirect to main app
+            window.location.href = "index.html";
+        } catch (error) {
+            console.error(error);
+            alert("Error saving profile");
+            btn.innerText = "Join Jaap App";
+            btn.classList.remove('loading');
+        }
+    };
+</script>
+</body>
+</html>
