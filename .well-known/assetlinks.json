@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "io.github.radharadhajaap.jaap108.twa",
+    "sha256_cert_fingerprints": ["50:FD:64:FD:06:21:37:F9:0C:34:E1:E1:DC:EA:FF:B2:FD:6E:5A:FF:0E:A1:F6:29:A2:FE:88:78:5D:B5:F5:E0"]
+  }
+}]
