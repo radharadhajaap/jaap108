@@ -3,1202 +3,688 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#24172d">
-<meta name="description" content="Radha Radha Jaap v16 — Divine Vrindavan, digital mala, sankalp and jaap history.">
-<title>Radha Radha Jaap v16.0 | Divine Vrindavan</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#291226">
+<title>Divine Jaap v18 | Multi-Deity Jaap</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Serif+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Serif+Devanagari:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
-:root {
-  --bg:#17111e;
-  --bg2:#24172d;
-  --surface:rgba(255,249,255,.075);
-  --surface2:rgba(255,249,255,.12);
-  --border:rgba(255,235,203,.17);
-  --gold:#f6d38b;
-  --gold2:#d9a64e;
-  --text:#fff8ef;
-  --muted:#c1b1c8;
-  --accent:#dba5d6;
-  --green:#bce8bd;
-  --danger:#ffb5b5;
-  --radius:22px;
+:root{
+  --gold:#ffe5a2;
+  --border:rgba(255,229,162,.4);
+  --glass:rgba(35,13,34,.48);
 }
-
-* { box-sizing:border-box; }
-html { min-height:100%; background:var(--bg); }
-body {
-  margin:0;
-  min-height:100vh;
-  min-height:100dvh;
-  padding:max(15px,env(safe-area-inset-top)) 0 max(22px,env(safe-area-inset-bottom));
-  color:var(--text);
-  font-family:Outfit,sans-serif;
-  background:
-    radial-gradient(ellipse at 50% 0%,rgba(157,93,162,.27),transparent 44%),
-    radial-gradient(ellipse at 0% 80%,rgba(196,133,63,.12),transparent 40%),
-    linear-gradient(160deg,var(--bg2),var(--bg) 70%);
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Outfit,sans-serif;color:white}
+body{
+  background:#291226;
+  overflow-x:hidden;
   -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
 }
-button,input,textarea,select {font:inherit;}
-button {color:inherit;cursor:pointer;touch-action:manipulation;}
-button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible {
-  outline:2px solid var(--gold);outline-offset:3px;
+.background{
+  position:fixed;inset:0;z-index:-3;
+  background-image:url('radha-bg.jpg');
+  background-size:cover;background-position:center;
 }
-button:disabled {opacity:.45;cursor:not-allowed;}
-[hidden] {display:none!important;}
-
-.app {position:relative;width:min(100% - 26px,560px);margin:auto;z-index:1;}
-.ambient {position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
-.glow {
-  position:absolute;width:230px;height:230px;border-radius:50%;
-  background:#c18bd2;filter:blur(95px);opacity:.12;
-  animation:drift 15s ease-in-out infinite alternate;
+.background:after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,#16081945,#16081928 35%,#1608198c);
 }
-.glow.a {left:-140px;top:25%;}
-.glow.b {right:-150px;bottom:10%;background:#efb65b;animation-delay:-7s;}
-@keyframes drift {to{transform:translate(35px,-30px);}}
+.app{
+  width:min(100% - 24px,560px);
+  min-height:100vh;min-height:100dvh;
+  margin:auto;display:flex;flex-direction:column;
+  padding:max(15px,env(safe-area-inset-top)) 0 max(18px,env(safe-area-inset-bottom));
+  position:relative;z-index:2;
+}
+.glass{
+  background:var(--glass);
+  border:1px solid var(--border);
+  backdrop-filter:blur(15px);
+  -webkit-backdrop-filter:blur(15px);
+  box-shadow:0 10px 40px #0003;
+}
+header{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.chip{border-radius:17px;padding:10px 13px;text-align:center}
+.chip b{font-size:15px;color:var(--gold)}
+.chip small{display:block;font-size:9px;letter-spacing:1px;margin-top:4px}
+.icon-button{
+  width:43px;height:43px;border-radius:15px;
+  border:1px solid var(--border);background:var(--glass);
+  color:white;font-size:19px;
+}
+.heading{text-align:center;margin:18px 0 10px;text-shadow:0 3px 20px #4b1427}
+.heading h1{
+  font-family:'Noto Serif Devanagari',serif;
+  font-size:clamp(29px,8vw,42px);color:var(--gold);margin:0;
+}
+.heading p{font-size:10px;letter-spacing:4px;margin:5px 0}
+.selector-box{padding:13px;border-radius:20px;margin-bottom:13px}
+.field-label{display:block;font-size:11px;color:#fff0d3;margin-bottom:8px}
+select,input,textarea{
+  font:inherit;color:white;background:#351b38;
+  border:1px solid var(--border);border-radius:13px;padding:12px;
+}
+select{width:100%;font-weight:600;font-size:15px}
+select option{background:#351b38;color:white}
+.selected-info{text-align:center;margin-top:9px;font-size:11px;color:#ffe7d5}
+.counter{
+  text-align:center;margin:12px 0;user-select:none;
+  cursor:pointer;touch-action:manipulation;
+}
+.deity-emoji{font-size:36px;margin-bottom:5px;filter:drop-shadow(0 0 12px #ffd88d)}
+.number{
+  font-size:clamp(84px,24vw,140px);line-height:1;
+  font-weight:900;color:#fff0c1;
+  text-shadow:0 0 18px #ffd88d,0 6px 30px #371019;
+  letter-spacing:-5px;
+}
+.mantra-label{font-size:13px;letter-spacing:3px;text-shadow:0 2px 8px black;margin-top:9px}
+.tap-hint{font-size:11px;margin-top:9px;color:#fff1d6}
+.space{flex:1;min-height:22px}
+.control{border-radius:25px;padding:17px 14px 13px;margin-bottom:12px}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.metric{text-align:center;font-size:10px;color:#fff3df}
+.metric strong{display:block;font-size:20px;color:var(--gold);margin-top:5px}
+.progress{height:7px;background:#ffffff32;border-radius:20px;overflow:hidden;margin:14px 0}
+.progress div{
+  height:100%;width:0;
+  background:linear-gradient(90deg,#ffbb6e,#fff4ab);
+  border-radius:20px;transition:width .25s;
+}
+.buttons{display:flex;align-items:center;justify-content:space-around;gap:12px}
+.action{
+  width:55px;height:55px;border:1px solid var(--border);
+  background:#4b1b3b99;color:white;border-radius:50%;font-size:24px;
+}
+.action:disabled{opacity:.4}
+.lotus{
+  width:79px;height:79px;border:3px solid var(--gold);
+  border-radius:50%;font-size:34px;
+  background:radial-gradient(circle,#fa94c3,#c12d75 60%,#702049);
+  box-shadow:0 0 25px #f9b2a6;
+}
+.hint{text-align:center;font-size:10px;margin-top:12px;color:#fff0da}
+.sankalp{border-radius:20px;padding:13px 15px;text-align:center;margin-bottom:12px}
+.sankalp b{font-size:12px;color:var(--gold)}
+.sankalp p{font-size:12px;margin:7px 0 0;font-style:italic}
+nav{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:5px;border-radius:20px;padding:10px 4px;
+}
+nav button{background:none;border:0;color:white;font-size:10px}
+nav button span{display:block;font-size:22px;margin-bottom:5px}
+.status{text-align:center;font-size:10px;margin:10px 0;color:#fff4dc}
+.bubble-layer{
+  position:fixed;inset:0;z-index:5;
+  pointer-events:none;overflow:hidden;
+}
+.bubble{
+  position:fixed;
+  width:var(--size);height:var(--size);
+  left:var(--x);top:var(--y);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:5px;
+  font-size:clamp(10px,2.8vw,15px);
+  line-height:1.25;font-family:Georgia,serif;font-style:italic;
+  color:#fff8d9;text-shadow:0 0 8px #f9b6d7;
+  background:
+    radial-gradient(circle at 30% 25%,#ffffffb0,transparent 28%),
+    radial-gradient(circle at 65% 75%,#f7a1d05c,transparent 70%),
+    #eec0e326;
+  border:1px solid #fff3e8bd;
+  box-shadow:inset -7px -8px 16px #a2357644,0 0 16px #ffd3ed9c;
+  animation:rise var(--duration) ease-out forwards;
+  transform:translateX(-50%);
+}
+@keyframes rise{
+  0%{opacity:0;transform:translate(-50%,12px) scale(.55)}
+  12%{opacity:1}
+  80%{opacity:.95}
+  100%{opacity:0;transform:translate(calc(-50% + var(--drift)),-75vh) scale(1.18)}
+}
+.modal-backdrop{
+  display:none;position:fixed;inset:0;background:#160918dc;
+  z-index:20;align-items:center;justify-content:center;padding:18px;
+}
+.modal-backdrop.open{display:flex}
+.modal{
+  width:min(100%,390px);max-height:85dvh;overflow:auto;
+  padding:21px;border-radius:23px;background:#371b39;
+  border:1px solid var(--border);
+}
+.modal h2{margin:0 0 10px;color:var(--gold);font-size:21px}
+.modal p{font-size:12px;line-height:1.6;color:#ead6e8}
+.modal input,.modal textarea{width:100%;margin:7px 0}
+.modal-buttons{display:flex;gap:9px;margin-top:13px}
+.modal-buttons button{
+  flex:1;padding:12px;border:1px solid var(--border);
+  border-radius:12px;background:#693353;color:white;
+}
+.modal-buttons .save{background:#f5cf88;color:#271525;font-weight:800}
+.setting{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:13px 0;font-size:13px}
+.setting button{border:1px solid var(--border);border-radius:10px;padding:8px 12px;background:#673353;color:white}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:12px}
+.day{padding:9px 1px;text-align:center;border-radius:9px;background:#ffffff15;font-size:11px}
+.day.today{outline:1px solid var(--gold)}
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  z-index:30;background:#291426ed;padding:12px 17px;
+  border-radius:14px;display:none;text-align:center;font-size:12px;
+  max-width:90vw;pointer-events:none;
+}
+@media(max-height:720px){
+  .heading{margin-top:10px}
+  .number{font-size:76px}
+  .space{min-height:10px}
+  .control{padding:12px}
+}
 @media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important;}
-}
-
-.header {display:flex;align-items:center;justify-content:space-between;gap:10px;}
-.brand {display:flex;align-items:center;gap:11px;min-width:0;}
-.logo {
-  display:grid;place-items:center;width:45px;height:45px;flex-shrink:0;
-  border:1px solid rgba(246,211,139,.45);border-radius:16px;
-  background:linear-gradient(140deg,rgba(246,211,139,.19),rgba(219,165,214,.12));
-  font-family:"Noto Serif Devanagari",serif;color:var(--gold);font-size:25px;
-  box-shadow:0 0 24px rgba(246,211,139,.08);
-}
-.brand-title {font-size:15px;font-weight:800;letter-spacing:.3px;}
-.brand-sub {margin-top:3px;font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
-.icon-btn {
-  display:grid;place-items:center;width:42px;height:42px;flex-shrink:0;
-  border:1px solid var(--border);border-radius:15px;background:var(--surface);font-size:18px;
-}
-.header-actions {display:flex;gap:7px;}
-
-.hero {
-  position:relative;overflow:hidden;margin-top:20px;padding:24px 18px 20px;
-  text-align:center;border:1px solid var(--border);border-radius:28px;
-  background:linear-gradient(155deg,rgba(255,247,235,.09),rgba(255,255,255,.018));
-  box-shadow:0 22px 60px rgba(0,0,0,.14);
-}
-.hero::before {
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse at 50% 35%,rgba(246,211,139,.10),transparent 65%);
-}
-.hero > * {position:relative;}
-.eyebrow {font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);}
-.hero h1 {
-  margin:9px 0 5px;font-family:"Noto Serif Devanagari",serif;
-  font-size:clamp(27px,7vw,37px);font-weight:600;line-height:1.35;
-  color:var(--gold);text-shadow:0 0 25px rgba(246,211,139,.12);
-}
-.hero-desc {font-size:12px;line-height:1.6;color:var(--muted);}
-.lotus {margin:13px auto 0;font-size:23px;color:var(--gold);opacity:.9;}
-
-.summary {
-  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;
-}
-.summary-card {
-  min-width:0;padding:14px;border:1px solid var(--border);
-  border-radius:18px;background:var(--surface);
-}
-.small-label {font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
-.summary-value {margin-top:6px;font-size:20px;font-weight:800;color:var(--gold);overflow-wrap:anywhere;}
-
-.panel {
-  padding:18px;margin-top:14px;border:1px solid var(--border);
-  border-radius:var(--radius);background:var(--surface);
-}
-.panel-heading {display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px;}
-.panel-title {font-size:15px;font-weight:800;}
-.panel-sub {margin-top:3px;color:var(--muted);font-size:11px;line-height:1.5;}
-
-.counter-wrap {display:flex;flex-direction:column;align-items:center;padding:6px 0 12px;}
-.mala-ring {position:relative;width:min(69vw,275px);height:min(69vw,275px);display:grid;place-items:center;}
-.ring-svg {position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);}
-.ring-track,.ring-progress {fill:none;stroke-width:2.5;}
-.ring-track {stroke:rgba(255,255,255,.10);}
-.ring-progress {stroke:url(#rg);stroke-linecap:round;stroke-dasharray:282.743;stroke-dashoffset:282.743;transition:stroke-dashoffset .3s;}
-.counter-button {
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  width:83%;height:83%;border-radius:50%;
-  border:1px solid rgba(246,211,139,.32);
-  background:radial-gradient(circle at 35% 25%,rgba(246,211,139,.11),transparent 55%),rgba(19,13,26,.72);
-  box-shadow:inset 0 0 35px rgba(246,211,139,.045),0 0 35px rgba(246,211,139,.055);
-  transition:transform .1s;
-}
-.counter-button:active {transform:scale(.97);}
-.counter-caption {font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
-.count {margin:7px 0;font-size:clamp(64px,18vw,90px);font-weight:900;letter-spacing:-4px;line-height:1;font-variant-numeric:tabular-nums;}
-.counter-hint {font-size:10px;color:var(--muted);letter-spacing:1px;}
-.mala-badge {
-  position:absolute;bottom:-1px;padding:9px 14px;border:1px solid rgba(246,211,139,.4);
-  border-radius:30px;background:#24182b;color:var(--gold);font-size:11px;font-weight:700;
-}
-.beads {display:flex;justify-content:center;gap:5px;margin-top:15px;flex-wrap:wrap;}
-.bead {width:8px;height:8px;border-radius:50%;background:rgba(246,211,139,.18);transition:background .15s,transform .15s;}
-.bead.done {background:var(--gold);box-shadow:0 0 7px rgba(246,211,139,.3);}
-.bead.current {outline:1px solid var(--gold);outline-offset:2px;transform:scale(1.12);}
-.progress-meta {display:flex;justify-content:space-between;gap:10px;margin:16px 0 8px;font-size:11px;color:var(--muted);}
-.progress-meta strong {color:var(--text);}
-.progress-track {height:6px;background:rgba(255,255,255,.09);border-radius:20px;overflow:hidden;}
-.progress-fill {height:100%;width:0;background:linear-gradient(90deg,var(--gold2),var(--gold));border-radius:inherit;transition:width .25s;}
-.button-row {display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:8px;margin-top:16px;}
-.btn {
-  min-height:44px;padding:10px 11px;border:1px solid var(--border);
-  border-radius:14px;background:var(--surface2);font-size:12px;font-weight:700;
-}
-.btn.primary {color:#28192a;background:linear-gradient(120deg,var(--gold),#f4b8da);border-color:transparent;}
-.btn.subtle {background:transparent;}
-.btn.full {width:100%;}
-.btn-row-two {display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px;}
-
-.stats {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:14px;}
-.stat {
-  padding:13px 5px;text-align:center;min-width:0;border:1px solid var(--border);
-  border-radius:17px;background:var(--surface);
-}
-.stat-icon {font-size:19px;}
-.stat-label {margin-top:7px;color:var(--muted);font-size:9px;letter-spacing:.5px;text-transform:uppercase;}
-.stat-value {margin-top:5px;font-size:18px;font-weight:800;overflow-wrap:anywhere;}
-
-.sankalp-text {padding:12px;border-radius:14px;background:rgba(246,211,139,.065);color:#f9e6c1;font-size:13px;line-height:1.7;overflow-wrap:anywhere;}
-.empty {padding:18px;text-align:center;color:var(--muted);font-size:12px;line-height:1.7;}
-.section-actions {display:flex;gap:7px;flex-wrap:wrap;}
-.section-actions .btn {min-height:35px;padding:8px 11px;}
-
-.tabs {display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin:15px 0 0;scrollbar-width:none;}
-.tabs::-webkit-scrollbar {display:none;}
-.tab {
-  flex-shrink:0;padding:9px 12px;border:1px solid var(--border);
-  border-radius:25px;background:transparent;color:var(--muted);font-size:11px;font-weight:700;
-}
-.tab.active {background:rgba(246,211,139,.14);color:var(--gold);border-color:rgba(246,211,139,.4);}
-.view {display:none;}
-.view.active {display:block;}
-
-.history-summary {display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
-.history-mini {padding:12px;border-radius:14px;background:rgba(255,255,255,.04);}
-.history-mini .small-label {font-size:9px;}
-.history-mini strong {display:block;margin-top:5px;font-size:18px;color:var(--gold);}
-.calendar-head {display:flex;align-items:center;justify-content:space-between;gap:10px;margin:15px 0;}
-.month-label {font-size:14px;font-weight:800;}
-.month-nav {display:flex;gap:7px;}
-.month-nav button {width:34px;height:34px;border:1px solid var(--border);border-radius:11px;background:var(--surface);}
-.weekdays,.calendar-grid {display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;}
-.weekday {text-align:center;font-size:9px;color:var(--muted);padding:7px 0;}
-.day {
-  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  min-height:44px;border:1px solid transparent;border-radius:10px;background:rgba(255,255,255,.025);
-  font-size:11px;color:var(--text);gap:4px;
-}
-.day.empty-day {background:transparent;}
-.day.today {border-color:var(--gold);}
-.day.selected {background:rgba(246,211,139,.17);border-color:var(--gold);color:var(--gold);}
-.day.has-count::after {content:"";width:4px;height:4px;border-radius:50%;background:var(--green);}
-.day.future {opacity:.3;}
-.day-count {font-size:8px;color:var(--green);}
-
-.history-detail {margin-top:14px;padding:14px;border-radius:16px;background:rgba(255,255,255,.035);}
-.history-detail h3 {margin:0 0 8px;font-size:13px;}
-.history-detail p {margin:5px 0;color:var(--muted);font-size:11px;line-height:1.6;}
-
-.theme-list {display:grid;grid-template-columns:1fr;gap:9px;}
-.theme-option {
-  display:flex;align-items:center;gap:12px;text-align:left;padding:13px;
-  border:1px solid var(--border);border-radius:17px;background:rgba(255,255,255,.025);
-}
-.theme-option.active {border-color:var(--gold);background:rgba(246,211,139,.09);}
-.theme-swatch {width:43px;height:43px;border-radius:14px;flex-shrink:0;border:1px solid #ffffff22;}
-.swatch-divine {background:linear-gradient(135deg,#35213f,#8b597e,#edc57e);}
-.swatch-gold {background:linear-gradient(135deg,#090909,#5b3a12,#f6d38b);}
-.swatch-pastel {background:linear-gradient(135deg,#f7e4eb,#c9e5db,#fff0c5);}
-.theme-name {font-size:13px;font-weight:800;}
-.theme-desc {margin-top:4px;color:var(--muted);font-size:10px;line-height:1.5;}
-
-.footer-nav {display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px;}
-.nav-btn {display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 5px;border:1px solid var(--border);border-radius:16px;background:var(--surface);font-size:10px;}
-.nav-btn span:first-child {font-size:19px;}
-.status {margin:14px 0 0;text-align:center;color:var(--muted);font-size:10px;line-height:1.7;}
-.status .dot {display:inline-block;width:6px;height:6px;margin-right:5px;border-radius:50%;background:var(--green);}
-.status.error .dot {background:var(--danger);}
-
-.toast {
-  position:fixed;z-index:100;bottom:max(20px,env(safe-area-inset-bottom));left:50%;
-  width:max-content;max-width:calc(100% - 35px);padding:12px 17px;
-  border:1px solid var(--border);border-radius:15px;background:#261d2d;
-  font-size:12px;text-align:center;box-shadow:0 10px 35px #0006;
-  opacity:0;pointer-events:none;transform:translate(-50%,15px);
-  transition:opacity .2s,transform .2s;
-}
-.toast.show {opacity:1;transform:translate(-50%,0);}
-
-.backdrop {
-  position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;
-  padding:18px;background:rgba(8,5,12,.78);backdrop-filter:blur(10px);
-}
-.backdrop.open {display:flex;}
-.modal {
-  width:min(100%,410px);max-height:85dvh;overflow-y:auto;padding:22px;
-  border:1px solid var(--border);border-radius:24px;background:#251b2c;
-  box-shadow:0 25px 80px #0008;
-}
-.modal h2 {margin:0 0 8px;font-size:20px;}
-.modal p {font-size:12px;line-height:1.7;color:var(--muted);}
-.field-label {display:block;margin:15px 0 7px;font-size:12px;color:var(--muted);}
-.field {
-  width:100%;min-height:45px;padding:12px;border:1px solid var(--border);
-  border-radius:13px;background:#17111e;color:var(--text);outline:none;
-}
-textarea.field {resize:vertical;min-height:85px;}
-.modal-buttons {display:flex;gap:8px;margin-top:18px;}
-.modal-buttons .btn {flex:1;}
-@media(min-width:500px) {.theme-list {grid-template-columns:1fr;}}
-@media(max-height:740px) {
-  .hero {padding:17px 14px;}
-  .mala-ring {width:min(58vw,230px);height:min(58vw,230px);}
-  .panel {padding:14px;}
+  .bubble{animation-duration:1.2s}
 }
 </style>
 </head>
 
 <body>
-<div class="ambient" aria-hidden="true"><div class="glow a"></div><div class="glow b"></div></div>
+<div class="background"></div>
+<div class="bubble-layer" id="bubbleLayer"></div>
 
 <main class="app">
-  <header class="header">
-    <div class="brand">
-      <div class="logo">राधा</div>
-      <div>
-        <div class="brand-title">Radha Radha Jaap</div>
-        <div class="brand-sub">Divine Bhakti · v16.0</div>
-      </div>
-    </div>
-    <div class="header-actions">
-      <button class="icon-btn" id="soundBtn" aria-label="Toggle bell sound">🔔</button>
-      <button class="icon-btn" id="settingsBtn" aria-label="Open settings">⚙️</button>
-    </div>
-  </header>
+<header>
+  <div class="chip glass"><b id="streak">🔥 0 DAYS</b><small>STREAK</small></div>
+  <div class="chip glass"><b id="total">👑 0</b><small>LIFETIME JAAP</small></div>
+  <button class="icon-button no-count" id="settingsBtn" aria-label="Settings">⚙️</button>
+</header>
 
-  <section class="hero">
-    <div class="eyebrow">A moment of devotion</div>
-    <h1>राधा राधा</h1>
-    <div class="hero-desc">Smरण में शांति · नाम में प्रेम<br>Chant with love, one name at a time.</div>
-    <div class="lotus" aria-hidden="true">❀ ॐ ❀</div>
-  </section>
+<div class="heading">
+  <h1>दिव्य जाप</h1>
+  <p>DIVINE JAAP</p>
+</div>
 
-  <section class="summary">
-    <div class="summary-card">
-      <div class="small-label">🔥 Current streak</div>
-      <div class="summary-value" id="streakValue">0 days</div>
-    </div>
-    <div class="summary-card">
-      <div class="small-label">✨ Lifetime jaap</div>
-      <div class="summary-value" id="totalValue">0</div>
-    </div>
-  </section>
+<section class="selector-box glass no-count">
+  <label class="field-label" for="deitySelect">🙏 Choose your deity / भगवान चुनें</label>
+  <select id="deitySelect">
+    <option value="radha">🌸 Radha Rani — Radha Radha</option>
+    <option value="ram">🏹 Shri Ram — Jai Shri Ram</option>
+    <option value="hanuman">🚩 Hanuman Ji — Jai Hanuman</option>
+    <option value="krishna">🦚 Krishna Ji — Hare Krishna</option>
+    <option value="shiv">🔱 Shiv Ji — Har Har Mahadev</option>
+    <option value="ganesh">🐘 Ganesh Ji — Ganpati Bappa</option>
+    <option value="durga">🌺 Maa Durga — Jai Mata Di</option>
+    <option value="vishnu">🪷 Bhagwan Vishnu — Om Namo Narayanaya</option>
+    <option value="lakshmi">🪷 Maa Lakshmi — Jai Maa Lakshmi</option>
+    <option value="saraswati">📚 Maa Saraswati — Jai Maa Saraswati</option>
+  </select>
+  <div class="selected-info" id="selectedInfo">Radha Rani ke naam ka jaap karein 🙏</div>
+</section>
 
-  <nav class="tabs" aria-label="Jaap sections">
-    <button class="tab active" data-view="jaap">🙏 Jaap</button>
-    <button class="tab" data-view="history">📅 History</button>
-    <button class="tab" data-view="sankalp">🌼 Sankalp</button>
-    <button class="tab" data-view="themes">🪷 Themes</button>
-  </nav>
+<div class="space"></div>
 
-  <section class="view active" id="view-jaap">
-    <div class="panel">
-      <div class="panel-heading">
-        <div>
-          <div class="panel-title">Today's Jaap</div>
-          <div class="panel-sub">Tap the mala to count one mantra.</div>
-        </div>
-        <div class="eyebrow" id="dateLabel"></div>
-      </div>
+<div class="counter" id="counter">
+  <div class="deity-emoji" id="deityEmoji">🌸</div>
+  <div class="number" id="count">0</div>
+  <div class="mantra-label" id="mantraLabel">RADHA RADHA</div>
+  <div class="tap-hint">✨ TAP ANYWHERE TO CHANT ✨</div>
+</div>
 
-      <div class="counter-wrap">
-        <div class="mala-ring">
-          <svg class="ring-svg" viewBox="0 0 100 100" aria-hidden="true">
-            <defs>
-              <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#d9a64e"/>
-                <stop offset="100%" stop-color="#fff0c2"/>
-              </linearGradient>
-            </defs>
-            <circle class="ring-track" cx="50" cy="50" r="45"/>
-            <circle class="ring-progress" id="ringProgress" cx="50" cy="50" r="45"/>
-          </svg>
-          <button class="counter-button" id="countBtn" disabled aria-label="Count one jaap">
-            <span class="counter-caption">Today's count</span>
-            <span class="count" id="countValue">0</span>
-            <span class="counter-hint" id="tapHint">CONNECTING…</span>
-          </button>
-          <div class="mala-badge" id="malaBadge">📿 0 / 108</div>
-        </div>
-        <div class="beads" id="beads" aria-label="108 bead progress"></div>
-      </div>
+<div class="space" style="flex:.35"></div>
 
-      <div class="progress-meta">
-        <span>Daily sankalp</span>
-        <strong id="goalPercent">0%</strong>
-      </div>
-      <div class="progress-track" role="progressbar" id="goalProgress" aria-label="Daily target progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-        <div class="progress-fill" id="goalFill"></div>
-      </div>
-      <div class="progress-meta">
-        <span>Goal: <strong id="goalValue">108</strong></span>
-        <span id="remainingValue">108 remaining</span>
-      </div>
-
-      <div class="button-row">
-        <button class="btn" id="undoBtn" disabled>↶ Undo</button>
-        <button class="btn" id="soundInlineBtn">🔔 Sound on</button>
-        <button class="btn primary" id="setGoalBtn">🎯 Set goal</button>
-      </div>
-    </div>
-
-    <section class="stats">
-      <div class="stat">
-        <div class="stat-icon">📿</div>
-        <div class="stat-label">Complete malas</div>
-        <div class="stat-value" id="malasValue">0</div>
-      </div>
-      <div class="stat">
-        <div class="stat-icon">🌸</div>
-        <div class="stat-label">Current mala</div>
-        <div class="stat-value" id="currentMalaValue">0/108</div>
-      </div>
-      <div class="stat">
-        <div class="stat-icon">🎯</div>
-        <div class="stat-label">Goal</div>
-        <div class="stat-value" id="goalSmallValue">108</div>
-      </div>
-    </section>
-
-    <div class="panel">
-      <div class="panel-heading">
-        <div>
-          <div class="panel-title">Your daily intention</div>
-          <div class="panel-sub">Keep your sankalp close to your heart.</div>
-        </div>
-        <button class="btn subtle" id="editSankalpBtn">Edit</button>
-      </div>
-      <div class="sankalp-text" id="sankalpPreview">May my mind remain peaceful in the remembrance of Radha Rani.</div>
-    </div>
-  </section>
-
-  <section class="view" id="view-history">
-    <div class="panel">
-      <div class="panel-heading">
-        <div>
-          <div class="panel-title">Jaap history</div>
-          <div class="panel-sub">Your daily records saved in Firestore.</div>
-        </div>
-        <button class="btn subtle" id="refreshHistoryBtn">↻ Refresh</button>
-      </div>
-
-      <div class="history-summary">
-        <div class="history-mini">
-          <div class="small-label">Recorded days</div>
-          <strong id="recordedDays">0</strong>
-        </div>
-        <div class="history-mini">
-          <div class="small-label">Recorded jaap</div>
-          <strong id="recordedJaap">0</strong>
-        </div>
-      </div>
-
-      <div class="calendar-head">
-        <button class="month-nav" id="prevMonth" aria-label="Previous month">‹</button>
-        <div class="month-label" id="monthLabel">Month</div>
-        <button class="month-nav" id="nextMonth" aria-label="Next month">›</button>
-      </div>
-
-      <div class="weekdays" aria-hidden="true">
-        <div class="weekday">Sun</div><div class="weekday">Mon</div>
-        <div class="weekday">Tue</div><div class="weekday">Wed</div>
-        <div class="weekday">Thu</div><div class="weekday">Fri</div>
-        <div class="weekday">Sat</div>
-      </div>
-      <div class="calendar-grid" id="calendarGrid"></div>
-      <div class="history-detail" id="historyDetail">
-        <h3>Select a date</h3>
-        <p>Select a day to view its saved jaap count.</p>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="panel-title">Recent recorded days</div>
-      <div class="panel-sub">Only records created after this version is installed will appear.</div>
-      <div id="recentHistory" class="empty">Your jaap history will appear here.</div>
-    </div>
-  </section>
-
-  <section class="view" id="view-sankalp">
-    <div class="panel">
-      <div class="panel-title">Your sankalp</div>
-      <div class="panel-sub">Set an intention and a daily jaap target.</div>
-
-      <label class="field-label" for="sankalpInput">Daily intention</label>
-      <textarea class="field" id="sankalpInput" maxlength="500" placeholder="Example: I will remember Radha Rani with a peaceful heart."></textarea>
-
-      <label class="field-label" for="goalInput">Daily jaap goal</label>
-      <input class="field" id="goalInput" type="number" min="1" max="100000" step="1" inputmode="numeric" value="108">
-
-      <div class="btn-row-two">
-        <button class="btn" data-preset="108">108 Jaap</button>
-        <button class="btn" data-preset="216">216 Jaap</button>
-        <button class="btn" data-preset="1008">1008 Jaap</button>
-        <button class="btn" data-preset="10000">10,000 Jaap</button>
-      </div>
-      <div style="margin-top:14px">
-        <button class="btn primary full" id="saveSankalpBtn">🙏 Save sankalp</button>
-      </div>
-      <p class="panel-sub" style="margin-top:13px">Your goal and intention are saved on this device. Your intention is not public.</p>
-    </div>
-  </section>
-
-  <section class="view" id="view-themes">
-    <div class="panel">
-      <div class="panel-title">Choose your devotional mood</div>
-      <div class="panel-sub">Change the app's colors anytime.</div>
-      <div class="theme-list" style="margin-top:16px">
-        <button class="theme-option" data-theme="divine">
-          <span class="theme-swatch swatch-divine"></span>
-          <span><span class="theme-name">🪷 Divine Vrindavan</span><span class="theme-desc">Purple dusk, lotus tones and golden light.</span></span>
-        </button>
-        <button class="theme-option" data-theme="gold">
-          <span class="theme-swatch swatch-gold"></span>
-          <span><span class="theme-name">✨ Mystic Black & Gold</span><span class="theme-desc">A deep, luxurious meditation space.</span></span>
-        </button>
-        <button class="theme-option" data-theme="pastel">
-          <span class="theme-swatch swatch-pastel"></span>
-          <span><span class="theme-name">🌸 Peaceful Pastel</span><span class="theme-desc">Soft pink, cream and peaceful sage tones.</span></span>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <nav class="footer-nav" aria-label="Other pages">
-    <button class="nav-btn" id="darshanBtn"><span>🖼️</span><span>Darshan</span></button>
-    <button class="nav-btn" id="leaderboardBtn"><span>🏆</span><span>Leaderboard</span></button>
-    <button class="nav-btn" id="settingsNavBtn"><span>⚙️</span><span>Settings</span></button>
-  </nav>
-
-  <div class="status" id="status" role="status" aria-live="polite">
-    <span class="dot"></span><span id="statusText">Connecting to Firebase…</span>
+<section class="control glass no-count">
+  <div class="metrics">
+    <div class="metric">📿 CURRENT MALA<strong id="mala">0 / 108</strong></div>
+    <div class="metric">🎯 DAILY TARGET<strong id="target">108</strong></div>
   </div>
+  <div class="progress"><div id="progress"></div></div>
+  <div class="buttons">
+    <button class="action no-count" id="undo" aria-label="Undo">↶</button>
+    <button class="action lotus no-count" id="tap" aria-label="Count one jaap">🪷</button>
+    <button class="action no-count" id="sound" aria-label="Toggle sound">♫</button>
+  </div>
+  <div class="hint">One tap = one count + one floating name bubble</div>
+</section>
+
+<section class="sankalp glass no-count" id="sankalpOpen">
+  <b>🚩 आज का संकल्प · SANKALP ✎</b>
+  <p id="sankalpText">108 jaap with devotion</p>
+</section>
+
+<nav class="glass no-count">
+  <button id="historyBtn"><span>📅</span>HISTORY</button>
+  <button id="targetBtn"><span>🎯</span>TARGET</button>
+  <button id="darshanBtn"><span>🖼️</span>DARSHAN</button>
+  <button id="leaderBtn"><span>🏆</span>LEADERBOARD</button>
+</nav>
+
+<div class="status" id="status">Connecting to Firebase…</div>
 </main>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<div class="backdrop" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
-  <div class="modal">
-    <h2 id="settingsTitle">Bhakti settings</h2>
-    <p>Personalise your jaap experience. Settings are saved on this device.</p>
-
-    <div class="setting-row">
-      <span>🔔 Mala completion bell</span>
-      <button class="btn" id="toggleSound" role="switch" aria-checked="true">On</button>
-    </div>
-    <div class="setting-row" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:15px">
-      <span>📳 Vibration feedback</span>
-      <button class="btn" id="toggleVibration" role="switch" aria-checked="true">On</button>
-    </div>
-    <div class="setting-row" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:15px">
-      <span>🎉 Mala celebration</span>
-      <button class="btn" id="toggleCelebration" role="switch" aria-checked="true">On</button>
-    </div>
+<div class="modal-backdrop no-count" id="settingsModal">
+  <div class="modal no-count">
+    <h2>⚙️ Settings</h2>
+    <div class="setting">Bell sound <button id="soundToggle">On</button></div>
+    <div class="setting">Vibration <button id="vibrateToggle">On</button></div>
+    <div class="setting">Bubble animation <button id="bubbleToggle">On</button></div>
+    <div class="setting">Background darkness <input id="darkness" type="range" min="0" max="75" value="20" style="width:120px"></div>
     <div class="modal-buttons">
-      <button class="btn primary" data-close="settingsModal">Done</button>
+      <button data-close>Close</button>
+      <button class="save" id="settingsTargetBtn">Change target</button>
     </div>
   </div>
 </div>
 
-<div class="backdrop" id="goalModal" role="dialog" aria-modal="true" aria-labelledby="goalModalTitle">
-  <div class="modal">
-    <h2 id="goalModalTitle">Set daily goal</h2>
-    <p>Choose a target for today's jaap practice.</p>
-    <label class="field-label" for="modalGoalInput">Jaap count</label>
-    <input class="field" id="modalGoalInput" type="number" min="1" max="100000" step="1" inputmode="numeric">
+<div class="modal-backdrop no-count" id="targetModal">
+  <div class="modal no-count">
+    <h2>🎯 Daily Target</h2>
+    <p>Target for the currently selected deity.</p>
+    <input type="number" id="targetInput" min="1" max="100000" value="108">
     <div class="modal-buttons">
-      <button class="btn" data-close="goalModal">Cancel</button>
-      <button class="btn primary" id="saveModalGoal">Save goal</button>
+      <button data-close>Cancel</button>
+      <button class="save" id="targetSave">Save</button>
     </div>
   </div>
 </div>
 
+<div class="modal-backdrop no-count" id="sankalpModal">
+  <div class="modal no-count">
+    <h2>🙏 My Sankalp</h2>
+    <textarea id="sankalpInput" maxlength="250" rows="3"></textarea>
+    <div class="modal-buttons">
+      <button data-close>Cancel</button>
+      <button class="save" id="sankalpSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop no-count" id="historyModal">
+  <div class="modal no-count">
+    <h2>📅 Jaap History</h2>
+    <p id="historySummary">Loading…</p>
+    <div class="calendar" id="calendar"></div>
+    <div class="modal-buttons"><button data-close>Close</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
 <audio id="bell" preload="none" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import {
-  getFirestore, doc, collection, setDoc, onSnapshot,
-  runTransaction, getDocs, query, where
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import {getFirestore,doc,onSnapshot,runTransaction} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
-/* Existing Firebase configuration preserved. */
-const firebaseConfig = {
-  apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
-  authDomain: "jaap-fdd80.firebaseapp.com",
-  projectId: "jaap-fdd80",
-  storageBucket: "jaap-fdd80.firebasestorage.app",
-  messagingSenderId: "375289521394",
-  appId: "1:375289521394:web:ced2cafa4d1743d5ab9c6b"
+const firebaseConfig={
+  apiKey:"AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
+  authDomain:"jaap-fdd80.firebaseapp.com",
+  projectId:"jaap-fdd80",
+  storageBucket:"jaap-fdd80.firebasestorage.app",
+  messagingSenderId:"375289521394",
+  appId:"1:375289521394:web:ced2cafa4d1743d5ab9c6b"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const db=getFirestore(initializeApp(firebaseConfig));
+const $=id=>document.getElementById(id);
+const user=(localStorage.getItem('jaapUserName')||'Guest').trim()||'Guest';
+const userRef=doc(db,'users',user);
 
-/*
- * Compatibility:
- * Existing users/{jaapUserName} document remains the main counter document.
- * "Guest" is a fallback label, not authentication or a secure user identity.
- */
-const user = (localStorage.getItem("jaapUserName") || "Guest").trim() || "Guest";
-const userRef = doc(db, "users", user);
-const userKey = encodeURIComponent(user);
+const deities={
+  radha:{emoji:'🌸',name:'Radha Rani',mantra:'RADHA RADHA',bubble:'Radha Radha',hint:'Radha Rani ke naam ka jaap karein 🙏'},
+  ram:{emoji:'🏹',name:'Shri Ram',mantra:'JAI SHRI RAM',bubble:'Jai Shri Ram',hint:'Shri Ram naam ka jaap karein 🙏'},
+  hanuman:{emoji:'🚩',name:'Hanuman Ji',mantra:'JAI HANUMAN',bubble:'Jai Hanuman',hint:'Hanuman Ji ka naam smaran karein 🙏'},
+  krishna:{emoji:'🦚',name:'Krishna Ji',mantra:'HARE KRISHNA',bubble:'Hare Krishna',hint:'Shri Krishna ka naam smaran karein 🙏'},
+  shiv:{emoji:'🔱',name:'Shiv Ji',mantra:'HAR HAR MAHADEV',bubble:'Har Har Mahadev',hint:'Mahadev ka naam smaran karein 🙏'},
+  ganesh:{emoji:'🐘',name:'Ganesh Ji',mantra:'GANPATI BAPPA',bubble:'Ganpati Bappa',hint:'Ganesh Ji ka naam smaran karein 🙏'},
+  durga:{emoji:'🌺',name:'Maa Durga',mantra:'JAI MATA DI',bubble:'Jai Mata Di',hint:'Maa Durga ka naam smaran karein 🙏'},
+  vishnu:{emoji:'🪷',name:'Bhagwan Vishnu',mantra:'OM NAMO NARAYANAYA',bubble:'Om Namo Narayanaya',hint:'Bhagwan Vishnu ka naam smaran karein 🙏'},
+  lakshmi:{emoji:'🪷',name:'Maa Lakshmi',mantra:'JAI MAA LAKSHMI',bubble:'Jai Maa Lakshmi',hint:'Maa Lakshmi ka naam smaran karein 🙏'},
+  saraswati:{emoji:'📚',name:'Maa Saraswati',mantra:'JAI MAA SARASWATI',bubble:'Jai Maa Saraswati',hint:'Maa Saraswati ka naam smaran karein 🙏'}
+};
 
-const $ = id => document.getElementById(id);
-const dayCollection = collection(db, "jaapDailyHistory");
+const dateKey=(d=new Date())=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const prevDate=()=>{const d=new Date();d.setDate(d.getDate()-1);return dateKey(d)};
+const safeNum=v=>Math.max(0,Number.isFinite(Number(v))?Math.floor(Number(v)):0);
+const getBool=(k,fallback)=>localStorage.getItem(k)===null?fallback:localStorage.getItem(k)==='true';
 
-function getLocalDate(date = new Date()) {
-  return [
-    date.getFullYear(),
-    String(date.getMonth() + 1).padStart(2, "0"),
-    String(date.getDate()).padStart(2, "0")
-  ].join("-");
-}
-function shiftDate(date, amount) {
-  const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  d.setDate(d.getDate() + amount);
-  return d;
-}
-function previousDate(date = new Date()) {
-  return getLocalDate(shiftDate(date, -1));
-}
-function safeCount(value) {
-  const n = Number(value ?? 0);
-  return Number.isFinite(n) ? Math.max(0, Math.floor(n)) : 0;
-}
-function readNumber(key, fallback, min, max) {
-  const n = Number(localStorage.getItem(key));
-  return Number.isInteger(n) && n >= min && n <= max ? n : fallback;
-}
-function readBoolean(key, fallback) {
-  const value = localStorage.getItem(key);
-  return value === null ? fallback : value === "true";
-}
+let selected=localStorage.getItem('jaapSelectedDeity')||'radha';
+if(!deities[selected])selected='radha';
 
-let today = getLocalDate();
-let count = 0;
-let total = 0;
-let streak = 0;
-let lastDate = "";
-let target = readNumber("jaapDailyTarget", 108, 1, 100000);
-let sankalp = localStorage.getItem("jaapSankalp") || "";
-let theme = localStorage.getItem("jaapTheme") || "divine";
-let soundOn = readBoolean("jaapSound", true);
-let vibrationOn = readBoolean("jaapVibration", true);
-let celebrationOn = readBoolean("jaapCelebration", true);
-let loaded = false;
-let busy = false;
-let queue = Promise.resolve();
-let toastTimer = null;
-let unsubscribe = null;
-let historyCache = new Map();
-let selectedDate = today;
-let displayedMonth = new Date();
-let historyLoading = false;
-let historyLoadId = 0;
+let today=dateKey(),ready=false,busy=false;
+let dailyCounts={},totalCounts={},dateByDeity={},streaks={};
+let goal=108,sankalp=localStorage.getItem('jaapSankalp')||'108 jaap with devotion';
+let sound=getBool('radhaSound',true);
+let vibrate=getBool('radhaVibrate',true);
+let bubbles=getBool('radhaBubbles',true);
+let darkness=Number(localStorage.getItem('radhaDarkness')||20);
+let operationQueue=Promise.resolve();
+let toastTimer;
 
-function currentCount() {
-  return lastDate === today ? count : 0;
+function daily(){
+  const entry=dailyCounts[selected];
+  return entry&&entry.date===today?safeNum(entry.count):0;
 }
-function currentStreak() {
-  return lastDate === today || lastDate === previousDate() ? streak : 0;
+function lifetime(){return safeNum(totalCounts[selected])}
+function currentStreak(){
+  const d=dateByDeity[selected];
+  return d===today||d===prevDate()?safeNum(streaks[selected]):0;
 }
-function status(message, error = false) {
-  $("statusText").textContent = message;
-  $("status").classList.toggle("error", error);
+function loadGoal(){
+  goal=Math.max(1,Number(localStorage.getItem('jaapGoal_'+selected))||108);
 }
-function toast(message) {
-  $("toast").textContent = message;
-  $("toast").classList.add("show");
+function toast(message){
+  $('toast').textContent=message;
+  $('toast').style.display='block';
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => $("toast").classList.remove("show"), 2500);
+  toastTimer=setTimeout(()=>$('toast').style.display='none',1900);
 }
-function enqueue(action) {
-  queue = queue.then(action).catch(error => {
-    console.error("Jaap operation failed:", error);
-    status("Save failed. Check your connection and Firestore rules.", true);
-    toast("Unable to save. Please try again.");
-  });
-  return queue;
+function render(){
+  const deity=deities[selected];
+  const n=daily();
+  $('deitySelect').value=selected;
+  $('deityEmoji').textContent=deity.emoji;
+  $('count').textContent=n.toLocaleString();
+  $('mantraLabel').textContent=deity.mantra;
+  $('selectedInfo').textContent=deity.hint;
+  $('total').textContent='👑 '+lifetime().toLocaleString();
+  $('streak').textContent='🔥 '+currentStreak()+' DAYS';
+  $('mala').textContent=`${n%108} / 108`;
+  $('target').textContent=goal.toLocaleString();
+  $('progress').style.width=Math.min(100,n/goal*100)+'%';
+  $('undo').disabled=!ready||busy||n<=0;
+  $('tap').disabled=!ready||busy;
+  $('sound').textContent=sound?'♫':'🔇';
+  $('soundToggle').textContent=sound?'On':'Off';
+  $('vibrateToggle').textContent=vibrate?'On':'Off';
+  $('bubbleToggle').textContent=bubbles?'On':'Off';
+  $('darkness').value=darkness;
+  $('sankalpText').textContent=sankalp;
+  document.querySelector('.background').style.filter=`brightness(${100-darkness}%)`;
 }
-
-function dayRef(date) {
-  return doc(db, "jaapDailyHistory", `${userKey}_${date}`);
+function makeBubble(x,y){
+  if(!bubbles)return;
+  const b=document.createElement('div');
+  const deity=deities[selected];
+  const size=72+Math.random()*18;
+  b.className='bubble';
+  b.style.setProperty('--size',size+'px');
+  b.style.setProperty('--x',Math.max(size/2,Math.min(innerWidth-size/2,x))+'px');
+  b.style.setProperty('--y',Math.max(30,Math.min(innerHeight-60,y))+'px');
+  b.style.setProperty('--duration',(3.5+Math.random()*.7)+'s');
+  b.style.setProperty('--drift',(Math.random()*70-35)+'px');
+  b.textContent=deity.bubble;
+  $('bubbleLayer').appendChild(b);
+  b.addEventListener('animationend',()=>b.remove(),{once:true});
+  setTimeout(()=>b.remove(),5000);
 }
-
-function renderBeads() {
-  const fragment = document.createDocumentFragment();
-  const remainder = currentCount() % 108;
-
-  for (let i = 1; i <= 27; i++) {
-    const bead = document.createElement("span");
-    bead.className = "bead";
-    if (remainder > 0 && i <= Math.ceil(remainder / 4)) bead.classList.add("done");
-    if (remainder > 0 && i === Math.ceil(remainder / 4)) bead.classList.add("current");
-    fragment.appendChild(bead);
-  }
-  $("beads").replaceChildren(fragment);
-  $("beads").setAttribute("aria-label", `${remainder} of 108 jaap beads completed`);
-}
-
-function render() {
-  const daily = currentCount();
-  const remainder = daily % 108;
-  const malas = Math.floor(daily / 108);
-  const progress = Math.min(100, daily / target * 100);
-  const remaining = Math.max(0, target - daily);
-  const streakNow = currentStreak();
-
-  $("countValue").textContent = daily.toLocaleString();
-  $("totalValue").textContent = total.toLocaleString();
-  $("streakValue").textContent = `${streakNow} ${streakNow === 1 ? "day" : "days"}`;
-  $("malaBadge").textContent = `📿 ${remainder} / 108`;
-  $("malasValue").textContent = malas.toLocaleString();
-  $("currentMalaValue").textContent = `${remainder}/108`;
-  $("goalValue").textContent = target.toLocaleString();
-  $("goalSmallValue").textContent = target.toLocaleString();
-  $("remainingValue").textContent = `${remaining.toLocaleString()} remaining`;
-  $("goalPercent").textContent = `${Math.round(progress)}%`;
-  $("goalFill").style.width = `${progress}%`;
-  $("goalProgress").setAttribute("aria-valuenow", String(Math.round(progress)));
-  $("ringProgress").style.strokeDashoffset = String(282.743 * (1 - remainder / 108));
-  $("dateLabel").textContent = new Date().toLocaleDateString(undefined, {month:"short",day:"numeric"});
-  $("countBtn").disabled = !loaded || busy;
-  $("tapHint").textContent = !loaded ? "CONNECTING…" : busy ? "SAVING…" : "TAP TO CHANT";
-  $("undoBtn").disabled = !loaded || busy || daily <= 0;
-  $("soundBtn").textContent = soundOn ? "🔔" : "🔕";
-  $("soundInlineBtn").textContent = soundOn ? "🔔 Sound on" : "🔕 Sound off";
-  $("toggleSound").textContent = soundOn ? "On" : "Off";
-  $("toggleVibration").textContent = vibrationOn ? "On" : "Off";
-  $("toggleCelebration").textContent = celebrationOn ? "On" : "Off";
-  $("toggleSound").setAttribute("aria-checked", String(soundOn));
-  $("toggleVibration").setAttribute("aria-checked", String(vibrationOn));
-  $("toggleCelebration").setAttribute("aria-checked", String(celebrationOn));
-  $("sankalpPreview").textContent = sankalp || "May my mind remain peaceful in the remembrance of Radha Rani.";
-  $("sankalpInput").value = sankalp;
-  $("goalInput").value = String(target);
-  renderBeads();
-}
-
-function applyTheme(name) {
-  const themes = {
-    divine: {
-      bg:"#17111e",bg2:"#24172d",surface:"rgba(255,249,255,.075)",
-      surface2:"rgba(255,249,255,.12)",border:"rgba(255,235,203,.17)",
-      gold:"#f6d38b",gold2:"#d9a64e",text:"#fff8ef",muted:"#c1b1c8",accent:"#dba5d6"
-    },
-    gold: {
-      bg:"#08090d",bg2:"#15120e",surface:"rgba(255,255,255,.055)",
-      surface2:"rgba(255,255,255,.09)",border:"rgba(255,216,117,.16)",
-      gold:"#ffd875",gold2:"#f4a929",text:"#fffaf0",muted:"#a9a49c",accent:"#d9a64e"
-    },
-    pastel: {
-      bg:"#f4e9ef",bg2:"#e6d7e7",surface:"rgba(255,255,255,.48)",
-      surface2:"rgba(255,255,255,.75)",border:"rgba(91,57,81,.17)",
-      gold:"#80536e",gold2:"#b7829b",text:"#342438",muted:"#78677b",accent:"#b7829b"
-    }
-  };
-  const selected = themes[name] || themes.divine;
-  for (const [key, value] of Object.entries(selected)) {
-    document.documentElement.style.setProperty("--" + key, value);
-  }
-  theme = themes[name] ? name : "divine";
-  document.body.style.color = selected.text;
-  document.querySelectorAll(".theme-option").forEach(button => {
-    button.classList.toggle("active", button.dataset.theme === theme);
-  });
-  localStorage.setItem("jaapTheme", theme);
-}
-
-function playBell() {
-  if (!soundOn) return;
-  const audio = $("bell");
-  try {
-    audio.currentTime = 0;
-    const promise = audio.play();
-    if (promise && promise.catch) promise.catch(() => {});
-  } catch (e) {
-    console.warn("Bell playback unavailable", e);
-  }
-}
-
-function celebrate(message) {
-  if (vibrationOn && navigator.vibrate) navigator.vibrate([35,35,70]);
-  if (soundOn) playBell();
-  if (celebrationOn && typeof confetti === "function") {
-    confetti({
-      particleCount:100,spread:70,origin:{y:.68},
-      colors:theme === "pastel" ? ["#80536e","#b7829b","#f4d5e4"] : ["#f6d38b","#d9a64e","#ffffff"],
-      disableForReducedMotion:true
-    });
-  }
-  toast(message);
+function playBell(){
+  if(!sound)return;
+  const audio=$('bell');
+  try{audio.currentTime=0;const p=audio.play();if(p?.catch)p.catch(()=>{});}catch(e){}
 }
 
 /*
- * The daily history document and the existing users document are updated
- * together in one Firestore transaction. No existing fields are deleted.
- *
- * History documents contain a userKey, date and daily count.
- * They do not contain authentication or private credentials.
+ * All deity counts are stored in the existing users/{user} document.
+ * Radha fields dailyCount, totalCount, lastDate and streak remain compatible.
+ * Other deities use separate deityDailyCounts / deityTotalCounts maps.
  */
-async function changeJaap(direction) {
-  if (!loaded || busy) return;
-  if (direction < 0 && currentCount() <= 0) return;
+async function changeCount(direction){
+  if(!ready||busy)return;
+  if(direction<0&&daily()<=0)return;
 
-  busy = true;
+  busy=true;
   render();
 
-  await enqueue(async () => {
-    const date = getLocalDate();
-    const historyRef = dayRef(date);
+  const deityKey=selected;
+  const todayAtStart=today;
 
-    const result = await runTransaction(db, async transaction => {
-      const userSnap = await transaction.get(userRef);
-      const historySnap = await transaction.get(historyRef);
-      const u = userSnap.exists() ? userSnap.data() : {};
-      const h = historySnap.exists() ? historySnap.data() : {};
+  operationQueue=operationQueue.then(async()=>{
+    try{
+      const result=await runTransaction(db,async tx=>{
+        const snap=await tx.get(userRef);
+        const data=snap.exists()?snap.data():{};
+        const now=dateKey();
+        const oldDailyMap={...(data.deityDailyCounts||{})};
+        const oldTotalMap={...(data.deityTotalCounts||{})};
+        const oldDates={...(data.deityLastDates||{})};
+        const oldStreaks={...(data.deityStreaks||{})};
 
-      const storedLastDate = typeof u.lastDate === "string" ? u.lastDate : "";
-      const oldDaily = storedLastDate === date
-        ? safeCount(u.dailyCount)
-        : 0;
-      const oldTotal = safeCount(u.totalCount);
-      const oldHistory = h.date === date ? safeCount(h.dailyCount) : 0;
+        let oldDaily;
+        let oldTotal;
+        let oldLastDate;
+        let oldStreak;
 
-      if (direction < 0 && (oldDaily <= 0 || oldTotal <= 0)) {
-        return null;
-      }
-
-      const nextDaily = Math.max(0, oldDaily + direction);
-      const nextTotal = Math.max(0, oldTotal + direction);
-      const nextHistory = Math.max(0, oldHistory + direction);
-
-      let nextStreak = safeCount(u.streak);
-      if (direction > 0) {
-        if (storedLastDate === date) {
-          nextStreak = Math.max(1, nextStreak);
-        } else if (storedLastDate === previousDate(new Date(date + "T12:00:00"))) {
-          nextStreak = Math.max(1, nextStreak) + 1;
-        } else {
-          nextStreak = 1;
+        if(deityKey==='radha'){
+          oldLastDate=data.lastDate||'';
+          oldDaily=oldLastDate===now?safeNum(data.dailyCount):0;
+          oldTotal=safeNum(data.totalCount);
+          oldStreak=safeNum(data.streak);
+        }else{
+          const entry=oldDailyMap[deityKey]||{};
+          oldDaily=entry.date===now?safeNum(entry.count):0;
+          oldTotal=safeNum(oldTotalMap[deityKey]);
+          oldLastDate=oldDates[deityKey]||'';
+          oldStreak=safeNum(oldStreaks[deityKey]);
         }
-      }
 
-      transaction.set(userRef, {
-        dailyCount:nextDaily,
-        totalCount:nextTotal,
-        lastDate:date,
-        streak:nextStreak
-      }, {merge:true});
+        if(direction<0&&(oldDaily<=0||oldTotal<=0))return null;
 
-      transaction.set(historyRef, {
-        userKey,
-        date,
-        dailyCount:nextHistory,
-        updatedAt:new Date().toISOString()
-      }, {merge:true});
+        const nextDaily=oldDaily+direction;
+        const nextTotal=oldTotal+direction;
+        let nextStreak=oldStreak;
 
-      return {
-        daily:nextDaily,total:nextTotal,streak:nextStreak,
-        history:nextHistory,date
-      };
-    });
+        if(direction>0){
+          if(oldLastDate===now)nextStreak=Math.max(1,oldStreak);
+          else if(oldLastDate===previousDateFor(now))nextStreak=Math.max(1,oldStreak)+1;
+          else nextStreak=1;
+        }
 
-    if (!result) {
-      toast("Nothing to undo.");
-      return;
-    }
+        if(deityKey==='radha'){
+          tx.set(userRef,{
+            dailyCount:nextDaily,
+            totalCount:nextTotal,
+            lastDate:now,
+            streak:nextStreak
+          },{merge:true});
+        }
 
-    count = result.daily;
-    total = result.total;
-    streak = result.streak;
-    lastDate = result.date;
-    today = result.date;
-    historyCache.set(result.date, {
-      date:result.date,dailyCount:result.history
-    });
-    render();
+        oldDailyMap[deityKey]={date:now,count:nextDaily};
+        oldTotalMap[deityKey]=nextTotal;
+        oldDates[deityKey]=now;
+        oldStreaks[deityKey]=nextStreak;
 
-    if (direction > 0 && result.daily % 108 === 0) {
-      celebrate(`📿 Mala completed! ${Math.floor(result.daily / 108)} malas today. Radha Radha!`);
-    } else if (direction > 0 && result.daily === target) {
-      celebrate("🙏 Your daily sankalp is complete!");
-    } else if (direction < 0) {
-      toast("Last jaap undone.");
-    } else {
-      if (vibrationOn && navigator.vibrate) navigator.vibrate(25);
-      if (result.daily % 27 === 0) toast("Radha Radha 🙏 " + result.daily + " jaap");
-    }
+        tx.set(userRef,{
+          deityDailyCounts:oldDailyMap,
+          deityTotalCounts:oldTotalMap,
+          deityLastDates:oldDates,
+          deityStreaks:oldStreaks
+        },{merge:true});
 
-    status("Synced with Firebase");
-    renderHistoryCalendar();
-  });
-
-  busy = false;
-  render();
-}
-
-async function loadHistory() {
-  if (historyLoading) return;
-  historyLoading = true;
-  const loadId = ++historyLoadId;
-  $("recentHistory").textContent = "Loading recorded days…";
-
-  try {
-    // Equality query only; sorting is done locally to avoid requiring an
-    // additional composite index for userKey + date.
-    const q = query(dayCollection, where("userKey", "==", userKey));
-    const snapshot = await getDocs(q);
-    if (loadId !== historyLoadId) return;
-
-    const next = new Map();
-    snapshot.forEach(item => {
-      const data = item.data();
-      if (typeof data.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(data.date)) {
-        next.set(data.date, {
-          date:data.date,
-          dailyCount:safeCount(data.dailyCount)
-        });
-      }
-    });
-
-    historyCache = next;
-    // The live current count is authoritative for today's display.
-    if (lastDate === today) {
-      historyCache.set(today, {date:today,dailyCount:count});
-    }
-    renderHistoryCalendar();
-    status("Jaap and history loaded");
-  } catch (error) {
-    console.error("History load failed:", error);
-    $("recentHistory").textContent = "History could not be loaded. Check your internet connection and Firestore security rules.";
-    toast("Unable to load jaap history.");
-  } finally {
-    if (loadId === historyLoadId) historyLoading = false;
-  }
-}
-
-function formatDate(date) {
-  const d = new Date(date + "T12:00:00");
-  return d.toLocaleDateString(undefined, {weekday:"short",year:"numeric",month:"short",day:"numeric"});
-}
-
-function renderHistoryCalendar() {
-  const year = displayedMonth.getFullYear();
-  const month = displayedMonth.getMonth();
-  const firstDay = new Date(year,month,1).getDay();
-  const days = new Date(year,month+1,0).getDate();
-  const monthStart = `${year}-${String(month+1).padStart(2,"0")}-01`;
-
-  $("monthLabel").textContent = displayedMonth.toLocaleDateString(undefined,{month:"long",year:"numeric"});
-  $("nextMonth").disabled = monthStart.slice(0,7) >= today.slice(0,7);
-  const fragment = document.createDocumentFragment();
-
-  for (let i=0;i<firstDay;i++) {
-    const blank = document.createElement("div");
-    blank.className = "day empty-day";
-    fragment.appendChild(blank);
-  }
-
-  for (let d=1;d<=days;d++) {
-    const date = `${year}-${String(month+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-    const entry = historyCache.get(date);
-    const n = date === today ? currentCount() : (entry ? entry.dailyCount : 0);
-    const button = document.createElement("button");
-    button.className = "day";
-    if (date === today) button.classList.add("today");
-    if (date === selectedDate) button.classList.add("selected");
-    if (n > 0) button.classList.add("has-count");
-    if (date > today) {
-      button.classList.add("future");
-      button.disabled = true;
-    }
-    const dayNumber = document.createElement("span");
-    dayNumber.textContent = String(d);
-    button.appendChild(dayNumber);
-    if (n > 0) {
-      const countLabel = document.createElement("span");
-      countLabel.className = "day-count";
-      countLabel.textContent = n >= 1000 ? (n/1000).toFixed(1)+"k" : String(n);
-      button.appendChild(countLabel);
-    }
-    button.setAttribute("aria-label", `${formatDate(date)}, ${n} jaap`);
-    button.addEventListener("click", () => {
-      selectedDate = date;
-      renderHistoryCalendar();
-      renderHistoryDetail(date);
-    });
-    fragment.appendChild(button);
-  }
-
-  $("calendarGrid").replaceChildren(fragment);
-
-  let recordedTotal = 0;
-  let recordedDaysCount = 0;
-  for (const [date,entry] of historyCache.entries()) {
-    const n = date === today ? currentCount() : entry.dailyCount;
-    recordedTotal += n;
-    if (n > 0) recordedDaysCount++;
-  }
-  $("recordedDays").textContent = recordedDaysCount.toLocaleString();
-  $("recordedJaap").textContent = recordedTotal.toLocaleString();
-
-  const recent = [...historyCache.values()]
-    .filter(entry => entry.dailyCount > 0)
-    .sort((a,b) => b.date.localeCompare(a.date))
-    .slice(0,7);
-
-  if (!recent.length) {
-    $("recentHistory").textContent = "No recorded days yet. Start chanting to create your first daily record.";
-  } else {
-    const list = document.createElement("div");
-    for (const entry of recent) {
-      const row = document.createElement("button");
-      row.className = "theme-option";
-      row.style.width = "100%";
-      row.style.marginTop = "7px";
-      const info = document.createElement("span");
-      info.style.flex = "1";
-      const name = document.createElement("span");
-      name.className = "theme-name";
-      name.textContent = formatDate(entry.date);
-      const desc = document.createElement("span");
-      desc.className = "theme-desc";
-      desc.textContent = `${entry.dailyCount.toLocaleString()} jaap · ${Math.floor(entry.dailyCount/108)} complete malas`;
-      info.append(name,desc);
-      const arrow = document.createElement("span");
-      arrow.textContent = "›";
-      row.append(info,arrow);
-      row.addEventListener("click", () => {
-        selectedDate = entry.date;
-        displayedMonth = new Date(entry.date+"T12:00:00");
-        renderHistoryCalendar();
-        renderHistoryDetail(entry.date);
+        return {daily:nextDaily,total:nextTotal,streak:nextStreak,date:now};
       });
-      list.appendChild(row);
+
+      if(result){
+        dailyCounts[deityKey]={date:result.date,count:result.daily};
+        totalCounts[deityKey]=result.total;
+        streaks[deityKey]=result.streak;
+        dateByDeity[deityKey]=result.date;
+
+        if(deityKey==='radha'){
+          dailyCounts.radha={date:result.date,count:result.daily};
+        }
+
+        render();
+
+        if(direction>0&&result.daily%108===0){
+          playBell();
+          if(typeof confetti==='function'){
+            confetti({particleCount:90,spread:65,colors:['#ffd875','#ff92cb','#ffffff']});
+          }
+          toast('📿 Mala complete! '+deities[deityKey].name+' 🙏');
+        }else if(direction>0&&result.daily===goal){
+          toast('🎯 Daily target completed!');
+        }else if(direction<0){
+          toast('Last jaap undone');
+        }else if(vibrate&&navigator.vibrate){
+          navigator.vibrate(25);
+        }
+
+        $('status').textContent='✓ Firebase synced';
+      }else{
+        toast('Nothing to undo');
+      }
+    }catch(error){
+      console.error(error);
+      $('status').textContent='Save failed. Check internet / Firestore rules.';
+      toast('Could not save. Please retry.');
     }
-    $("recentHistory").replaceChildren(list);
-  }
+  });
 
-  renderHistoryDetail(selectedDate);
-}
-
-function renderHistoryDetail(date) {
-  const detail = $("historyDetail");
-  const entry = historyCache.get(date);
-  const n = date === today ? currentCount() : (entry ? entry.dailyCount : 0);
-
-  detail.replaceChildren();
-  const title = document.createElement("h3");
-  title.textContent = formatDate(date);
-  const p = document.createElement("p");
-  p.textContent = `${n.toLocaleString()} jaap · ${Math.floor(n/108)} complete malas · ${n%108}/108 in the current mala`;
-  const note = document.createElement("p");
-  note.textContent = date === today
-    ? "Today's number follows your live jaap counter."
-    : entry
-      ? "This is a saved daily record."
-      : "No saved record for this date. Older days cannot be reconstructed if they were never recorded.";
-  detail.append(title,p,note);
-}
-
-function setTarget(value) {
-  const n = Number(value);
-  if (!Number.isInteger(n) || n < 1 || n > 100000) {
-    toast("Enter a whole number from 1 to 100000.");
-    return false;
-  }
-  target = n;
-  localStorage.setItem("jaapDailyTarget",String(target));
-  render();
-  toast(`Daily goal set to ${target.toLocaleString()}.`);
-  return true;
-}
-
-function saveSankalp() {
-  target = Number($("goalInput").value);
-  if (!Number.isInteger(target) || target < 1 || target > 100000) {
-    toast("Enter a goal between 1 and 100000.");
-    return;
-  }
-  sankalp = $("sankalpInput").value.trim().slice(0,500);
-  localStorage.setItem("jaapDailyTarget",String(target));
-  localStorage.setItem("jaapSankalp",sankalp);
-  render();
-  toast("Your sankalp has been saved on this device 🙏");
-}
-
-function openView(name) {
-  document.querySelectorAll(".tab").forEach(tab => tab.classList.toggle("active",tab.dataset.view===name));
-  document.querySelectorAll(".view").forEach(view => view.classList.toggle("active",view.id==="view-"+name));
-  if (name === "history") loadHistory();
-  if (name === "sankalp") {
-    $("sankalpInput").value = sankalp;
-    $("goalInput").value = String(target);
-  }
-}
-
-function openModal(id) { $(id).classList.add("open"); }
-function closeModal(id) { $(id).classList.remove("open"); }
-
-function setSetting(name) {
-  if (name === "sound") {
-    soundOn = !soundOn;
-    localStorage.setItem("jaapSound",String(soundOn));
-  } else if (name === "vibration") {
-    vibrationOn = !vibrationOn;
-    localStorage.setItem("jaapVibration",String(vibrationOn));
-  } else if (name === "celebration") {
-    celebrationOn = !celebrationOn;
-    localStorage.setItem("jaapCelebration",String(celebrationOn));
-  }
+  await operationQueue;
+  busy=false;
   render();
 }
+function previousDateFor(date){
+  const d=new Date(date+'T12:00:00');
+  d.setDate(d.getDate()-1);
+  return dateKey(d);
+}
+function open(id){$(id).classList.add('open')}
+function close(){document.querySelectorAll('.modal-backdrop.open').forEach(x=>x.classList.remove('open'))}
 
-$("countBtn").addEventListener("click", () => changeJaap(1));
-$("undoBtn").addEventListener("click", () => changeJaap(-1));
-
-document.querySelectorAll(".tab").forEach(tab => {
-  tab.addEventListener("click",() => openView(tab.dataset.view));
+/* Screen tap: exactly one bubble and one count per click.
+   Interactive controls and open dialogs are excluded. */
+document.addEventListener('click',event=>{
+  if(event.target.closest('button,select,input,textarea,a,.modal,.no-count'))return;
+  if(event.target.closest('.modal-backdrop'))return;
+  makeBubble(event.clientX,event.clientY);
+  changeCount(1);
 });
 
-$("setGoalBtn").addEventListener("click",() => {
-  $("modalGoalInput").value = String(target);
-  openModal("goalModal");
-});
-$("saveModalGoal").addEventListener("click",() => {
-  if (setTarget($("modalGoalInput").value)) closeModal("goalModal");
-});
-$("saveSankalpBtn").addEventListener("click",saveSankalp);
-$("editSankalpBtn").addEventListener("click",() => openView("sankalp"));
+$('tap').onclick=()=>{makeBubble(innerWidth/2,innerHeight*.58);changeCount(1)};
+$('undo').onclick=()=>changeCount(-1);
 
-document.querySelectorAll("[data-preset]").forEach(button => {
-  button.addEventListener("click",() => {
-    $("goalInput").value = button.dataset.preset;
-    target = Number(button.dataset.preset);
+$('deitySelect').addEventListener('change',()=>{
+  selected=$('deitySelect').value;
+  localStorage.setItem('jaapSelectedDeity',selected);
+  loadGoal();
+  render();
+  toast(deities[selected].name+' selected');
+});
+
+$('sound').onclick=()=>{
+  sound=!sound;
+  localStorage.setItem('radhaSound',sound);
+  render();
+};
+$('settingsBtn').onclick=()=>open('settingsModal');
+$('soundToggle').onclick=()=>{
+  sound=!sound;localStorage.setItem('radhaSound',sound);render();
+};
+$('vibrateToggle').onclick=()=>{
+  vibrate=!vibrate;localStorage.setItem('radhaVibrate',vibrate);render();
+};
+$('bubbleToggle').onclick=()=>{
+  bubbles=!bubbles;localStorage.setItem('radhaBubbles',bubbles);render();
+};
+$('darkness').oninput=e=>{
+  darkness=Number(e.target.value);
+  localStorage.setItem('radhaDarkness',darkness);render();
+};
+
+function showTarget(){
+  $('targetInput').value=goal;
+  open('targetModal');
+}
+$('targetBtn').onclick=showTarget;
+$('settingsTargetBtn').onclick=()=>{close();showTarget()};
+$('targetSave').onclick=()=>{
+  const n=Number($('targetInput').value);
+  if(!Number.isInteger(n)||n<1||n>100000)return toast('Target must be 1–100000');
+  goal=n;
+  localStorage.setItem('jaapGoal_'+selected,String(goal));
+  close();render();toast('Target saved');
+};
+
+$('sankalpOpen').onclick=()=>{
+  $('sankalpInput').value=sankalp;
+  open('sankalpModal');
+};
+$('sankalpSave').onclick=()=>{
+  sankalp=$('sankalpInput').value.trim().slice(0,250)||'Radha Radha';
+  localStorage.setItem('jaapSankalp',sankalp);
+  close();render();toast('Sankalp saved');
+};
+
+$('darshanBtn').onclick=()=>location.href='darshan.html';
+$('leaderBtn').onclick=()=>location.href='leaderboard.html';
+
+$('historyBtn').onclick=()=>{
+  const grid=$('calendar');
+  grid.replaceChildren();
+  const now=new Date();
+  const first=new Date(now.getFullYear(),now.getMonth(),1);
+  const days=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+
+  for(let i=0;i<first.getDay();i++)grid.appendChild(document.createElement('span'));
+  for(let d=1;d<=days;d++){
+    const cell=document.createElement('div');
+    cell.className='day'+(d===now.getDate()?' today':'');
+    cell.textContent=d;
+    grid.appendChild(cell);
+  }
+  $('historySummary').textContent=
+    deities[selected].name+': Today '+daily()+' jaap · Lifetime '+lifetime()+'.';
+  open('historyModal');
+};
+
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=close);
+document.querySelectorAll('.modal-backdrop').forEach(b=>{
+  b.onclick=e=>{if(e.target===b)close()};
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+
+setInterval(()=>{
+  if(today!==dateKey()){
+    today=dateKey();
     render();
-  });
-});
-
-document.querySelectorAll(".theme-option[data-theme]").forEach(button => {
-  button.addEventListener("click",() => {
-    applyTheme(button.dataset.theme);
-    toast("Theme updated.");
-  });
-});
-
-$("soundBtn").addEventListener("click",() => setSetting("sound"));
-$("soundInlineBtn").addEventListener("click",() => setSetting("sound"));
-$("settingsBtn").addEventListener("click",() => openModal("settingsModal"));
-$("settingsNavBtn").addEventListener("click",() => openModal("settingsModal"));
-$("toggleSound").addEventListener("click",() => setSetting("sound"));
-$("toggleVibration").addEventListener("click",() => setSetting("vibration"));
-$("toggleCelebration").addEventListener("click",() => setSetting("celebration"));
-
-$("refreshHistoryBtn").addEventListener("click",() => {
-  historyLoading = false;
-  loadHistory();
-});
-$("prevMonth").addEventListener("click",() => {
-  displayedMonth = new Date(displayedMonth.getFullYear(),displayedMonth.getMonth()-1,1);
-  renderHistoryCalendar();
-});
-$("nextMonth").addEventListener("click",() => {
-  const next = new Date(displayedMonth.getFullYear(),displayedMonth.getMonth()+1,1);
-  if (getLocalDate(next).slice(0,7) <= today.slice(0,7)) {
-    displayedMonth = next;
-    renderHistoryCalendar();
-  }
-});
-
-document.querySelectorAll("[data-close]").forEach(button => {
-  button.addEventListener("click",() => closeModal(button.dataset.close));
-});
-document.querySelectorAll(".backdrop").forEach(backdrop => {
-  backdrop.addEventListener("click",event => {
-    if (event.target === backdrop) closeModal(backdrop.id);
-  });
-});
-document.addEventListener("keydown",event => {
-  if (event.key === "Escape") {
-    document.querySelectorAll(".backdrop.open").forEach(modal => closeModal(modal.id));
-  }
-});
-
-$("darshanBtn").addEventListener("click",() => location.href="darshan.html");
-$("leaderboardBtn").addEventListener("click",() => location.href="leaderboard.html");
-
-applyTheme(theme);
-render();
-displayedMonth = new Date();
-renderHistoryCalendar();
-
-setInterval(() => {
-  const now = getLocalDate();
-  if (now !== today) {
-    today = now;
-    render();
-    if (lastDate !== today) {
-      // The display resets to zero for the new local day without deleting
-      // yesterday's daily history or the lifetime total.
-      renderHistoryCalendar();
-    }
   }
 },30000);
 
-/*
- * Live listener preserves compatibility with users/{user}.
- * The listener does not create an account or authenticate the user.
- */
-try {
-  unsubscribe = onSnapshot(userRef,snapshot => {
-    const data = snapshot.exists() ? snapshot.data() : {};
-    count = safeCount(data.dailyCount);
-    total = safeCount(data.totalCount);
-    streak = safeCount(data.streak);
-    lastDate = typeof data.lastDate === "string" ? data.lastDate : "";
-    today = getLocalDate();
-    loaded = true;
+loadGoal();
+render();
 
-    if (lastDate === today) {
-      historyCache.set(today,{date:today,dailyCount:count});
-    }
-    render();
-    status("Connected · Firebase data loaded");
-  },error => {
-    console.error("Firebase listener error:",error);
-    loaded = false;
-    render();
-    status("Firebase connection failed. Check security rules and internet.",true);
-  });
-} catch (error) {
-  console.error("Firebase setup error:",error);
-  status("Firebase setup failed. Verify configuration.",true);
-}
+onSnapshot(userRef,snap=>{
+  const d=snap.exists()?snap.data():{};
+  const dailyMap=d.deityDailyCounts||{};
+  const totalMap=d.deityTotalCounts||{};
+  const dates=d.deityLastDates||{};
+  const streakMap=d.deityStreaks||{};
+
+  dailyCounts={...dailyMap};
+  totalCounts={...totalMap};
+  dateByDeity={...dates};
+  streaks={...streakMap};
+
+  // Preserve and read the original Radha fields.
+  dailyCounts.radha={
+    date:d.lastDate||'',
+    count:safeNum(d.dailyCount)
+  };
+  totalCounts.radha=safeNum(d.totalCount);
+  dateByDeity.radha=d.lastDate||'';
+  streaks.radha=safeNum(d.streak);
+
+  ready=true;
+  today=dateKey();
+  render();
+  $('status').textContent='✓ Firebase connected';
+},error=>{
+  console.error(error);
+  ready=false;
+  render();
+  $('status').textContent='Firebase error: check internet and rules';
+});
 </script>
 </body>
 </html>
