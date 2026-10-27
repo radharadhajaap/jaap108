@@ -4,641 +4,290 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#6d2148">
-<meta name="description" content="Radha Radha Divine Jaap">
+<meta name="theme-color" content="#702448">
 <title>Divine Jaap | Radhe Radhe</title>
-
 <style>
-:root{
-  --gold:#ffe5a0;
-  --pink:#ff75b4;
-  --text:#fff8ed;
-  --glass:rgba(57,16,43,.68);
-  --border:rgba(255,225,168,.58);
-}
+:root{--gold:#ffe4a0;--glass:rgba(58,17,43,.68);--line:#ffe1a080}
 *{box-sizing:border-box}
-html{min-height:100%;background:#391329}
-body{
-  margin:0;min-height:100vh;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  color:var(--text);
-  -webkit-tap-highlight-color:transparent;
-}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff8ed}
+body{background:#4c193c;-webkit-tap-highlight-color:transparent}
 button,select,input{font:inherit}
-button{cursor:pointer;color:inherit;touch-action:manipulation}
-button:focus-visible,select:focus-visible,input:focus-visible{
-  outline:2px solid var(--gold);outline-offset:3px
-}
-
-/* Separate image layer: image stays visible behind all content */
-#bgImage{
-  position:fixed;inset:0;z-index:-3;
-  background-image:url("radha-bg.jpg");
-  background-position:center 35%;
-  background-repeat:no-repeat;background-size:cover;
-  transform:scale(1.02);
-  transition:background-image .35s ease,opacity .3s ease;
-}
-#bgOverlay{
-  position:fixed;inset:0;z-index:-2;pointer-events:none;
-  background:linear-gradient(180deg,
-    rgba(30,8,25,.23) 0%,
-    rgba(39,8,28,.12) 36%,
-    rgba(35,8,27,.39) 68%,
-    rgba(30,7,23,.72) 100%);
-}
-#app{
-  width:100%;max-width:760px;margin:auto;
-  min-height:100vh;min-height:100dvh;
-  padding:max(15px,env(safe-area-inset-top)) 16px
-    max(24px,env(safe-area-inset-bottom));
-  display:flex;flex-direction:column;gap:17px;
-}
-header{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:10px;text-align:center;
-}
-.top-stat{
-  min-width:95px;padding:9px 12px;border:1px solid var(--border);
-  border-radius:19px;background:rgba(68,22,44,.56);
-  backdrop-filter:blur(10px);font-size:11px;
-}
-.top-stat strong{display:block;font-size:20px;color:var(--gold);margin-bottom:3px}
-.brand{flex:1}
-.brand-icon{font-size:27px;color:var(--gold)}
-.brand h1{
-  font-family:Georgia,serif;font-size:clamp(27px,7vw,39px);
-  line-height:1.1;margin:2px 0;color:#ffe5a0;
-  text-shadow:0 2px 20px #7b2c4d;
-}
-.brand p{font-size:10px;letter-spacing:4px;margin:7px 0 0}
-.panel{
-  border:1px solid var(--border);border-radius:25px;
-  background:var(--glass);
-  backdrop-filter:blur(13px);-webkit-backdrop-filter:blur(13px);
-  box-shadow:0 12px 32px #16050d36,inset 0 1px #ffffff15;
-}
-.selector-panel{padding:17px}
-.label{font-size:12px;color:#ffe6c4;margin-bottom:10px}
-select,input{
-  width:100%;border:1px solid #ffddac85;border-radius:15px;
-  padding:14px;background:#3e193b;color:#fff7eb;
-}
-select option{background:#3e193b;color:white}
-.helper{text-align:center;font-size:12px;margin:11px 0 0;color:#ffebda}
-.hero{
-  text-align:center;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;min-height:280px;
-  padding:10px 0 3px;cursor:pointer;user-select:none;
-  -webkit-user-select:none;
-}
-.hero-lotus{font-size:34px;filter:drop-shadow(0 0 15px #ffb4dc)}
-.count{
-  font-size:clamp(82px,22vw,124px);font-weight:850;line-height:1.05;
-  letter-spacing:-4px;color:#ffe7a5;
-  text-shadow:0 4px 24px #4a142d88;
-  font-variant-numeric:tabular-nums;
-}
+button{color:inherit;cursor:pointer;touch-action:manipulation}
+#background{position:fixed;inset:0;z-index:-2;background:center 35%/cover no-repeat;transition:background-image .25s}
+#shade{position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,#230b2530,#26091c20 40%,#23081980)}
+#app{max-width:700px;margin:auto;padding:max(14px,env(safe-area-inset-top)) 14px max(24px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:15px;min-height:100vh;min-height:100dvh}
+header{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:7px;align-items:center;text-align:center}
+.mini,.panel{border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 10px 28px #18051535}
+.mini{border-radius:16px;padding:9px 4px;font-size:10px}
+.mini strong{display:block;color:var(--gold);font-size:18px;margin-bottom:3px}
+.brand h1{font-family:Georgia,serif;color:var(--gold);font-size:clamp(25px,6vw,38px);margin:0;text-shadow:0 2px 15px #4b193d}
+.brand p{font-size:9px;letter-spacing:3px;margin:6px 0}
+.panel{border-radius:23px;padding:16px}
+.label{font-size:12px;margin-bottom:10px;color:#ffebd1}
+select,input{width:100%;padding:14px;border-radius:15px;border:1px solid var(--line);background:#401938;color:#fff8ef}
+select option{background:#401938;color:white}
+.helper{text-align:center;font-size:12px;margin:10px 0 0}
+.hero{min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;user-select:none}
+.hero-icon{font-size:35px}
+.count{font-size:clamp(78px,22vw,120px);font-weight:850;line-height:1.1;letter-spacing:-4px;color:var(--gold);font-variant-numeric:tabular-nums;text-shadow:0 3px 25px #35102c}
 .count.bump{animation:bump .16s ease-out}
-@keyframes bump{50%{transform:scale(1.075)}}
-.mantra{font-size:17px;letter-spacing:3px;font-weight:700;margin:10px 0}
-.tap-hint{
-  display:inline-block;background:#94164fce;border:1px solid #ffd9a5a0;
-  padding:11px 18px;border-radius:30px;font-size:12px;
-  box-shadow:0 4px 18px #380b2940;
-}
-.counter-panel{padding:20px 17px;text-align:center}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.stat-title{font-size:11px;color:#ffecd4}
-.stat-value{font-size:27px;font-weight:800;color:var(--gold);margin-top:8px}
-.progress{
-  height:9px;background:#ffffff38;border-radius:30px;
-  margin:18px 0 22px;overflow:hidden
-}
-#progressBar{
-  width:0;height:100%;border-radius:30px;
-  background:linear-gradient(90deg,#ff78b9,#ffe9a6);
-  transition:width .2s ease
-}
-.controls{display:flex;justify-content:space-around;align-items:center;gap:12px}
-.round{
-  width:61px;height:61px;border-radius:50%;border:1px solid var(--border);
-  background:#4c153dce;font-size:25px;
-  display:grid;place-items:center
-}
-.round.main{
-  width:93px;height:93px;border:4px solid #ffe6a0;
-  background:radial-gradient(circle at 35% 25%,#ffacd8,#b91d70 70%);
-  box-shadow:0 0 24px #ff91c780;font-size:36px
-}
-.control-caption{font-size:10px;margin-top:6px}
-.tap-note{font-size:12px;margin:15px 0 0;color:#ffe9d2}
-.sankalp{padding:18px;text-align:center}
+@keyframes bump{50%{transform:scale(1.07)}}
+.mantra{font-weight:750;letter-spacing:2px;font-size:17px;margin:8px}
+.hint{padding:10px 17px;border:1px solid var(--line);border-radius:25px;background:#971752d9;font-size:12px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:center}
+.stat-label{font-size:11px}
+.stat-value{font-size:25px;font-weight:800;color:var(--gold);margin-top:8px}
+.track{height:8px;border-radius:20px;background:#ffffff40;margin:18px 0;overflow:hidden}
+#progress{height:100%;width:0;background:linear-gradient(90deg,#ff75ba,#ffebaa);transition:width .2s}
+.controls{display:flex;justify-content:space-around;align-items:center;text-align:center;gap:10px}
+.round{width:60px;height:60px;border:1px solid var(--line);border-radius:50%;background:#451438;font-size:25px}
+.round.main{width:90px;height:90px;border:4px solid var(--gold);background:radial-gradient(circle at 35% 25%,#ffacd7,#ba1c70);font-size:35px;box-shadow:0 0 22px #ff7bb85c}
+.caption{font-size:10px;margin-top:6px}
+.note{text-align:center;font-size:12px;margin:14px 0 0}
+.sankalp{text-align:center;cursor:pointer}
 .sankalp strong{color:var(--gold)}
 .sankalp p{font-size:12px;margin:8px 0 0}
-.nav{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:5px;
-  padding:13px 5px;border-radius:22px
-}
-.nav a{
-  text-align:center;text-decoration:none;color:#ffedc8;
-  font-size:11px;padding:7px 2px
-}
-.nav .nav-icon{display:block;font-size:23px;margin-bottom:6px}
-.status{font-size:11px;text-align:center;min-height:16px;color:#ffebd9}
-.bubble-layer{position:fixed;inset:0;z-index:10;pointer-events:none;overflow:hidden}
-.bubble{
-  position:absolute;transform:translate(-50%,-50%);
-  color:#fff6cf;font-size:18px;font-weight:800;
-  text-shadow:0 0 15px #ffb6d7;
-  white-space:nowrap;animation:floatUp .95s ease-out forwards
-}
-@keyframes floatUp{
-  0%{opacity:0;transform:translate(-50%,-35%) scale(.8)}
-  15%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}
-  100%{opacity:0;transform:translate(-50%,-150%) scale(.95)}
-}
-.toast{
-  position:fixed;z-index:20;bottom:max(22px,env(safe-area-inset-bottom));
-  left:50%;transform:translate(-50%,15px);opacity:0;
-  padding:12px 17px;background:#35112eeF;
-  border:1px solid var(--border);border-radius:14px;
-  font-size:12px;transition:.2s;pointer-events:none;
-  width:max-content;max-width:90vw;text-align:center
-}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-.modal-bg{
-  position:fixed;inset:0;z-index:30;background:#14050ed9;
-  display:none;align-items:center;justify-content:center;padding:20px
-}
+nav{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;text-align:center}
+nav a{color:#ffedc9;text-decoration:none;font-size:10px;padding:5px 0}
+nav span{display:block;font-size:23px;margin-bottom:6px}
+#status{text-align:center;font-size:11px;min-height:16px}
+#bubbles{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+.bubble{position:absolute;transform:translate(-50%,-50%);font-weight:800;font-size:18px;white-space:nowrap;color:#fff4cf;text-shadow:0 0 15px #ffaddb;animation:float .95s ease-out forwards}
+@keyframes float{0%{opacity:0;transform:translate(-50%,-30%) scale(.8)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}100%{opacity:0;transform:translate(-50%,-145%)}}
+#toast{position:fixed;z-index:10;bottom:25px;left:50%;transform:translate(-50%,12px);opacity:0;background:#35112e;border:1px solid var(--line);padding:12px 16px;border-radius:14px;font-size:12px;max-width:90vw;text-align:center;transition:.2s;pointer-events:none}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+.modal-bg{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;padding:20px;background:#13040edb}
 .modal-bg.open{display:flex}
-.modal{width:min(100%,380px);padding:22px;border-radius:23px}
-.modal h2{margin-top:0;color:var(--gold);font-family:Georgia,serif}
-.modal p{font-size:12px;line-height:1.6}
-.modal-actions{display:flex;gap:10px;margin-top:14px}
-.action{
-  flex:1;padding:12px;border:1px solid var(--border);
-  border-radius:12px;background:#ffffff12
-}
-.action.primary{background:#ffe0a0;color:#54203c;font-weight:800}
-@media(max-width:390px){
-  #app{padding-left:12px;padding-right:12px;gap:13px}
-  .top-stat{min-width:76px;padding:8px 6px}
-  .top-stat strong{font-size:17px}
-  .hero{min-height:245px}
-  .counter-panel{padding:16px 12px}
-  .round.main{width:82px;height:82px}
-}
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
-}
+.modal{width:min(100%,360px);border:1px solid var(--line);border-radius:22px;background:#51203f;padding:22px}
+.modal h2{color:var(--gold)}
+.modal p{font-size:12px;line-height:1.5}
+.actions{display:flex;gap:9px;margin-top:12px}
+.actions button{flex:1;padding:12px;border:1px solid var(--line);border-radius:12px;background:#ffffff14}
+.actions .save{background:var(--gold);color:#4d183b;font-weight:800}
+@media(max-width:390px){#app{padding-left:10px;padding-right:10px;gap:12px}.mini strong{font-size:16px}.hero{min-height:235px}.round.main{width:80px;height:80px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
-
 <body>
-<div id="bgImage"></div>
-<div id="bgOverlay"></div>
-
+<div id="background"></div><div id="shade"></div>
 <div id="app">
-  <header>
-    <div class="top-stat">
-      <strong id="streak">🙏</strong>
-      STREAK
-    </div>
-    <div class="brand">
-      <div class="brand-icon">🪷</div>
-      <h1>दिव्य जाप</h1>
-      <p>DIVINE JAAP</p>
-    </div>
-    <div class="top-stat">
-      <strong id="lifetimeTop">0</strong>
-      TOTAL JAAP
-    </div>
-  </header>
+<header>
+  <div class="mini"><strong id="streak">🙏</strong>STREAK</div>
+  <div class="brand"><h1 id="heading">दिव्य जाप</h1><p>DIVINE JAAP</p></div>
+  <div class="mini"><strong id="topTotal">0</strong>TOTAL JAAP</div>
+</header>
 
-  <section class="panel selector-panel">
-    <div class="label">🙏 भगवान चुनें · CHOOSE DEITY</div>
-    <select id="deitySelect" aria-label="Choose deity">
-      <option value="radha">🌸 Radha Rani — Radha Radha</option>
-      <option value="hanuman">🙏 Hanuman Ji — Jai Bajrang Bali</option>
-      <option value="krishna">🦚 Shri Krishna — Hare Krishna</option>
-      <option value="ram">🏹 Shri Ram — Jai Shri Ram</option>
-      <option value="shiv">🔱 Shiv Ji — Om Namah Shivaya</option>
-      <option value="ganesh">🐘 Ganesh Ji — Ganpati Bappa</option>
-      <option value="durga">🌺 Maa Durga — Jai Mata Di</option>
-      <option value="vishnu">🪷 Bhagwan Vishnu — Om Namo Narayanaya</option>
-      <option value="lakshmi">✨ Maa Lakshmi — Jai Maa Lakshmi</option>
-      <option value="saraswati">🪷 Maa Saraswati — Jai Maa Saraswati</option>
-    </select>
-    <p class="helper" id="deityHelper">Radha Rani ke naam ka jaap karein 🙏</p>
-  </section>
+<section class="panel">
+  <div class="label">🙏 भगवान चुनें · CHOOSE DEITY</div>
+  <select id="deity">
+    <option value="radha">🌸 Radha Rani — Radha Radha</option>
+    <option value="hanuman">🙏 Hanuman Ji — Jai Bajrang Bali</option>
+    <option value="krishna">🦚 Shri Krishna — Hare Krishna</option>
+    <option value="ram">🏹 Shri Ram — Jai Shri Ram</option>
+    <option value="shiv">🔱 Shiv Ji — Om Namah Shivaya</option>
+    <option value="ganesh">🐘 Ganesh Ji — Ganpati Bappa</option>
+    <option value="durga">🌺 Maa Durga — Jai Mata Di</option>
+    <option value="vishnu">🪷 Bhagwan Vishnu — Om Namo Narayanaya</option>
+    <option value="lakshmi">✨ Maa Lakshmi — Jai Maa Lakshmi</option>
+    <option value="saraswati">📚 Maa Saraswati — Jai Maa Saraswati</option>
+  </select>
+  <p class="helper" id="helper">Radha Rani ke naam ka jaap karein 🙏</p>
+</section>
 
-  <section class="hero" id="heroTap" aria-label="Tap to chant">
-    <div class="hero-lotus" id="heroIcon">🌸</div>
-    <div class="count" id="dailyCount">0</div>
-    <div class="mantra" id="mantraText">RADHA RADHA</div>
-    <div class="tap-hint">✨ TAP ANYWHERE TO CHANT ✨</div>
-  </section>
+<section class="hero" id="hero">
+  <div class="hero-icon" id="heroIcon">🌸</div>
+  <div class="count" id="count">0</div>
+  <div class="mantra" id="mantra">RADHA RADHA</div>
+  <div class="hint">✨ TAP ANYWHERE TO CHANT ✨</div>
+</section>
 
-  <section class="panel counter-panel">
-    <div class="stats">
-      <div>
-        <div class="stat-title">🌺 CURRENT MALA</div>
-        <div class="stat-value" id="malaValue">0 / 108</div>
-      </div>
-      <div>
-        <div class="stat-title">🎯 DAILY TARGET</div>
-        <div class="stat-value" id="targetValue">108</div>
-      </div>
-    </div>
-    <div class="progress"><div id="progressBar"></div></div>
-    <div class="controls">
-      <div>
-        <button class="round" id="undoBtn" type="button" aria-label="Undo last tap">↶</button>
-        <div class="control-caption">UNDO</div>
-      </div>
-      <div>
-        <button class="round main" id="tapBtn" type="button" aria-label="Count one jaap">🪷</button>
-        <div class="control-caption">ONE TAP = ONE JAAP</div>
-      </div>
-      <div>
-        <button class="round" id="soundBtn" type="button" aria-label="Toggle sound">♫</button>
-        <div class="control-caption" id="soundCaption">SOUND OFF</div>
-      </div>
-    </div>
-    <p class="tap-note">One tap = one count + one bubble</p>
-  </section>
+<section class="panel">
+  <div class="stats">
+    <div><div class="stat-label">🌸 CURRENT MALA</div><div class="stat-value" id="mala">0 / 108</div></div>
+    <div><div class="stat-label">🎯 DAILY TARGET</div><div class="stat-value" id="targetLabel">108</div></div>
+  </div>
+  <div class="track"><div id="progress"></div></div>
+  <div class="controls">
+    <div><button class="round" id="undo">↶</button><div class="caption">UNDO</div></div>
+    <div><button class="round main" id="tap">🪷</button><div class="caption">ONE TAP = ONE JAAP</div></div>
+    <div><button class="round" id="sound">♫</button><div class="caption" id="soundLabel">SOUND OFF</div></div>
+  </div>
+  <p class="note">One tap = one count + one bubble</p>
+</section>
 
-  <section class="panel sankalp" id="sankalpOpen" role="button" tabindex="0">
-    <strong>🚩 आज का संकल्प · SANKALP ✎</strong>
-    <p id="sankalpText">108 jaap with devotion</p>
-  </section>
+<section class="panel sankalp" id="sankalp" role="button" tabindex="0">
+  <strong>🚩 आज का संकल्प · SANKALP ✎</strong><p id="sankalpText">108 jaap with devotion</p>
+</section>
 
-  <nav class="panel nav">
-    <a href="history.html"><span class="nav-icon">▦</span>HISTORY</a>
-    <a href="#" id="targetOpen"><span class="nav-icon">🎯</span>TARGET</a>
-    <a href="darshan.html"><span class="nav-icon">🖼️</span>DARSHAN</a>
-    <a href="leaderboard.html"><span class="nav-icon">🏆</span>LEADERBOARD</a>
-  </nav>
-
-  <div class="status" id="status" role="status">Connecting…</div>
+<nav class="panel">
+  <a href="history.html"><span>▦</span>HISTORY</a>
+  <a href="#" id="targetOpen"><span>🎯</span>TARGET</a>
+  <a href="darshan.html"><span>🖼️</span>DARSHAN</a>
+  <a href="leaderboard.html"><span>🏆</span>LEADERBOARD</a>
+</nav>
+<div id="status" role="status">Connecting…</div>
 </div>
 
-<div class="bubble-layer" id="bubbleLayer"></div>
-<div class="toast" id="toast"></div>
-
+<div id="bubbles"></div><div id="toast"></div>
 <div class="modal-bg" id="modalBg">
-  <section class="modal panel" role="dialog" aria-modal="true">
-    <h2 id="modalTitle">Your Sankalp 🙏</h2>
-    <p id="modalDesc">Set your daily Jaap target.</p>
-    <input id="modalInput" type="number" min="1" max="1000000" placeholder="Enter target">
-    <div class="modal-actions">
-      <button class="action" id="modalCancel" type="button">Cancel</button>
-      <button class="action primary" id="modalSave" type="button">Save</button>
-    </div>
-  </section>
+ <section class="modal">
+  <h2 id="modalTitle">Daily Sankalp 🙏</h2><p>Apna daily jaap target set karein.</p>
+  <input id="targetInput" type="number" min="1" max="1000000" placeholder="Daily target">
+  <div class="actions"><button id="cancel">Cancel</button><button class="save" id="save">Save</button></div>
+ </section>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
 <script>
 "use strict";
 
-/* Keep your existing Firebase project configuration. */
-const firebaseConfig = {
-  apiKey: "AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
-  authDomain: "jaap-fdd80.firebaseapp.com",
-  projectId: "jaap-fdd80",
-  storageBucket: "jaap-fdd80.firebasestorage.app",
-  messagingSenderId: "375289521394",
-  appId: "1:375289521394:web:ced2cafa4d1743d5ab9c6b"
+/* Existing Firebase configuration — preserve project and collection. */
+const firebaseConfig={
+ apiKey:"AIzaSyArfXVNLQhYAspd2xmZuwLb7bxLaY8sQqY",
+ authDomain:"jaap-fdd80.firebaseapp.com",
+ projectId:"jaap-fdd80",
+ storageBucket:"jaap-fdd80.firebasestorage.app",
+ messagingSenderId:"375289521394",
+ appId:"1:375289521394:web:ced2cafa4d1743d5ab9c6b"
 };
 
-const $ = id => document.getElementById(id);
-const today = () => {
-  const d = new Date();
-  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-};
-const yesterday = () => {
-  const d = new Date(); d.setDate(d.getDate()-1);
-  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-};
-
-const deities = {
-  radha: {
-    name:"Radha Rani", icon:"🌸", mantra:"RADHA RADHA",
-    helper:"Radha Rani ke naam ka jaap karein 🙏",
-    bubble:"राधे राधे 🌸", bg:"radha-bg.jpg", position:"center 35%"
-  },
-  hanuman: {
-    name:"Hanuman Ji", icon:"🙏", mantra:"JAI BAJRANG BALI",
-    helper:"Hanuman Ji ka naam shraddha se lein 🙏",
-    bubble:"जय बजरंग बली 🙏",
-    bg:"https://divyamworld.co/images/deities/hanuman-poster.png",
-    position:"center 25%"
-  },
-  krishna: {
-    name:"Shri Krishna", icon:"🦚", mantra:"HARE KRISHNA",
-    helper:"Shri Krishna ka smaran karein 🦚",
-    bubble:"हरे कृष्ण 🦚",
-    bg:"radha-bg.jpg", position:"center 35%"
-  },
-  ram: {
-    name:"Shri Ram", icon:"🏹", mantra:"JAI SHRI RAM",
-    helper:"Shri Ram ka naam lein 🙏",
-    bubble:"जय श्री राम 🙏",
-    bg:"https://divyamworld.co/images/deities/hanuman-poster.png",
-    position:"center 25%"
-  },
-  shiv: {
-    name:"Shiv Ji", icon:"🔱", mantra:"OM NAMAH SHIVAYA",
-    helper:"Om Namah Shivaya 🔱", bubble:"ॐ नमः शिवाय 🔱",
-    bg:"radha-bg.jpg", position:"center 35%"
-  },
-  ganesh: {
-    name:"Ganesh Ji", icon:"🐘", mantra:"JAI GANESH",
-    helper:"Ganpati Bappa Morya 🐘", bubble:"जय गणेश 🐘",
-    bg:"radha-bg.jpg", position:"center 35%"
-  },
-  durga: {
-    name:"Maa Durga", icon:"🌺", mantra:"JAI MATA DI",
-    helper:"Maa Durga ka smaran karein 🌺", bubble:"जय माता दी 🌺",
-    bg:"radha-bg.jpg", position:"center 35%"
-  },
-  vishnu: {
-    name:"Bhagwan Vishnu", icon:"🪷", mantra:"OM NAMO NARAYANAYA",
-    helper:"Bhagwan Vishnu ka smaran karein 🪷", bubble:"ॐ नमो नारायणाय 🪷",
-    bg:"radha-bg.jpg", position:"center 35%"
-  },
-  lakshmi: {
-    name:"Maa Lakshmi", icon:"✨", mantra:"JAI MAA LAKSHMI",
-    helper:"Maa Lakshmi ka smaran karein ✨", bubble:"जय माँ लक्ष्मी ✨",
-    bg:"radha-bg.jpg", position:"center 35%"
-  },
-  saraswati: {
-    name:"Maa Saraswati", icon:"🪷", mantra:"JAI MAA SARASWATI",
-    helper:"Maa Saraswati ka smaran karein 🪷", bubble:"जय माँ सरस्वती 🪷",
-    bg:"radha-bg.jpg", position:"center 35%"
-  }
+/*
+ Upload each image beside index.html:
+ radha-bg.jpg, hanuman-bg.jpg, krishna-bg.jpg, ram-bg.jpg,
+ shiv-bg.jpg, ganesh-bg.jpg, durga-bg.jpg, vishnu-bg.jpg,
+ lakshmi-bg.jpg, saraswati-bg.jpg.
+*/
+const gods={
+ radha:{name:"Radha Rani",icon:"🌸",mantra:"RADHA RADHA",bubble:"राधे राधे 🌸",image:"radha-bg.jpg",helper:"Radha Rani ke naam ka jaap karein 🙏"},
+ hanuman:{name:"Hanuman Ji",icon:"🙏",mantra:"JAI BAJRANG BALI",bubble:"जय बजरंग बली 🙏",image:"hanuman-bg.jpg",helper:"Hanuman Ji ka smaran karein 🙏"},
+ krishna:{name:"Shri Krishna",icon:"🦚",mantra:"HARE KRISHNA",bubble:"हरे कृष्ण 🦚",image:"krishna-bg.jpg",helper:"Shri Krishna ka naam lein 🦚"},
+ ram:{name:"Shri Ram",icon:"🏹",mantra:"JAI SHRI RAM",bubble:"जय श्री राम 🏹",image:"ram-bg.jpg",helper:"Shri Ram ka smaran karein 🙏"},
+ shiv:{name:"Shiv Ji",icon:"🔱",mantra:"OM NAMAH SHIVAYA",bubble:"ॐ नमः शिवाय 🔱",image:"shiv-bg.jpg",helper:"Om Namah Shivaya 🔱"},
+ ganesh:{name:"Ganesh Ji",icon:"🐘",mantra:"JAI GANESH",bubble:"जय गणेश 🐘",image:"ganesh-bg.jpg",helper:"Ganpati Bappa Morya 🐘"},
+ durga:{name:"Maa Durga",icon:"🌺",mantra:"JAI MATA DI",bubble:"जय माता दी 🌺",image:"durga-bg.jpg",helper:"Maa Durga ka smaran karein 🌺"},
+ vishnu:{name:"Bhagwan Vishnu",icon:"🪷",mantra:"OM NAMO NARAYANAYA",bubble:"ॐ नमो नारायणाय 🪷",image:"vishnu-bg.jpg",helper:"Bhagwan Vishnu ka smaran karein 🪷"},
+ lakshmi:{name:"Maa Lakshmi",icon:"✨",mantra:"JAI MAA LAKSHMI",bubble:"जय माँ लक्ष्मी ✨",image:"lakshmi-bg.jpg",helper:"Maa Lakshmi ka smaran karein ✨"},
+ saraswati:{name:"Maa Saraswati",icon:"📚",mantra:"JAI MAA SARASWATI",bubble:"जय माँ सरस्वती 📚",image:"saraswati-bg.jpg",helper:"Maa Saraswati ka smaran karein 🙏"}
 };
 
-let selected = localStorage.getItem("jaapSelectedDeity") || "radha";
-if (!deities[selected]) selected = "radha";
-let target = Math.max(1, Number(localStorage.getItem("jaapDailyTarget") || 108));
-let soundOn = false;
-let audioCtx = null;
-let db = null, userRef = null, unsubscribe = null, ready = false;
-let baseDaily = 0, baseTotal = 0, baseStreak = 0;
-let pending = 0, writeQueue = Promise.resolve(), lastTap = null;
-let toastTimer;
+const $=id=>document.getElementById(id);
+const today=()=>{let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`};
+const yesterday=()=>{let d=new Date();d.setDate(d.getDate()-1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`};
+let selected=localStorage.getItem("jaapSelectedDeity")||"radha";
+if(!gods[selected])selected="radha";
+let target=Math.max(1,Number(localStorage.getItem("jaapDailyTarget")||108));
+let db,userRef,unsubscribe,ready=false,queue=Promise.resolve(),pending=0;
+let daily=0,total=0,streak=0,lastTap=null,soundOn=false,audioCtx=null,toastTimer;
 
-function toast(msg) {
-  $("toast").textContent = msg;
-  $("toast").classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>$("toast").classList.remove("show"),2000);
+function toast(s){$("toast").textContent=s;$("toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").classList.remove("show"),1800)}
+function localData(id){let x=JSON.parse(localStorage.getItem("jaap_"+id)||'{"daily":0,"total":0,"date":""}');if(x.date!==today()){x.daily=0;x.date=today()}return x}
+function render(){
+ $("count").textContent=daily.toLocaleString("en-IN");
+ $("topTotal").textContent=total.toLocaleString("en-IN");
+ $("streak").textContent=streak?streak+" DAYS":"🙏";
+ $("mala").textContent=(daily%108|| (daily>0?108:0))+" / 108";
+ $("targetLabel").textContent=target.toLocaleString("en-IN");
+ $("progress").style.width=Math.min(100,daily/target*100)+"%";
+ $("sankalpText").textContent=target+" jaap with devotion";
 }
-
-function applyBackground() {
-  const d = deities[selected];
-  const bg = $("bgImage");
-  bg.style.backgroundImage = `url("${d.bg}")`;
-  bg.style.backgroundPosition = d.position || "center";
-  $("heroIcon").textContent = d.icon;
-  $("mantraText").textContent = d.mantra;
-  $("deityHelper").textContent = d.helper;
-  $("tapBtn").textContent = d.icon;
-  document.querySelector(".brand h1").textContent =
-    selected === "radha" ? "दिव्य जाप" : d.name + " जाप";
-  document.title = d.name + " | Divine Jaap";
-  localStorage.setItem("jaapSelectedDeity",selected);
-  render();
+function selectGod(){
+ const g=gods[selected];
+ $("background").style.backgroundImage=`url("${g.image}")`;
+ $("heroIcon").textContent=g.icon;
+ $("tap").textContent=g.icon;
+ $("mantra").textContent=g.mantra;
+ $("helper").textContent=g.helper;
+ $("heading").textContent=selected==="radha"?"दिव्य जाप":g.name+" जाप";
+ document.title=g.name+" | Divine Jaap";
+ $("deity").value=selected;
+ localStorage.setItem("jaapSelectedDeity",selected);
+ if(selected==="radha"){syncFromRadha();}else{
+  const x=localData(selected);daily=x.daily;total=x.total;streak=0;render();
+ }
 }
-
-function render() {
-  const daily = Math.max(0,baseDaily+pending);
-  const total = Math.max(0,baseTotal+pending);
-  $("dailyCount").textContent = daily.toLocaleString("en-IN");
-  $("lifetimeTop").textContent = total.toLocaleString("en-IN");
-  $("malaValue").textContent = (daily%108 || (daily>0 && daily%108===0 ? 108:0))+" / 108";
-  $("targetValue").textContent = target.toLocaleString("en-IN");
-  $("progressBar").style.width = Math.min(100,daily/target*100)+"%";
-  $("streak").textContent = baseStreak ? baseStreak+" DAYS" : "🙏";
-  $("sankalpText").textContent = target+" jaap with devotion";
+function syncFromRadha(){
+ if(!ready)return;
+ // Snapshot listener updates Radha's existing fields.
 }
-
-function bubble(x,y) {
-  const layer = $("bubbleLayer");
-  layer.replaceChildren();
-  const el = document.createElement("div");
-  el.className = "bubble";
-  el.textContent = deities[selected].bubble;
-  el.style.left = Math.min(innerWidth-90,Math.max(90,x))+"px";
-  el.style.top = Math.min(innerHeight-80,Math.max(90,y))+"px";
-  layer.appendChild(el);
-  setTimeout(()=>el.remove(),1050);
+function showBubble(x,y){
+ const layer=$("bubbles");layer.replaceChildren();
+ const b=document.createElement("div");b.className="bubble";b.textContent=gods[selected].bubble;
+ b.style.left=Math.min(innerWidth-90,Math.max(90,x))+"px";
+ b.style.top=Math.min(innerHeight-80,Math.max(90,y))+"px";
+ layer.appendChild(b);setTimeout(()=>b.remove(),1000);
 }
-
-function sound() {
-  if(!soundOn)return;
-  try {
-    const AC=window.AudioContext||window.webkitAudioContext;
-    if(!AC)return;
-    audioCtx=audioCtx||new AC();
-    if(audioCtx.state==="suspended")audioCtx.resume();
-    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-    o.type="sine";o.frequency.value=760;
-    g.gain.setValueAtTime(.1,audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.25);
-    o.connect(g);g.connect(audioCtx.destination);
-    o.start();o.stop(audioCtx.currentTime+.26);
-  } catch(e) {}
+function bell(){
+ if(!soundOn)return;
+ try{let AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;audioCtx=audioCtx||new AC();if(audioCtx.state==="suspended")audioCtx.resume();let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=780;g.gain.setValueAtTime(.09,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.25);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+.26)}catch(e){}
 }
-
-function increment(x,y) {
-  bubble(x,y);
-  $("dailyCount").classList.remove("bump");
-  void $("dailyCount").offsetWidth;
-  $("dailyCount").classList.add("bump");
-  sound();
-  if(navigator.vibrate)try{navigator.vibrate(10)}catch(e){}
-
-  // Only Radha uses the existing legacy Firebase fields.
-  // Other deities use separate local counters to avoid overwriting Radha data.
-  if(selected !== "radha") {
-    const key = "jaapLocal_"+selected;
-    const saved = JSON.parse(localStorage.getItem(key)||'{"daily":0,"total":0,"date":""}');
-    const day = today();
-    saved.daily = saved.date===day ? Number(saved.daily||0)+1 : 1;
-    saved.total = Number(saved.total||0)+1;
-    saved.date = day;
-    localStorage.setItem(key,JSON.stringify(saved));
-    baseDaily=saved.daily; baseTotal=saved.total; pending=0;
-    render();
-    return;
-  }
-
-  if(!ready) {
-    toast("Firebase connect ho raha hai…");
-    return;
-  }
-  lastTap = {deity:selected,date:today()};
-  pending++;
-  render();
-
-  writeQueue = writeQueue.then(async()=>{
-    try {
-      const result = await db.runTransaction(async tx=>{
-        const snap=await tx.get(userRef);
-        if(!snap.exists)throw new Error("User record not found");
-        const data=snap.data()||{};
-        const day=today();
-        const oldDate=data.lastDate||"";
-        const daily=(oldDate===day?Number(data.dailyCount||0):0)+1;
-        const total=Number(data.totalCount||0)+1;
-        const streak=oldDate===day?Number(data.streak||0):
-          oldDate===yesterday()?Number(data.streak||0)+1:1;
-        tx.update(userRef,{
-          dailyCount:daily,totalCount:total,lastDate:day,streak:streak
-        });
-        return {daily,total,streak};
-      });
-      baseDaily=result.daily;
-      baseTotal=result.total;
-      baseStreak=result.streak;
-      pending=Math.max(0,pending-1);
-      render();
-      $("status").textContent="✓ Jaap saved";
-    }catch(err){
-      pending=Math.max(0,pending-1);
-      render();
-      $("status").textContent="Save failed — login/internet check karein";
-      console.error(err);
-      toast("Jaap save nahi hua. Login check karein.");
-    }
-  });
+function countTap(x,y){
+ showBubble(x,y);$("count").classList.remove("bump");void $("count").offsetWidth;$("count").classList.add("bump");bell();
+ if(navigator.vibrate)try{navigator.vibrate(10)}catch(e){}
+ if(selected!=="radha"){
+  let d=localData(selected);d.daily++;d.total++;d.date=today();localStorage.setItem("jaap_"+selected,JSON.stringify(d));daily=d.daily;total=d.total;render();return;
+ }
+ if(!ready){toast("Firebase connect ho raha hai");return}
+ pending++;daily++;total++;render();
+ queue=queue.then(async()=>{
+  try{
+   const r=await db.runTransaction(async tx=>{
+    const snap=await tx.get(userRef);if(!snap.exists)throw Error("User document not found");
+    const d=snap.data()||{},day=today(),prev=d.lastDate||"";
+    const nd=(prev===day?Number(d.dailyCount||0):0)+1;
+    const nt=Number(d.totalCount||0)+1;
+    const ns=prev===day?Number(d.streak||0):(prev===yesterday()?Number(d.streak||0)+1:1);
+    tx.update(userRef,{dailyCount:nd,totalCount:nt,lastDate:day,streak:ns});
+    return {daily:nd,total:nt,streak:ns};
+   });
+   daily=r.daily;total=r.total;streak=r.streak;pending=Math.max(0,pending-1);render();$("status").textContent="✓ Jaap saved";
+  }catch(e){pending=Math.max(0,pending-1);render();console.error(e);toast("Save fail hua. Login/internet check karein");}
+ });
 }
-
-function tapFromEvent(e) {
-  increment(e.clientX || innerWidth/2,e.clientY || innerHeight/2);
-}
-
-$("tapBtn").addEventListener("click",e=>{
-  e.stopPropagation();
-  const r=$("tapBtn").getBoundingClientRect();
-  tapFromEvent({clientX:r.left+r.width/2,clientY:r.top+r.height/2});
-});
-$("heroTap").addEventListener("click",e=>{
-  if(e.target.closest("button,select,a,input"))return;
-  tapFromEvent(e);
-});
-
-/* Tap the open screen to count, but do not count UI controls. */
+$("tap").addEventListener("click",e=>{e.stopPropagation();let r=$("tap").getBoundingClientRect();countTap(r.left+r.width/2,r.top+r.height/2)});
+$("hero").addEventListener("click",e=>countTap(e.clientX,e.clientY));
 document.addEventListener("click",e=>{
-  if(e.target.closest("button,select,input,a,.selector-panel,.counter-panel,.sankalp,.nav,.modal-bg,header"))return;
-  if(e.target.closest("#heroTap"))return;
-  tapFromEvent(e);
+ if(e.target.closest("button,select,input,a,.panel,header,nav,.modal-bg"))return;
+ countTap(e.clientX,e.clientY);
+});
+$("deity").addEventListener("change",()=>{selected=$("deity").value;selectGod()});
+
+$("undo").addEventListener("click",()=>{
+ if(selected==="radha"){toast("Radha undo is disabled to protect saved Firebase totals");return}
+ let d=localData(selected);if(d.daily>0)d.daily--;if(d.total>0)d.total--;
+ localStorage.setItem("jaap_"+selected,JSON.stringify(d));daily=d.daily;total=d.total;render();toast("Last local jaap undone");
+});
+$("sound").addEventListener("click",()=>{soundOn=!soundOn;$("sound").textContent=soundOn?"🔔":"♫";$("soundLabel").textContent=soundOn?"SOUND ON":"SOUND OFF";bell()});
+
+function openTarget(){ $("targetInput").value=target;$("modalBg").classList.add("open") }
+$("targetOpen").addEventListener("click",e=>{e.preventDefault();openTarget()});
+$("sankalp").addEventListener("click",openTarget);
+$("sankalp").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" ")openTarget()});
+$("cancel").addEventListener("click",()=>$("modalBg").classList.remove("open"));
+$("modalBg").addEventListener("click",e=>{if(e.target===$("modalBg"))$("modalBg").classList.remove("open")});
+$("save").addEventListener("click",()=>{
+ let n=Number($("targetInput").value);if(!Number.isInteger(n)||n<1||n>1000000){toast("Valid target enter karein");return}
+ target=n;localStorage.setItem("jaapDailyTarget",String(n));$("modalBg").classList.remove("open");render();toast("Target saved");
 });
 
-$("deitySelect").value=selected;
-$("deitySelect").addEventListener("change",()=>{
-  selected=$("deitySelect").value;
-  const d=deities[selected];
-  if(selected!=="radha") {
-    const key="jaapLocal_"+selected;
-    const saved=JSON.parse(localStorage.getItem(key)||'{"daily":0,"total":0,"date":""}');
-    if(saved.date!==today()){saved.daily=0;saved.date=today()}
-    baseDaily=Number(saved.daily||0);
-    baseTotal=Number(saved.total||0);
-    baseStreak=0;
-    pending=0;
-  } else if(ready) {
-    // Snapshot listener will sync Radha's existing fields.
-  }
-  applyBackground();
-});
-
-$("undoBtn").addEventListener("click",()=>{
-  if(selected==="radha") {
-    toast("Radha undo ko safe rakhne ke liye existing data se manual restore karein.");
-    return;
-  }
-  const key="jaapLocal_"+selected;
-  const saved=JSON.parse(localStorage.getItem(key)||'{"daily":0,"total":0,"date":""}');
-  if(saved.daily>0)saved.daily--;
-  if(saved.total>0)saved.total--;
-  localStorage.setItem(key,JSON.stringify(saved));
-  baseDaily=saved.daily;baseTotal=saved.total;render();
-  toast("Last local jaap undone");
-});
-
-$("soundBtn").addEventListener("click",()=>{
-  soundOn=!soundOn;
-  $("soundBtn").textContent=soundOn?"🔔":"♫";
-  $("soundCaption").textContent=soundOn?"SOUND ON":"SOUND OFF";
-  if(soundOn)sound();
-});
-
-function openModal(title,desc) {
-  $("modalTitle").textContent=title;
-  $("modalDesc").textContent=desc;
-  $("modalInput").value=target;
-  $("modalBg").classList.add("open");
-  $("modalInput").focus();
+async function initFirebase(){
+ try{
+  if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
+  db=firebase.firestore();
+  const username=localStorage.getItem("jaapUserName")||"Guest";
+  userRef=db.collection("users").doc(username);
+  unsubscribe=userRef.onSnapshot(s=>{
+   if(!s.exists){ready=false;$("status").textContent="User record nahi mila. Login karein.";return}
+   ready=true;
+   if(selected==="radha"&&pending===0){
+    const d=s.data()||{};daily=d.lastDate===today()?Number(d.dailyCount||0):0;
+    total=Number(d.totalCount||0);streak=Number(d.streak||0);render();
+   }
+   $("status").textContent="Connected • Jaap ready";
+  },e=>{console.error(e);ready=false;$("status").textContent="Firebase sync error — login check karein"});
+ }catch(e){console.error(e);$("status").textContent="Firebase connection failed"}
 }
-function closeModal(){$("modalBg").classList.remove("open")}
-$("targetOpen").addEventListener("click",e=>{
-  e.preventDefault();openModal("Daily Target 🎯","Choose your daily Jaap goal.");
-});
-$("sankalpOpen").addEventListener("click",()=>openModal("Aaj Ka Sankalp 🙏","Apna daily jaap target set karein."));
-$("sankalpOpen").addEventListener("keydown",e=>{
-  if(e.key==="Enter"||e.key===" "){e.preventDefault();openModal("Aaj Ka Sankalp 🙏","Apna daily jaap target set karein.")}
-});
-$("modalCancel").addEventListener("click",closeModal);
-$("modalBg").addEventListener("click",e=>{if(e.target===$("modalBg"))closeModal()});
-$("modalSave").addEventListener("click",()=>{
-  const n=Number($("modalInput").value);
-  if(!Number.isInteger(n)||n<1||n>1000000){toast("1 se 1000000 ke beech target dein");return}
-  target=n;localStorage.setItem("jaapDailyTarget",String(n));
-  closeModal();render();toast("Target updated 🙏");
-});
-
-/* Firebase connection: uses existing username document convention. */
-async function startFirebase() {
-  try {
-    if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
-    db=firebase.firestore();
-    const username=localStorage.getItem("jaapUserName")||"Guest";
-    userRef=db.collection("users").doc(username);
-    unsubscribe=userRef.onSnapshot(snap=>{
-      if(!snap.exists){
-        ready=false;
-        $("status").textContent="User record nahi mila — login karein.";
-        return;
-      }
-      ready=true;
-      const data=snap.data()||{};
-      if(selected==="radha"&&pending===0){
-        baseDaily=data.lastDate===today()?Number(data.dailyCount||0):0;
-        baseTotal=Number(data.totalCount||0);
-        baseStreak=Number(data.streak||0);
-        render();
-      }
-      $("status").textContent="Connected • Jaap ready";
-    },err=>{
-      console.error(err);ready=false;
-      $("status").textContent="Firebase sync error — login/internet check karein";
-    });
-  }catch(err){
-    console.error(err);
-    $("status").textContent="Firebase connection failed";
-  }
-}
-
-render();
-applyBackground();
-startFirebase();
+render();selectGod();initFirebase();
 window.addEventListener("pagehide",()=>{if(unsubscribe)unsubscribe()});
 </script>
 </body>
